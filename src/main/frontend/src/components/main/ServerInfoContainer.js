@@ -3,20 +3,7 @@ import { ListCheck, PencilSquare, PinMapFill } from 'react-bootstrap-icons';
 import { Link } from 'react-router-dom';
 import styles from 'styles/components/main/serverInfoContainer.module.css';
 
-function ServerInfoContainer() {
-
-    const [serverInfo, SetServerInfo] = useState(
-        {
-            id : '111111',
-            name : 'minecraft',
-            photo : '',
-            usage : 'minecraft',
-            description : 'minecraft server',
-            numOfMemos : 3,
-            numOfLists : 3,
-            numOfMaps : 2
-        }
-    );
+function ServerInfoContainer({serverInfo}) {
 
     return(
         <div className={styles.container}>

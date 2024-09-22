@@ -1,27 +1,24 @@
 import styles from 'styles/components/servermain/servermainChecklist.module.css';
 import { useState } from "react";
+import { Button } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+import { useServer } from 'contexts/ServerContext';
+import checklistSample from 'lib/sampleData/checklistSample';
 
 function ServerMainChecklist() {
 
-    const [checklist, setChecklist] = useState([
-        {
-            id : '1234',
-            serverId: '11111',
-            title: '신규 바이옴 찾기',
-            ownerId: '133',
-            checked: true
-        },
-        {
-            id : '1234',
-            serverId: '11111',
-            title: '목장 관리하기',
-            ownerId: '133',
-            checked: false
-        }
-    ]);
+    const {serverInfo} = useServer();
+    const navigate = useNavigate();
+
+    const [checklist, setChecklist] = useState(checklistSample);
+
+    function handleMoreBtn() {
+        navigate(`/servers/${serverInfo.id}/checklists`);
+    }
 
     return(
         <div className={styles.box}>
+            <Button className={styles.more_btn} onClick={handleMoreBtn}>더보기</Button>
             <ul>
             {
                 checklist.map((el)=>{

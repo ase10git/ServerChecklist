@@ -19,4 +19,5 @@ public class Map {
     private String location;
     private String photo;
     private String ownerId;
+    private String description;
 }

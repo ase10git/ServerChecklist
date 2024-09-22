@@ -1,0 +1,142 @@
+.container{
+    width: 90%;
+    margin: 50px 0;
+    position: relative;
+}
+
+.title{
+    width: 80%;
+    margin-bottom: 20px;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* default map info page */
+.btn_wrap{
+    position: absolute; top: 0; right: 0;
+}
+
+.edit_btn{
+    margin-right: 5px;
+}
+
+.box{
+    width: 100%;
+    padding: 20px;
+    background-color: var(--green-color-m);
+    border-radius: 10px;
+}
+
+.map_img_box{
+    width: 100%; height: 150px;
+    margin-bottom: 5px;
+    border: 1px solid white;
+    border-radius: 5px;
+}
+
+.map_img_box img{
+    width: 100%; height: 100%;
+}
+
+.info_box{
+    margin: 10px 0;
+    position: relative;
+}
+
+.info_box p{
+    padding: 10px 0;
+    color:white;
+}
+
+.nickname{
+    padding: 8px;
+    position: absolute; top:0; right:0;
+    background-color: var(--green-color-l);
+    border-radius: 5px;
+}
+
+.desc_box{
+    border-top: 1px solid white;
+}
+
+.location{
+    padding: 5px 8px;
+    background-color: var(--green-color-l);
+    border-radius: 5px;
+    color:#000;
+}
+
+.list_btn_wrap{
+    width: 100%;
+    padding-top: 20px;
+    display: flex; justify-content: flex-end;
+}
+
+.list_btn_wrap button{
+    padding: 8px;
+    background-color: var(--green-color-m);
+    font-size: 1rem;
+    color: white;
+}
+
+/* map edit page */
+
+.map_img_box{
+    width: 100%; height: 150px;
+    margin-bottom: 5px;
+    border: 1px solid white;
+    border-radius: 5px;
+    position: relative;
+}
+
+.map_img_box label{
+    width: 100%; height: 100%;
+    position: absolute;
+    display: flex; justify-content: center;
+    align-items: center;
+    background-color: white;
+    font-size: 8rem;
+}
+
+.map_img_box input{
+    width: 100%; height: 100%;
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.info_box{
+    margin: 10px 0;
+    position: relative;
+}
+
+.input_box{
+    width: 100%;
+    padding-top: 10px;
+    display: flex; justify-content: space-between;
+}
+
+.input_box label{
+    width: 15%;
+    margin-right: 10px;
+}
+
+.input_box input{
+    width: 80%;
+    padding: 10px;
+    height: 30px;
+    border-radius: 2px;
+    font-size: 1rem;
+}
+
+.edit_btn_wrap{
+    width: 100%;
+    padding-top: 20px;
+    display: flex; justify-content: flex-end;
+}
+
+.upload_btn{
+    margin-right: 5px;
+}

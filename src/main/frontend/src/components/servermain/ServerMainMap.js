@@ -1,38 +1,25 @@
 import styles from 'styles/components/servermain/servermainMap.module.css';
 import { useState } from "react";
+import { Button } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+import { useServer } from 'contexts/ServerContext';
+import mapSample from 'lib/sampleData/mapSample';
 
 function ServerMainMap() {
 
-    const [map, setMap] = useState([
-        {
-            id : '12',
-            serverId: '11111',
-            title: '황무지 바이옴 좌표',
-            location: '312 -31 62',
-            photo: '',
-            ownerId: '12'
-        },
-        {
-            id : '15',
-            serverId: '11111',
-            title: '본거점 외관',
-            location: '623 781 62',
-            photo: '',
-            ownerId: '2'
-        },
-        {
-            id : '12',
-            serverId: '11111',
-            title: 'end portal',
-            location: '123 0 -12',
-            photo: '',
-            ownerId: '24'
-        }
-    ]);
+    const {serverInfo} = useServer();
+    const navigate = useNavigate();
+
+    const [map, setMap] = useState(mapSample);
+
+    function handleMoreBtn() {
+        navigate(`/servers/${serverInfo.id}/maps`);
+    }
 
     return(
         <div className={styles.box}>
             <h3 className={styles.map_title}>서버 지도</h3>
+            <Button className={styles.more_btn} onClick={handleMoreBtn}>더보기</Button>
             <div className={styles.map_box}>
             {
                 map.map((el)=>{

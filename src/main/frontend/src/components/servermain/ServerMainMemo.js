@@ -1,59 +1,26 @@
+import { useServer } from 'contexts/ServerContext';
 import { useState } from 'react';
-import { Col, Container, Row } from 'react-bootstrap';
+import { Button, Col, Container, Row } from 'react-bootstrap';
 import { Dot } from 'react-bootstrap-icons';
+import { useNavigate } from 'react-router-dom';
 import styles from 'styles/components/servermain/servermainMemo.module.css';
-
+import memoSample from 'lib/sampleData/memoSample';
 
 function ServerMainMemo() {
 
-    const [memo, setMemo] = useState([
-        {
-            id : '231',
-            serverId: '11111',
-            name: '목장 가축 리스트',
-            content: '양, 소, 말, 닭, 토끼',
-            ownerId: '12'
-        },
-        {
-            id : '234',
-            serverId: '11111',
-            name: '본거점 재화',
-            content: '철 120개, 금 40개',
-            ownerId: '21'
-        },
-        {
-            id : '232',
-            serverId: '11111',
-            name: 'end region no dragon',
-            content: 'no dragon, already kiiled it',
-            ownerId: '2'
-        },
-        {
-            id : '233',
-            serverId: '11111',
-            name: '자작나무 많이 필요',
-            content: '현재 건축 재료로 사용중',
-            ownerId: '24'
-        },
-        {
-            id : '236',
-            serverId: '11111',
-            name: '레이드 재료 수집중',
-            content: '위더 레이드 준비중',
-            ownerId: '12'
-        },
-        {
-            id : '238',
-            serverId: '11111',
-            name: '서버 확장중',
-            content: '일주일간 서버가 다운될 수 있습니다.',
-            ownerId: '2'
-        },
-    ]);
+    const {serverInfo} = useServer();
+    const navigate = useNavigate();
+
+    const [memo, setMemo] = useState(memoSample);
+
+    function handleMoreBtn() {
+        navigate(`/servers/${serverInfo.id}/memo`);
+    }
 
     return(
         <div className={styles.box}>
             <h3 className={styles.memo_title}>서버 메모</h3>
+            <Button className={styles.more_btn} onClick={handleMoreBtn}>더보기</Button>
             <div className={styles.memo_box}>
             {
                 memo.map((el)=>{

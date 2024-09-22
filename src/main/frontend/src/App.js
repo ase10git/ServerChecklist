@@ -6,7 +6,15 @@ import { Route, Routes } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Main from './pages/Main';
-import ServerMain from 'pages/ServerMain';
+import ServerMain from 'pages/server/ServerMain';
+import Login from 'pages/user/Login';
+import Register from 'pages/user/Register';
+import ResetPwd from 'pages/user/ResetPwd';
+import Memo from 'pages/server/Memo';
+import Checklists from 'pages/server/Checklists';
+import Maps from 'pages/server/maps/Maps';
+import MapDetail from 'pages/server/maps/MapDetail';
+import MapAdd from 'pages/server/maps/MapAdd';
 
 function App() {
   // const [hello, setHello] = useState('');
@@ -25,19 +33,21 @@ function App() {
       <div className='content-wrapper'>
         <Routes>
           <Route path="/" Component={Main}></Route>
-          <Route path="/login"></Route>
-          <Route path="/join"></Route>
-          <Route path="/password"></Route>
-          <Route path="/user/:id"></Route>
-          <Route path="/servers/:id" Component={ServerMain}>
-            <Route path="checklists"></Route>
-            <Route path="memo"></Route>
+          <Route path="/login" Component={Login}/>
+          <Route path="/register" Component={Register}/>
+          <Route path="/resetpwd" Component={ResetPwd}/>
+          <Route path="/user/:id"/>
+          <Route path="/servers/:id">
+            <Route path="" Component={ServerMain}/>
+            <Route path="checklists" Component={Checklists}/>
+            <Route path="memo" Component={Memo}/>
             <Route path="maps">
-              <Route path=":id"></Route>
-              <Route path="add"></Route>
+              <Route path="" Component={Maps}/>
+              <Route path=":id" Component={MapDetail}/>
+              <Route path="new" Component={MapAdd}/>
             </Route>
           </Route>
-          <Route path="/error"></Route>
+          <Route path="/error" Component={Error}/>
         </Routes>
       </div>
       <Footer/>

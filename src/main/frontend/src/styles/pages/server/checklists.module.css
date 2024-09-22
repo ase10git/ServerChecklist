@@ -1,0 +1,65 @@
+.container{
+    width: 90%;
+    margin: 50px 0;
+    position: relative;
+}
+
+.title{
+    width: 100%;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.btn_wrap{
+    position: absolute; top: 0; right: 0;
+}
+
+.add_btn{
+    margin-right: 5px;
+}
+
+.box{
+    width: 100%;
+    background-color: var(--green-color-m);
+    border-radius: 10px;
+}
+
+.box ul{
+    width: 100%;
+    padding: 20px;
+}
+
+.box ul li{
+    width: 100%;
+    padding: 10px 20px;
+    display: flex;
+}
+
+.box ul li input{
+    margin-right: 20px;
+    display: block;
+    transform: scale(2);
+    border: none;
+}
+
+.box ul li span{
+    color:white;
+}
+
+.box ul li .checked{
+    text-decoration: line-through;
+}
+
+.plus_wrap{
+    width: 100%;
+    padding-bottom: 10px;
+    display: flex; justify-content: center; align-items: center;
+    background-color: var(--green-color-m);
+    border-radius: 10px;
+}
+
+.plus_wrap button{
+    font-size: 1.5rem;
+    color:white;
+    background-color: transparent;
+}
