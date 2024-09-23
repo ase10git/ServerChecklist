@@ -1,4 +1,4 @@
-import { Button, Container, Form } from 'react-bootstrap';
+import { button, Container, Form } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from 'styles/pages/server/maps/mapAdd.module.css';
 import mapSample from 'lib/sampleData/mapSample';
@@ -22,7 +22,7 @@ function MapAdd() {
             <Form className={styles.box}>
                 <input type='hidden' name='ownerid'></input>
                 <div className={styles.map_img_box}>
-                    <label htmlFor='title'><Camera/></label>
+                    <label htmlFor='photo'><Camera/></label>
                     <input type='file' name="photo" accept="image/*"></input>
                 </div>
                 <div className={styles.info_box}>
@@ -41,8 +41,8 @@ function MapAdd() {
                 </div>
             </Form>
             <div className={styles.btn_wrap}>
-                <Button className={`edit_btn ${styles.upload_btn}`}>업로드</Button>
-                <Button className='del_btn' onClick={handleBackBtn}>취소</Button>
+                <button className={`edit_btn ${styles.upload_btn}`}>업로드</button>
+                <button className='del_btn' onClick={handleBackBtn}>취소</button>
             </div>
         </Container>
     )

@@ -1,9 +1,8 @@
-import { Button, Container, Form } from 'react-bootstrap';
+import { button, Container, Form } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from 'styles/pages/server/maps/mapDetail.module.css';
 import mapSample from 'lib/sampleData/mapSample';
-import { useContext, useState } from 'react';
-import { Camera } from 'react-bootstrap-icons';
+import { useState } from 'react';
 import MapContext, { useMap } from 'contexts/MapContext';
 
 function MapDetail() {
@@ -43,9 +42,9 @@ function MapInfo({handleBackBtn}) {
                 <Link to={`/`}>서버(이름)</Link> : {map.title}
             </h2> 
             <div className={styles.btn_wrap}>
-                <Button className={`edit_btn ${styles.edit_btn}`}
-                onClick={handleEditChange}>수정</Button>
-                <Button className={`del_btn ${styles.del_btn}`}>제거</Button>
+                <button className={`edit_btn ${styles.edit_btn}`}
+                onClick={handleEditChange}>수정</button>
+                <button className={`del_btn ${styles.del_btn}`}>제거</button>
             </div>
             <div className={styles.box}>
                 <div className={styles.map_img_box}>
@@ -59,7 +58,7 @@ function MapInfo({handleBackBtn}) {
                 </div>
             </div>
             <div className={styles.list_btn_wrap}>
-                <Button onClick={handleBackBtn}>목록으로</Button>
+                <button onClick={handleBackBtn}>목록으로</button>
             </div>
         </>
     )
@@ -94,9 +93,9 @@ function MapEdit() {
                 </div>
             </Form>
             <div className={styles.edit_btn_wrap}>
-                <Button className={`edit_btn ${styles.upload_btn}`}>수정</Button>
-                <Button className='del_btn'
-                onClick={handleEditChange}>취소</Button>
+                <button className={`edit_btn ${styles.upload_btn}`}>수정</button>
+                <button className='del_btn'
+                onClick={handleEditChange}>취소</button>
             </div>
         </>
     )

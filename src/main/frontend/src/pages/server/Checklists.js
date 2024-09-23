@@ -1,5 +1,5 @@
 import styles from 'styles/pages/server/checklists.module.css';
-import { Button, Container } from "react-bootstrap";
+import { button, Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import checklistSample from 'lib/sampleData/checklistSample';
 import { useState } from 'react';
@@ -21,8 +21,8 @@ function Checklists() {
                 <Link to={`/`}>서버(이름)</Link> 체크리스트
             </h2>
             <div className={styles.btn_wrap}>
-                <Button className={`add_btn ${styles.add_btn}`}>추가</Button>
-                <Button className={`del_btn ${styles.del_btn}`}>제거</Button>
+                <button className={`add_btn ${styles.add_btn}`}>추가</button>
+                <button className={`del_btn ${styles.del_btn}`}>제거</button>
             </div>
             <div className={styles.box}>
                 <ul>
@@ -38,7 +38,7 @@ function Checklists() {
                 }
                 </ul>
                 <div className={styles.plus_wrap}>
-                    <Button><PlusCircle/></Button>
+                    <button><PlusCircle/></button>
                 </div>
             </div>
         </Container>

@@ -1,29 +1,29 @@
 [
     {
         "id" : "12",
-        "serverid": "11111",
+        "serverId": "11111",
         "title": "황무지 바이옴 좌표",
         "location": "312 -31 62",
         "photo": "",
-        "ownerid": "12",
+        "ownerId": "12",
         "description" : "본거점에서 가장 가까운 황무지 바이옴 좌표. 몬스터 위험하니 준비해서 탐험할 것."
     },
     {
         "id" : "15",
-        "serverid": "11111",
+        "serverId": "11111",
         "title": "본거점 외관",
         "location": "623 781 62",
         "photo": "",
-        "ownerid": "2",
+        "ownerId": "2",
         "description" : "아직 공사 진행중"
     },
     {
         "id" : "12",
-        "serverid": "11111",
+        "serverId": "11111",
         "title": "end portal",
         "location": "123 0 -12",
         "photo": "",
-        "ownerid": "24",
+        "ownerId": "24",
         "description" : "주변 지형 정리해둬서 몬스터는 없음"
     }
 ]

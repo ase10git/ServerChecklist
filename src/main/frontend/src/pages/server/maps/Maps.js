@@ -4,7 +4,7 @@ import mapSample from 'lib/sampleData/mapSample';
 import { useState } from 'react';
 import { PlusCircle } from 'react-bootstrap-icons';
 
-const { Container, Button } = require("react-bootstrap");
+const { Container, button } = require("react-bootstrap");
 
 function Maps() {
 
@@ -19,8 +19,8 @@ function Maps() {
         <Container className={styles.container}>
             <h2 className={styles.title}><Link to={`/`}>서버(이름)</Link> 지도</h2>
             <div className={styles.add_btn_wrap}>
-                <Button className={`add_btn ${styles.add_btn}`}
-                onClick={handleAddBtn}>추가</Button>
+                <button className={`add_btn ${styles.add_btn}`}
+                onClick={handleAddBtn}>추가</button>
             </div>
             <div className={styles.box}>
                 {
@@ -39,7 +39,7 @@ function Maps() {
                 }
             </div>
             <div className={styles.plus_wrap}>
-                <Button onClick={handleAddBtn}><PlusCircle/></Button>
+                <button onClick={handleAddBtn}><PlusCircle/></button>
             </div>
         </Container>
     )

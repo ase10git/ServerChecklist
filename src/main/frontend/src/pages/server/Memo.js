@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import memoSample from 'lib/sampleData/memoSample';
 import { PlusCircle } from 'react-bootstrap-icons';
 
-const { Container, Button, Form } = require("react-bootstrap");
+const { Container, button, Form } = require("react-bootstrap");
 
 function Memo() {
 
@@ -20,8 +20,8 @@ function Memo() {
         <Container className={styles.container}>
             <h2 className={styles.title}><Link to={`/`}>서버(이름)</Link> 메모</h2>
             <div className={styles.add_btn_wrap}>
-                <Button className={`add_btn ${styles.add_btn}`}
-                onClick={handleAddChange}>추가</Button>
+                <button className={`add_btn ${styles.add_btn}`}
+                onClick={handleAddChange}>추가</button>
             </div>
             <div className={styles.box}>
                 {
@@ -34,8 +34,8 @@ function Memo() {
                                         <span>{el.ownerId}</span>
                                     </div>
                                     <div className={styles.btn_wrap}>
-                                        <Button className={`edit_btn ${styles.edit_btn}`}>수정</Button>
-                                        <Button className={`del_btn ${styles.del_btn}`}>삭제</Button>
+                                        <button className={`edit_btn ${styles.edit_btn}`}>수정</button>
+                                        <button className={`del_btn ${styles.del_btn}`}>삭제</button>
                                     </div>
                                 </div>
                                 <div className={styles.content_box}>
@@ -48,7 +48,7 @@ function Memo() {
                 {
                     isAdd === false ?
                     <div className={styles.plus_wrap}>
-                        <Button onClick={handleAddChange}><PlusCircle/></Button>
+                        <button onClick={handleAddChange}><PlusCircle/></button>
                     </div>
                     : <MemoAdd handleAddChange={handleAddChange}/>
                 }
@@ -68,9 +68,9 @@ function MemoAdd({handleAddChange}) {
                         <input type='hidden' value=''></input>
                     </div>
                     <div className={styles.btn_wrap}>
-                        <Button className={`add_btn ${styles.add_btn}`}>추가</Button>
-                        <Button className={`del_btn ${styles.del_btn}`}
-                        onClick={handleAddChange}>취소</Button>
+                        <button className={`add_btn ${styles.add_btn}`}>추가</button>
+                        <button className={`del_btn ${styles.del_btn}`}
+                        onClick={handleAddChange}>취소</button>
                     </div>
                 </div>
                 <input name='content' className={styles.content_box}></input>

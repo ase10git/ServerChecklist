@@ -1,3 +1,4 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
 import 'styles/common.css'
 import axios from 'axios';
 import 'App.css';
@@ -15,6 +16,7 @@ import Checklists from 'pages/server/Checklists';
 import Maps from 'pages/server/maps/Maps';
 import MapDetail from 'pages/server/maps/MapDetail';
 import MapAdd from 'pages/server/maps/MapAdd';
+import User from 'pages/user/User';
 
 function App() {
   // const [hello, setHello] = useState('');
@@ -36,7 +38,7 @@ function App() {
           <Route path="/login" Component={Login}/>
           <Route path="/register" Component={Register}/>
           <Route path="/resetpwd" Component={ResetPwd}/>
-          <Route path="/user/:id"/>
+          <Route path="/user" Component={User}/>
           <Route path="/servers/:id">
             <Route path="" Component={ServerMain}/>
             <Route path="checklists" Component={Checklists}/>

@@ -1,6 +1,6 @@
 import styles from 'styles/components/servermain/servermainMap.module.css';
 import { useState } from "react";
-import { Button } from 'react-bootstrap';
+import { button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useServer } from 'contexts/ServerContext';
 import mapSample from 'lib/sampleData/mapSample';
@@ -19,7 +19,7 @@ function ServerMainMap() {
     return(
         <div className={styles.box}>
             <h3 className={styles.map_title}>서버 지도</h3>
-            <Button className={styles.more_btn} onClick={handleMoreBtn}>더보기</Button>
+            <button className={styles.more_btn} onClick={handleMoreBtn}>더보기</button>
             <div className={styles.map_box}>
             {
                 map.map((el)=>{

@@ -17,5 +17,6 @@ public class CheckList {
 
     private String title;
     private String ownerId;
+    private String serverId;
     private Boolean checked;
 }

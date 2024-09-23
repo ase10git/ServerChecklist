@@ -1,6 +1,6 @@
 import { useServer } from 'contexts/ServerContext';
 import { useState } from 'react';
-import { Button, Col, Container, Row } from 'react-bootstrap';
+import { button, Col, Container, Row } from 'react-bootstrap';
 import { Dot } from 'react-bootstrap-icons';
 import { useNavigate } from 'react-router-dom';
 import styles from 'styles/components/servermain/servermainMemo.module.css';
@@ -20,7 +20,7 @@ function ServerMainMemo() {
     return(
         <div className={styles.box}>
             <h3 className={styles.memo_title}>서버 메모</h3>
-            <Button className={styles.more_btn} onClick={handleMoreBtn}>더보기</Button>
+            <button className={styles.more_btn} onClick={handleMoreBtn}>더보기</button>
             <div className={styles.memo_box}>
             {
                 memo.map((el)=>{

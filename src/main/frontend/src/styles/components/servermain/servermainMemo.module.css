@@ -8,14 +8,14 @@
 
 .memo_title{
     padding: 5px;
-    position: absolute; top: -10px; left: -10px;
+    position: absolute; top: -20px; left: -10px;
     background-color: var(--green-color-ml);
     border-radius: 5px;
 }
 
 .more_btn{
     padding: 5px;
-    position: absolute; top: 0px; right: 0px;
+    position: absolute; top: -20px; right: 0px;
     border: 1px solid var(--green-color-d);
     background-color: var(--green-color-ml);
 }

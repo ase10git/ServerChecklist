@@ -1,6 +1,6 @@
 import styles from 'styles/components/servermain/servermainChecklist.module.css';
 import { useState } from "react";
-import { Button } from 'react-bootstrap';
+import { button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useServer } from 'contexts/ServerContext';
 import checklistSample from 'lib/sampleData/checklistSample';
@@ -18,7 +18,7 @@ function ServerMainChecklist() {
 
     return(
         <div className={styles.box}>
-            <Button className={styles.more_btn} onClick={handleMoreBtn}>더보기</Button>
+            <button className={styles.more_btn} onClick={handleMoreBtn}>더보기</button>
             <ul>
             {
                 checklist.map((el)=>{

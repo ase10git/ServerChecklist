@@ -17,4 +17,7 @@ public class Memo {
     private String name;
     private String content;
     private String ownerId;
+    private String serverId;
+    private String uploadDate;
+    private String modifyDate;
 }

@@ -19,5 +19,8 @@ public class Map {
     private String location;
     private String photo;
     private String ownerId;
+    private String serverId;
     private String description;
+    private String uploadDate;
+    private String modifyDate;
 }

@@ -1,0 +1,21 @@
+.container{
+    width: 100%;
+    margin: 50px 0;
+}
+
+.container h2{
+    width: 100%;
+    text-align: center;
+}
+
+.box{
+    width: 100%;
+    margin: 30px auto; padding: 20px;
+    background-color: var(--green-color-ml);
+    border-radius: 10px;
+}
+
+.btn_wrap{
+    margin: 15px auto;
+    display: flex; justify-content: space-around;
+}

@@ -1,8 +1,15 @@
-import { Person, Search, SearchHeartFill } from 'react-bootstrap-icons';
+import { Person, Search } from 'react-bootstrap-icons';
 import styles from 'styles/components/header.module.css';
-import { Button, Form, Navbar, Row } from "react-bootstrap";
+import { button, Form, Navbar, Row } from "react-bootstrap";
+import { useNavigate } from 'react-router-dom';
 
 function Header() {
+
+    const navigate = useNavigate();
+
+    function handleLoginBtn() {
+        navigate('/login');
+    }
 
     return(
         <>
@@ -10,16 +17,17 @@ function Header() {
                 <div className={styles.nav_container}>
                     <Navbar.Brand href="/" className={styles.logo}>서버메모</Navbar.Brand>
                     <Form inline className={styles.input_form}>
-                        <Row className={styles.input_group}>
-                            <Form.Control
+                        <div className={styles.input_group}>
+                            <input
                             type="text"
                             placeholder="서버 검색 / Search for Server"
                             className={styles.search}
                             />
-                            <Button type="submit" className={styles.search_btn}><Search/></Button>
-                        </Row>
+                            <button type="submit" className={styles.search_btn}><Search/></button>
+                        </div>
                     </Form>
-                    <Button className={styles.login_btn}><Person/>로그인</Button>
+                    <button className={styles.login_btn}
+                    onClick={handleLoginBtn}><Person/>로그인</button>
                 </div>
             </Navbar>
         </>
