@@ -1,52 +1,46 @@
-import { button, Container, Form, InputGroup } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';
-import styles from 'styles/pages/server/maps/mapAdd.module.css';
-import mapSample from 'lib/sampleData/mapSample';
-import { useState } from 'react';
-import { Camera } from 'react-bootstrap-icons';
+import styles from 'styles/pages/server/serverAdd.module.css';
+import { Container, Form, InputGroup } from "react-bootstrap";
+import { Camera } from "react-bootstrap-icons";
+import { Link, useNavigate } from "react-router-dom";
 
-function MapAdd() {
+function ServerAdd() {
 
-    const [map, setMap] = useState(mapSample[0]);
     const navigate = useNavigate();
 
     function handleBackBtn() {
-        navigate(`/servers/${map.serverid}/maps`);
+        navigate(`/`);
     }
 
-    return (
+    return(
         <Container className={styles.container}>
-            <h2 className={styles.title}>
-                <Link to={`/`}>서버(이름)</Link> 지도 추가
-            </h2> 
+            <h2 className={styles.title}>새 서버 추가</h2> 
             <Form className={styles.box}>
-                <input type='hidden' name='ownerid'></input>
-                <div className={styles.map_img_box}>
+                <div className={styles.img_box}>
                     <label htmlFor='photo'><Camera/></label>
                     <input type='file' name="photo" accept="image/*"></input>
                 </div>
                 <div className={styles.info_box}>
-                    <Form.Group md="4" controlId="title" className={styles.form_box}>
+                    <Form.Group md="4" controlId="name" className={styles.form_box}>
                         <InputGroup className="mb-3">
-                            <InputGroup.Text id="title">제목</InputGroup.Text>
+                            <InputGroup.Text id="name">서버 이름</InputGroup.Text>
                             <Form.Control
                             type='text'
-                            aria-label="title"
+                            aria-label="name"
                             />
                         </InputGroup>
                     </Form.Group>
-                    <Form.Group md="4" controlId="location" className={styles.form_box}>
+                    <Form.Group md="4" controlId="usage" className={styles.form_box}>
                         <InputGroup className="mb-3">
-                            <InputGroup.Text id="location">위치 좌표</InputGroup.Text>
+                            <InputGroup.Text id="usage">사용 용도</InputGroup.Text>
                             <Form.Control
                             type='text'
-                            aria-label="location"
+                            aria-label="usage"
                             />
                         </InputGroup>
                     </Form.Group>
                     <Form.Group md="4" controlId="description" className={styles.form_box}>
                         <InputGroup className="mb-3">
-                            <InputGroup.Text id="description">지도 설명</InputGroup.Text>
+                            <InputGroup.Text id="description">서버 이름</InputGroup.Text>
                             <Form.Control
                             type='text'
                             aria-label="description"
@@ -56,11 +50,11 @@ function MapAdd() {
                 </div>
             </Form>
             <div className={styles.btn_wrap}>
-                <button className={`edit_btn ${styles.upload_btn}`}>업로드</button>
+                <button className={`edit_btn ${styles.upload_btn}`}>추가</button>
                 <button className='del_btn' onClick={handleBackBtn}>취소</button>
             </div>
         </Container>
     )
 }
 
-export default MapAdd;
+export default ServerAdd;

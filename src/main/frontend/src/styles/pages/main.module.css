@@ -1,16 +1,47 @@
-.box{
+.container{
     width: 100%;
-    margin: 20px 0 20px;
+    margin: 20px auto;
+}
+
+.main_title{
+    padding: 20px;
+    background-color: var(--green-color-ml);
+    border-radius: 8px;
+    text-align: center;
+    font-weight: bold;
+    
+}
+
+.visual{
+    margin-top: 30px;
+    width: 100%;
+}
+
+.server_list_box{
+    margin-top: 30px;
+    position: relative;
+}
+
+.carousel-item, .carousel-item-next, .carousel-item-prev{
+    display: flex; justify-content: center;
+}
+
+.server_box{
+    width: 100%;
     display: flex; flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
 @media screen and (min-width: 1368px) {
-    .box{
-        width: 70%;
+    .server_box{
         margin-top: 40px;
         flex-direction: row;
     }
-    
+}
+
+.btn_wrap{
+    width: 100%;
+    display: flex; justify-content: flex-end;
+    position: absolute; top: 0; right: 0;
 }

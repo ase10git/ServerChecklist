@@ -17,9 +17,11 @@
 }
 
 .server_photo_box{
-    width: 50%; height: 120px;
+    width: 50%; height: 220px;
     border-radius: 5px;
     background-color: #ffffff;
+    display: flex; justify-content: center;
+    align-items: center;
 }
 
 .server_photo{
@@ -39,6 +41,10 @@
 
 .server_info:last-child{
     margin-bottom: 0px;
+}
+
+.server_info p{
+    margin-bottom: 0 !important;
 }
 
 .server_info p > span{

@@ -17,6 +17,9 @@ import Maps from 'pages/server/maps/Maps';
 import MapDetail from 'pages/server/maps/MapDetail';
 import MapAdd from 'pages/server/maps/MapAdd';
 import User from 'pages/user/User';
+import ServerAdd from 'pages/server/ServerAdd';
+import ServerEdit from 'pages/server/ServerEdit';
+import Favorites from 'pages/user/Favorites';
 
 function App() {
   // const [hello, setHello] = useState('');
@@ -38,9 +41,14 @@ function App() {
           <Route path="/login" Component={Login}/>
           <Route path="/register" Component={Register}/>
           <Route path="/resetpwd" Component={ResetPwd}/>
-          <Route path="/user" Component={User}/>
+          <Route path="/user">
+            <Route path="" Component={User}/>
+            <Route path="favorites" Component={Favorites}/>
+          </Route>
+          <Route path="/servers/add" Component={ServerAdd}/>
           <Route path="/servers/:id">
             <Route path="" Component={ServerMain}/>
+            <Route path="edit" Component={ServerEdit}/>
             <Route path="checklists" Component={Checklists}/>
             <Route path="memo" Component={Memo}/>
             <Route path="maps">

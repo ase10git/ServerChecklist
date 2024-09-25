@@ -1,4 +1,4 @@
-import { button, Container, Form } from 'react-bootstrap';
+import { button, Container, Form, InputGroup } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from 'styles/pages/server/maps/mapDetail.module.css';
 import mapSample from 'lib/sampleData/mapSample';
@@ -77,19 +77,37 @@ function MapEdit() {
                     <img src={map.photo} alt="mapimg"></img>
                     <input type='file' name="photo" accept="image/*"></input>
                 </div>
-                <div className={styles.info_box}>
-                    <div className={styles.input_box}>
-                        <label htmlFor='title'>제목</label>
-                        <input className={styles.map_title} name='title' value={map.title}></input>
-                    </div>
-                    <div className={styles.input_box}>
-                        <label htmlFor='location'>위치 좌표</label>
-                        <input name='location' value={map.location}></input>
-                    </div>
-                    <div className={styles.input_box}>
-                        <label htmlFor='description'>지도 설명</label>
-                        <input name='description' value={map.description}></input>
-                    </div>
+                <div className={`${styles.info_box} ${styles.edit}`}>
+                    <Form.Group md="4" controlId="title" className={styles.form_box}>
+                        <InputGroup className="mb-3">
+                            <InputGroup.Text id="title">제목</InputGroup.Text>
+                            <Form.Control
+                            type='text'
+                            aria-label="title"
+                            placeholder={map.title}
+                            />
+                        </InputGroup>
+                    </Form.Group>
+                    <Form.Group md="4" controlId="location" className={styles.form_box}>
+                        <InputGroup className="mb-3">
+                            <InputGroup.Text id="location">위치 좌표</InputGroup.Text>
+                            <Form.Control
+                            type='text'
+                            aria-label="location"
+                            placeholder={map.location}
+                            />
+                        </InputGroup>
+                    </Form.Group>
+                    <Form.Group md="4" controlId="description" className={styles.form_box}>
+                        <InputGroup className="mb-3">
+                            <InputGroup.Text id="description">지도 설명</InputGroup.Text>
+                            <Form.Control
+                            type='text'
+                            aria-label="description"
+                            placeholder={map.description}
+                            />
+                        </InputGroup>
+                    </Form.Group>
                 </div>
             </Form>
             <div className={styles.edit_btn_wrap}>

@@ -2,10 +2,6 @@
 ul, ol, li{list-style-type: none;}
 a{text-decoration: none; color:#000;}
 
-h2{
-    font-weight: bold;
-}
-
 /* custom options */
 :root{
     --green-color-l: #ebfffe;
@@ -90,4 +86,9 @@ button{
 
 .add_btn:active{
     background-color: var(--green-color-dm);
+}
+
+/* carousel */
+.carousel-item.active, .carousel-item-next, .carousel-item-prev{
+    display: flex; justify-content: center;
 }

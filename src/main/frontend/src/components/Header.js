@@ -1,6 +1,6 @@
 import { Person, Search } from 'react-bootstrap-icons';
 import styles from 'styles/components/header.module.css';
-import { button, Form, Navbar, Row } from "react-bootstrap";
+import { Form, Navbar} from "react-bootstrap";
 import { useNavigate } from 'react-router-dom';
 
 function Header() {
@@ -20,7 +20,7 @@ function Header() {
                         <div className={styles.input_group}>
                             <input
                             type="text"
-                            placeholder="서버 검색 / Search for Server"
+                            placeholder="서버 검색"
                             className={styles.search}
                             />
                             <button type="submit" className={styles.search_btn}><Search/></button>
