@@ -19,4 +19,32 @@ public class CheckList {
     private String ownerId;
     private String serverId;
     private Boolean checked;
+
+    // constructor
+    // 신규용
+    public CheckList(String title, String ownerId, String serverId, Boolean checked) {
+        this.title = title;
+        this.ownerId = ownerId;
+        this.serverId = serverId;
+        this.checked = false;
+    }
+
+    // 수정용
+    public CheckList(String id, String title, Boolean checked) {
+        this.id = id;
+        this.title = title;
+        this.checked = checked;
+    }
+
+    // 데이터 수정
+    public void patch(CheckList checkList) {
+
+        if (title != null) {
+            this.title = checkList.title;
+        }
+
+        if (checked != null) {
+            this.checked = checkList.checked;
+        }
+    }
 }

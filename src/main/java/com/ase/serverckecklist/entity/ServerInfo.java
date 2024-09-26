@@ -21,6 +21,7 @@ public class ServerInfo {
     private String photo;
     private String usage;
     private String description;
+    private String managerId;
 
     @CreatedDate
     private LocalDateTime createdDate;
@@ -38,6 +39,7 @@ public class ServerInfo {
         this.description = description;
         this.createdDate = LocalDateTime.now();
         this.modifiedDate = LocalDateTime.now();
+        this.managerId = "";
     }
 
     // 수정용

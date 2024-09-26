@@ -11,11 +11,13 @@ public class ServerInfoDto {
     private String photo;
     private String usage;
     private String description;
+    private String managerId;
 
+    // DTO -> Entity
     public ServerInfo toEntity() {
         // id 유무에 따른 수정/추가 구분
         if (id == null) {
-            // 수정용
+            // 신규 등록
             return new ServerInfo(
                     name,
                     photo,
@@ -23,7 +25,7 @@ public class ServerInfoDto {
                     description
             );
         } else {
-            // 신규 등록용
+            // 수정용
             return new ServerInfo(
                     id,
                     name,
