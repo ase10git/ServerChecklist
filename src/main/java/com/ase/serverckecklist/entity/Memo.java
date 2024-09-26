@@ -18,6 +18,6 @@ public class Memo {
     private String content;
     private String ownerId;
     private String serverId;
-    private String uploadDate;
-    private String modifyDate;
+    private String createdDate;
+    private String modifiedDate;
 }

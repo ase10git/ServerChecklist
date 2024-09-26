@@ -1,8 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'styles/common.css'
-import axios from 'axios';
 import 'App.css';
-import { useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -20,24 +18,16 @@ import User from 'pages/user/User';
 import ServerAdd from 'pages/server/ServerAdd';
 import ServerEdit from 'pages/server/ServerEdit';
 import Favorites from 'pages/user/Favorites';
+import Error from 'pages/Error';
 
 function App() {
-  // const [hello, setHello] = useState('');
-
-  // useEffect(()=>{
-  //   async function axiosTest() {
-  //     const { data } = await axios.get('http://localhost:9000/api/hello');
-  //     setHello(data);
-  //   }
-  //   axiosTest();
-  // }, []);
 
   return (
     <div className='app-wrapper'>
       <Header/>
       <div className='content-wrapper'>
         <Routes>
-          <Route path="/" Component={Main}></Route>
+          <Route path="/" Component={Main}/>
           <Route path="/login" Component={Login}/>
           <Route path="/register" Component={Register}/>
           <Route path="/resetpwd" Component={ResetPwd}/>

@@ -21,6 +21,6 @@ public class Map {
     private String ownerId;
     private String serverId;
     private String description;
-    private String uploadDate;
-    private String modifyDate;
+    private String createdDate;
+    private String modifiedDate;
 }

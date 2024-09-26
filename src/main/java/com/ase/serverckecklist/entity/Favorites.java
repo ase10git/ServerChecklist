@@ -10,11 +10,14 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Mark {
+public class Favorites {
 
     @Id
     private String id;
 
-    private String targetId;
     private String ownerId;
+    private String serverList;
+    private String checklist;
+    private String mapList;
+    private String memoList;
 }

@@ -1,12 +1,12 @@
 package com.ase.serverckecklist.service;
 
-import com.ase.serverckecklist.repository.MarkRepository;
+import com.ase.serverckecklist.repository.FavoritesRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class MarkService {
+public class FavoritesService {
 
-    private final MarkRepository markRepository;
+    private final FavoritesRepository favoritesRepository;
 }

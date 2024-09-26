@@ -1,9 +1,9 @@
 package com.ase.serverckecklist.repository;
 
-import com.ase.serverckecklist.entity.Mark;
+import com.ase.serverckecklist.entity.Favorites;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface MarkRepository extends MongoRepository<Mark, String> {
+public interface FavoritesRepository extends MongoRepository<Favorites, String> {
 }

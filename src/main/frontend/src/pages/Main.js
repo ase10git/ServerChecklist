@@ -1,18 +1,26 @@
 import styles from 'styles/pages/main.module.css';
 import { Carousel, CarouselItem, Container } from 'react-bootstrap';
 import ServerInfoContainer from 'components/main/ServerInfoContainer';
-import { useState } from 'react';
-import serverListSample from 'lib/sampleData/serverListSample';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { index } from 'api/server';
 
 function Main() {
 
-    const [serverData, setServerData] = useState(serverListSample);
+    const [serverData, setServerData] = useState([]);
     const navigate = useNavigate();
 
     function handleServerAdd() {
         navigate('/servers/add');
     }
+
+    useEffect(()=>{
+        async function getServers() {
+            const res = await index();
+            setServerData(res);
+        }
+        getServers();
+    }, []);
 
     return(
         <Container className={styles.container}>

@@ -2,20 +2,29 @@ import ServerMainChecklist from 'components/servermain/ServerMainChecklist';
 import ServerMainMap from 'components/servermain/ServerMainMap';
 import ServerMainMemo from 'components/servermain/ServerMainMemo';
 import ServerContext from 'contexts/ServerContext';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Container } from 'react-bootstrap';
 import styles from 'styles/pages/server/serverMain.module.css';
-import serverSample from 'lib/sampleData/serverSample';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { show } from 'api/server';
 
 function ServerMain() {
 
-    const [serverInfo, SetServerInfo] = useState(serverSample);
+    const [serverInfo, SetServerInfo] = useState({});
+    const {id} = useParams();
     const navigate = useNavigate();
 
     function handleServerEdit() {
         navigate(`/servers/${serverInfo.id}/edit`);
     }
+
+    useEffect(()=>{
+        async function getServer() {
+            const res = await show(id);
+            SetServerInfo(res);
+        }
+        getServer();
+    }, []);
 
     return(
         <ServerContext.Provider value={{serverInfo}}>
