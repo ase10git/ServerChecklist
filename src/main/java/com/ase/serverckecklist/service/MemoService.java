@@ -15,8 +15,8 @@ public class MemoService {
     private final MemoRepository memoRepository;
 
     // 서버의 모든 메모 조회
-    public ArrayList<Memo> index() { // 매개변수로 서버 id 추가, 메소드 추가!!!
-        return (ArrayList<Memo>) memoRepository.findAll();
+    public ArrayList<Memo> index(String serverId) { // 매개변수로 서버 id 추가, 메소드 추가!!!
+        return memoRepository.findByServerId(serverId);
     }
 
     // 특정 메모 조회

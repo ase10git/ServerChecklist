@@ -41,29 +41,31 @@ function ServerEdit() {
     // form 데이터 등록
     function handleChange(event) {
         const { name, value } = event.currentTarget;
-        
-        if (value !== null || value.equals('')) {
-            setFormData((prev) => ({
-                ...prev,
-                [name] : value,
-            }));
-        } else {
-            setFormData((prev) => ({
-                ...prev,
-                [name] : serverInfo[name],
-            }));
-        }
+        setFormData((prev) => ({
+            ...prev,
+            [name] : value,
+        }));
     }
 
     // 서버 수정
     async function handleSubmit(event) {
         event.preventDefault();
 
+        const updatedFormData = {...formData};
+
+        // 빈 값 처리
+        Object.keys(updatedFormData).forEach((key)=>{
+            if (updatedFormData[key] === null || updatedFormData[key] === '') {
+                updatedFormData[key] = serverInfo[key];
+            }
+        });
+
         try {
-            const res = await patch(formData);
+            const res = await patch(updatedFormData);
 
             if (res !== null) {
                 alert('서버가 수정되었습니다');
+                navigate(`/servers/${serverInfo.id}`);
             } else {
                 alert('서버 수정을 실패했습니다');
             }

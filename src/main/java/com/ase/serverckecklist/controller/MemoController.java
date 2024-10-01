@@ -20,13 +20,13 @@ public class MemoController {
     private final MemoService memoService;
 
     // GET
-    @GetMapping("/list")
-    public ArrayList<Memo> index() {
-        return memoService.index();
+    @GetMapping("/list/{serverId}")
+    public ArrayList<Memo> index(@PathVariable("serverId") String serverId) {
+        return memoService.index(serverId);
     }
 
     @GetMapping("{id}")
-    public Memo index(@PathVariable("id") String id) {
+    public Memo show(@PathVariable("id") String id) {
         return memoService.show(id);
     }
 
