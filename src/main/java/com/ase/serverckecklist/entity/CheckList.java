@@ -3,8 +3,12 @@ package com.ase.serverckecklist.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.time.LocalDateTime;
 
 @Document(collection = "checklist")
 @Data
@@ -20,13 +24,21 @@ public class CheckList {
     private String serverId;
     private Boolean checked;
 
+    @CreatedDate
+    private LocalDateTime createdDate;
+
+    @LastModifiedDate
+    private LocalDateTime modifiedDate;
+
     // constructor
     // 신규용
-    public CheckList(String title, String ownerId, String serverId, Boolean checked) {
+    public CheckList(String title, String ownerId, String serverId) {
         this.title = title;
         this.ownerId = ownerId;
         this.serverId = serverId;
         this.checked = false;
+        this.createdDate = LocalDateTime.now();
+        this.modifiedDate = LocalDateTime.now();
     }
 
     // 수정용
@@ -46,5 +58,7 @@ public class CheckList {
         if (checked != null) {
             this.checked = checkList.checked;
         }
+
+        this.modifiedDate = LocalDateTime.now();
     }
 }

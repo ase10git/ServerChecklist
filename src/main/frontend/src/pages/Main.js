@@ -31,8 +31,8 @@ function Main() {
                 {
                     serverData.map((el)=>{
                         return (
-                            <CarouselItem key={el.id}>
-                                <ServerInfoContainer serverInfo={el}/>
+                            <CarouselItem key={el.serverInfo.id}>
+                                <ServerInfoContainer data={el}/>
                             </CarouselItem>
                         );
                     })
@@ -49,7 +49,7 @@ function Main() {
                 {
                     serverData.map((el)=>{
                         return (
-                            <ServerInfoContainer key={el.id} serverInfo={el}/>
+                            <ServerInfoContainer key={el.serverInfo.id} data={el}/>
                         );
                     })
                 }

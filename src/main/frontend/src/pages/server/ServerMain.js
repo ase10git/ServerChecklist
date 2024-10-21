@@ -7,11 +7,16 @@ import { Container } from 'react-bootstrap';
 import styles from 'styles/pages/server/serverMain.module.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import { show } from 'api/server';
+import { recentList } from 'api/memo';
+import { Pencil } from 'react-bootstrap-icons';
+import { recentCheckList } from 'api/checklist';
 
 function ServerMain() {
 
-    const [serverInfo, SetServerInfo] = useState({});
+    const [serverInfo, setServerInfo] = useState({});
     const {id} = useParams();
+    const [serverMemo, setServerMemo] = useState([]);
+    const [serverChecklists, setServerChecklists] = useState([]);
     const navigate = useNavigate();
 
     function handleServerEdit() {
@@ -19,11 +24,26 @@ function ServerMain() {
     }
 
     useEffect(()=>{
+        // 서버 정보 가져오기
         async function getServer() {
             const res = await show(id);
-            SetServerInfo(res);
+            setServerInfo(res);
+        }
+
+        // 서버 메모 가져오기
+        async function getMemo() {
+            const res = await recentList(id);
+            setServerMemo(res);
+        }
+
+        // 서버 체크리스트 가져오기
+        async function getChecklists() {
+            const res = await recentCheckList(id);
+            setServerChecklists(res);
         }
         getServer();
+        getMemo();
+        getChecklists();
     }, []);
 
     return(
@@ -32,7 +52,7 @@ function ServerMain() {
                 <div className={styles.title_box}>
                     <h1>{serverInfo.name}</h1>
                     <button className='edit_btn'
-                    onClick={handleServerEdit}>수정</button>
+                    onClick={handleServerEdit}><Pencil/></button>
                 </div>
                 <div className={styles.main_box}>
                     <div className={styles.left_box}>
@@ -47,7 +67,7 @@ function ServerMain() {
                         <div className={styles.category_box}>
                             <button className={styles.more_btn} 
                             onClick={()=>{navigate(`/servers/${serverInfo.id}/checklists`)}}>더보기</button>
-                            <ServerMainChecklist/>
+                            <ServerMainChecklist serverChecklists={serverChecklists}/>
                         </div>
                     </div>
                     <div className={styles.right_box}>
@@ -55,7 +75,7 @@ function ServerMain() {
                             <h2 className={styles.category_title}>서버 메모</h2>
                             <button className={styles.more_btn} 
                             onClick={()=>{navigate(`/servers/${serverInfo.id}/memo`)}}>더보기</button>
-                            <ServerMainMemo/>
+                            <ServerMainMemo serverMemo={serverMemo}/>
                         </div>
                     </div>
                 </div>

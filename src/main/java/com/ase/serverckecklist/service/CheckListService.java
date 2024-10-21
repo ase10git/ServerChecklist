@@ -15,12 +15,17 @@ public class CheckListService {
 
     private final CheckListRepository checkListRepository;
 
-    // 서버의 체크리스트 전체 조회
-    public ArrayList<CheckList> index() { // 서버id를 매개변수로 받고, 메소드 추가!!!
-        return (ArrayList<CheckList>) checkListRepository.findAll();
+    // 서버의 모든 체크리스트 전체 조회
+    public ArrayList<CheckList> index(String serverId) {
+        return checkListRepository.findByServerId(serverId);
     }
 
-    // id로 체크리스트 조회
+    // 가장 최근에 서버에 추가된 메모 상위 6개만 가져오기
+    public ArrayList<CheckList> recentList(String serverId) {
+        return checkListRepository.findByServerIdOrderByCreatedDateDescModifiedDateDesc(serverId);
+    }
+
+    // id로 특정 체크리스트 조회
     public CheckList show(@PathVariable String id) {
         return checkListRepository.findById(id).orElse(null);
     }

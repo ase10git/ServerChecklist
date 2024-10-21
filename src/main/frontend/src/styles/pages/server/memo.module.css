@@ -33,7 +33,7 @@
 
 .info_box{
     width: 100%;
-    display: flex;justify-content: space-between;
+    display: flex; justify-content: space-between;
 }
 
 .memo_title_box{

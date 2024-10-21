@@ -5,7 +5,6 @@ import com.ase.serverckecklist.entity.Memo;
 import com.ase.serverckecklist.repository.MemoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.ArrayList;
 
@@ -15,12 +14,22 @@ public class MemoService {
     private final MemoRepository memoRepository;
 
     // 서버의 모든 메모 조회
-    public ArrayList<Memo> index(String serverId) { // 매개변수로 서버 id 추가, 메소드 추가!!!
+    public ArrayList<Memo> index(String serverId) {
         return memoRepository.findByServerId(serverId);
     }
 
+    // 가장 최근에 서버에 추가된 메모 상위 6개만 가져오기
+    public ArrayList<Memo> recentList(String serverId) {
+        return memoRepository.findByServerIdOrderByCreatedDateDescModifiedDateDesc(serverId);
+    }
+
+    // 서버에 등록된 전체 메모 수 조회
+    public int numOfMemo(String serverId) {
+        return memoRepository.countByServerId(serverId);
+    }
+
     // 특정 메모 조회
-    public Memo show(@PathVariable String id) {
+    public Memo show(String id) {
         return memoRepository.findById(id).orElse(null);
     }
 

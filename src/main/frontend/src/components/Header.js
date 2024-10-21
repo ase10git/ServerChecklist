@@ -16,7 +16,7 @@ function Header() {
             <Navbar expand="lg" className={`bg-body-tertiary ${styles.nav}`}>
                 <div className={styles.nav_container}>
                     <Navbar.Brand href="/" className={styles.logo}>서버메모</Navbar.Brand>
-                    <Form inline className={styles.input_form}>
+                    <Form className={styles.input_form}>
                         <div className={styles.input_group}>
                             <input
                             type="text"

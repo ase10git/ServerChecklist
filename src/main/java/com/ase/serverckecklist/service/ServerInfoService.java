@@ -2,10 +2,13 @@ package com.ase.serverckecklist.service;
 
 import com.ase.serverckecklist.dto.ServerInfoDto;
 import com.ase.serverckecklist.entity.ServerInfo;
+import com.ase.serverckecklist.repository.CheckListRepository;
+import com.ase.serverckecklist.repository.MapRepository;
+import com.ase.serverckecklist.repository.MemoRepository;
 import com.ase.serverckecklist.repository.ServerInfoRepository;
+import com.ase.serverckecklist.vo.ServerInfoVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.ArrayList;
 
@@ -14,14 +17,32 @@ import java.util.ArrayList;
 public class ServerInfoService {
 
     private final ServerInfoRepository serverInfoRepository;
+    private final MemoRepository memoRepository;
+    private final CheckListRepository checkListRepository;
+    private final MapRepository mapRepository;
 
     // 서버 전체 조회
-    public ArrayList<ServerInfo> index() {
-        return (ArrayList<ServerInfo>) serverInfoRepository.findAll();
+    public ArrayList<ServerInfoVO> index() {
+        ArrayList<ServerInfoVO> list = new ArrayList<>();
+        ArrayList<ServerInfo> serverList = (ArrayList<ServerInfo>) serverInfoRepository.findAll();
+
+        for (ServerInfo serverInfo : serverList) {
+            // 서버 정보와 각 서버의 메모, 체크리스트, 맵 수를 저장한 VO 생성
+            ServerInfoVO vo = new ServerInfoVO(
+                    serverInfo,
+                    memoRepository.countByServerId(serverInfo.getId()),
+                    checkListRepository.countByServerId(serverInfo.getId()),
+                    mapRepository.countByServerId(serverInfo.getId())
+            );
+            // 리스트에 저장
+            list.add(vo);
+        }
+
+        return list;
     }
 
     // id로 서버 조회
-    public ServerInfo show(@PathVariable String id) {
+    public ServerInfo show(String id) {
         return serverInfoRepository.findById(id).orElse(null);
     }
 

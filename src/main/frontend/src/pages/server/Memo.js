@@ -1,13 +1,11 @@
 import styles from 'styles/pages/server/memo.module.css';
-import { useServer } from "contexts/ServerContext";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import memoSample from 'lib/sampleData/memoSample';
-import { PlusCircle } from 'react-bootstrap-icons';
+//import memoSample from 'lib/sampleData/memoSample';
+import { CheckLg, PencilFill, PlusCircle, Trash, XLg } from 'react-bootstrap-icons';
 import { create, list, patch, remove } from 'api/memo';
 import { show } from 'api/server';
-
-const { Container, button, Form } = require("react-bootstrap");
+import { Container, Form } from "react-bootstrap";
 
 function Memo() {
 
@@ -17,6 +15,7 @@ function Memo() {
     const [isAdd, setIsAdd] = useState(false);
     const [isEdit, setIsEdit] = useState('');
     const navigate = useNavigate();
+    
     // 새 메모 form
     const [formData, setFormData] = useState({
         name: '',
@@ -125,16 +124,19 @@ function Memo() {
             ...prev,
             name: '',
             content: '',
+            ownerId: ''
         }));
-        handleAddChange();
+        handleAddState();
     }
 
     // 메모 수정 취소 시 form 리셋
     function handleEditQuit() {
         setFormData((prev) => ({
             ...prev,
+            id: '',
             name: '',
             content: '',
+            ownerId: ''
         }));
         setIsEdit('');
     }
@@ -180,7 +182,7 @@ function Memo() {
             <h2 className={styles.title}><Link to={`/`}>{serverInfo.name}</Link> 메모</h2>
             <div className={styles.add_btn_wrap}>
                 <button className={`add_btn ${styles.add_btn}`}
-                onClick={handleAddState}>추가</button>
+                onClick={handleAddState}><PlusCircle/></button>
             </div>
             <div className={styles.box}>
                 {
@@ -235,10 +237,10 @@ function MemoBox({
                 <div className={styles.btn_wrap}>
                     <button 
                     className={`edit_btn ${styles.edit_btn}`}
-                    onClick={()=>(handleEditState(memo))}>수정</button>
+                    onClick={()=>(handleEditState(memo))}><PencilFill/></button>
                     <button 
                     className={`del_btn ${styles.del_btn}`}
-                    onClick={()=>(handleDelete(memo.id))}>삭제</button>
+                    onClick={()=>(handleDelete(memo.id))}><Trash/></button>
                 </div>
             </div>
             <div className={styles.content_box}>
@@ -263,11 +265,11 @@ function MemoAdd({
                 </div>
                 <div className={styles.btn_wrap}>
                     <button className={`add_btn ${styles.add_btn}`}
-                    onClick={handleSubmit}>추가</button>
+                    onClick={handleSubmit}><CheckLg/></button>
                     <button
                     className={`del_btn ${styles.del_btn}`}
                     onClick={handleAddQuit}
-                    >취소</button>
+                    ><XLg/></button>
                 </div>
             </div>
             <input name='content' className={styles.content_box}
@@ -295,9 +297,9 @@ function MemoEdit({
                     <button
                     className={`edit_btn ${styles.edit_btn}`}
                     onClick={handleEdit}
-                    >확인</button>
+                    ><CheckLg/></button>
                     <button className={`del_btn ${styles.del_btn}`}
-                    onClick={handleEditQuit}>취소</button>
+                    onClick={handleEditQuit}><XLg/></button>
                 </div>
             </div>
             <input name='content' 

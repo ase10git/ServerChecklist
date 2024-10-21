@@ -1,15 +1,12 @@
 import styles from 'styles/components/servermain/servermainChecklist.module.css';
-import { useState } from "react";
-import checklistSample from 'lib/sampleData/checklistSample';
+//import checklistSample from 'lib/sampleData/checklistSample';
 
-function ServerMainChecklist() {
-
-    const [checklist, setChecklist] = useState(checklistSample);
+function ServerMainChecklist({serverChecklists}) {
 
     return(
         <ul className={styles.list}>
         {
-            checklist.map((el)=>{
+            serverChecklists.map((el)=>{
                 return(
                     <li key={el.id}>
                         <input type="checkbox" checked={el.checked}></input>

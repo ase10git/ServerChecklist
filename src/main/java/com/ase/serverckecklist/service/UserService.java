@@ -5,7 +5,6 @@ import com.ase.serverckecklist.entity.User;
 import com.ase.serverckecklist.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 @Service
 @RequiredArgsConstructor
@@ -14,7 +13,7 @@ public class UserService {
     private final UserRepository userRepository;
 
     // id로 유저 조회
-    public User show(@PathVariable String id) {
+    public User show(String id) {
         return userRepository.findById(id).orElse(null);
     }
 

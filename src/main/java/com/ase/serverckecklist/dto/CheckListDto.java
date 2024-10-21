@@ -21,8 +21,7 @@ public class CheckListDto {
             return new CheckList(
                     title,
                     ownerId,
-                    serverId,
-                    checked
+                    serverId
             );
         } else {
             // 수정용

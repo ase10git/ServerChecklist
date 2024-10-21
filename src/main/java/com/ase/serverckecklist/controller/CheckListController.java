@@ -7,12 +7,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
-@Controller
+@RestController
 @RequestMapping("/api/checklists")
 @Slf4j
 @RequiredArgsConstructor
@@ -21,13 +20,18 @@ public class CheckListController {
     private final CheckListService checkListService;
 
     // GET
-    @GetMapping("/list")
-    public ArrayList<CheckList> index() {
-        return checkListService.index();
+    @GetMapping("/list/{serverId}")
+    public ArrayList<CheckList> index(@PathVariable("serverId") String serverId) {
+        return checkListService.index(serverId);
+    }
+
+    @GetMapping("/recentlist/{serverId}")
+    public ArrayList<CheckList> recentList(@PathVariable("serverId") String serverId) {
+        return checkListService.recentList(serverId);
     }
 
     @GetMapping("{id}")
-    public CheckList index(@PathVariable("id") String id) {
+    public CheckList show(@PathVariable("id") String id) {
         return checkListService.show(id);
     }
 

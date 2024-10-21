@@ -25,6 +25,11 @@ public class MemoController {
         return memoService.index(serverId);
     }
 
+    @GetMapping("/recentlist/{serverId}")
+    public ArrayList<Memo> recentList(@PathVariable("serverId") String serverId) {
+        return memoService.recentList(serverId);
+    }
+
     @GetMapping("{id}")
     public Memo show(@PathVariable("id") String id) {
         return memoService.show(id);

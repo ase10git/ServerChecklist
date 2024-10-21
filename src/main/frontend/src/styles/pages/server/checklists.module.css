@@ -14,10 +14,6 @@
     position: absolute; top: 0; right: 0;
 }
 
-.add_btn{
-    margin-right: 5px;
-}
-
 .box{
     width: 100%;
     background-color: var(--green-color-m);
@@ -35,19 +31,40 @@
     display: flex;
 }
 
-.box ul li input{
+.info_box{
+    width: 100%;
+    display: flex; justify-content: space-between;
+}
+
+.check_info_box{
+    display: flex; justify-content: flex-start;
+    align-items: center;
+}
+
+.check_input{
     margin-right: 20px;
     display: block;
     transform: scale(2);
     border: none;
 }
 
-.box ul li span{
+.check_title{
+    display: block;
     color:white;
 }
 
-.box ul li .checked{
+.info_box .checked{
     text-decoration: line-through;
+}
+
+.option_btn_wrap{
+    display: flex; justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.edit_btn{
+    margin-right: 5px;
 }
 
 .plus_wrap{
@@ -62,4 +79,28 @@
     font-size: 1.5rem;
     color:white;
     background-color: transparent;
+}
+
+.input_box {
+    width: 100%;
+    padding: 0 40px 40px;
+    display: flex; justify-content: space-between;
+}
+
+.input_box input{
+    width: 80%;
+    padding: 10px;
+    margin-right: 5%;
+}
+
+.edit_input_box{
+    width: 100%;
+    display: flex; justify-content: space-between;
+    align-items: center;
+}
+
+.edit_input_box input{
+    width: 80%;
+    padding: 10px;
+    margin-right: 5%;
 }

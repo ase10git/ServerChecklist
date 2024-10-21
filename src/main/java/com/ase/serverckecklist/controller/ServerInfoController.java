@@ -3,6 +3,7 @@ package com.ase.serverckecklist.controller;
 import com.ase.serverckecklist.dto.ServerInfoDto;
 import com.ase.serverckecklist.entity.ServerInfo;
 import com.ase.serverckecklist.service.ServerInfoService;
+import com.ase.serverckecklist.vo.ServerInfoVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -21,7 +22,7 @@ public class ServerInfoController {
 
     // GET
     @GetMapping("/list")
-    public ArrayList<ServerInfo> index() {
+    public ArrayList<ServerInfoVO> index() {
         return serverInfoService.index();
     }
 

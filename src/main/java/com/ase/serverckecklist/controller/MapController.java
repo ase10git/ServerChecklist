@@ -21,13 +21,13 @@ public class MapController {
     private final MapService mapService;
 
     // GET
-    @GetMapping("/list")
-    public ArrayList<Map> index() {
-        return mapService.index();
+    @GetMapping("/list/{serverId}")
+    public ArrayList<Map> index(@PathVariable("serverId") String serverId) {
+        return mapService.index(serverId);
     }
 
     @GetMapping("{id}")
-    public Map index(@PathVariable("id") String id) {
+    public Map show(@PathVariable("id") String id) {
         return mapService.show(id);
     }
 

@@ -5,7 +5,6 @@ import com.ase.serverckecklist.entity.Map;
 import com.ase.serverckecklist.repository.MapRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.ArrayList;
 
@@ -17,12 +16,12 @@ public class MapService {
 
 
     // 서버의 맵 전체 조회
-    public ArrayList<Map> index() { // 서버 id를 매개변수로 받고, 메소드 추가!!!
-        return (ArrayList<Map>) mapRepository.findAll();
+    public ArrayList<Map> index(String serverId) { // 서버 id를 매개변수로 받고, 메소드 추가!!!
+        return mapRepository.findByServerId(serverId);
     }
 
     // id로 맵 조회
-    public Map show(@PathVariable String id) {
+    public Map show(String id) {
         return mapRepository.findById(id).orElse(null);
     }
 

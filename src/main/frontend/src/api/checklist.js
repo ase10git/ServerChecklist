@@ -9,10 +9,10 @@ async function errorHandling(targetFn) {
     }
 }
 
-// 서버의 전체 메모 가져오기
+// 서버의 전체 체크리스트 가져오기
 export async function list(serverId) {
     return errorHandling(async ()=>{
-        const res = await axios.get(`/memo/list/${serverId}`);
+        const res = await axios.get(`/checklists/list/${serverId}`);
     
         if (res.statusText !== "OK") {
             //window.location.href = '/error';
@@ -23,10 +23,10 @@ export async function list(serverId) {
     })
 }
 
-// 가장 최근에 서버에 추가된 메모 상위 6개만 가져오기
-export async function recentList(serverId) {
+// 가장 최근에 서버에 추가된 체크리스트 상위 6개만 가져오기
+export async function recentCheckList(serverId) {
     return errorHandling(async ()=>{
-        const res = await axios.get(`/memo/recentlist/${serverId}`);
+        const res = await axios.get(`/checklists/recentlist/${serverId}`);
     
         if (res.statusText !== "OK") {
             //window.location.href = '/error';
@@ -37,10 +37,10 @@ export async function recentList(serverId) {
     })
 }
 
-// 특정 메모 가져오기
+// 특정 체크리스트 가져오기
 export async function show(id) {
     return errorHandling(async ()=>{
-        const res = await axios.get(`/memo/${id}`);
+        const res = await axios.get(`/checklists/${id}`);
         
         if (res.statusText !== "OK") {
             //window.location.href = '/error';
@@ -51,10 +51,10 @@ export async function show(id) {
     });
 }
 
-// 새 메모 추가하기
+// 새 체크리스트 추가하기
 export async function create(formData) {
     return errorHandling(async ()=>{
-        const res = await axios.post(`/memo`, formData);
+        const res = await axios.post(`/checklists`, formData);
         
         if (res.statusText !== "OK") {
             //window.location.href = '/error';
@@ -65,10 +65,10 @@ export async function create(formData) {
     });
 }
 
-// 메모 수정하기
+// 체크리스트 수정하기
 export async function patch(formData) {
     return errorHandling(async ()=>{
-        const res = await axios.patch(`/memo/${formData.id}`, formData);
+        const res = await axios.patch(`/checklists/${formData.id}`, formData);
         
         if (res.statusText !== "OK") {
             //window.location.href = '/error';
@@ -79,10 +79,10 @@ export async function patch(formData) {
     });
 }
 
-// 메모 삭제하기
+// 체크리스트 삭제하기
 export async function remove(id) {
     return errorHandling(async ()=>{
-        const res = await axios.delete(`/memo/${id}`);
+        const res = await axios.delete(`/checklists/${id}`);
         
         if (res.statusText !== "OK") {
             //window.location.href = '/error';

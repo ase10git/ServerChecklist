@@ -34,6 +34,7 @@ function ServerAdd() {
 
             if (res !== null) {
                 alert('서버가 추가되었습니다');
+                navigate('/');
             } else {
                 alert('서버 추가를 실패했습니다');
             }
