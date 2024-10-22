@@ -20,22 +20,26 @@ public class CheckListController {
     private final CheckListService checkListService;
 
     // GET
+    // 특정 서버의 전체 체크리스트 가져오기
     @GetMapping("/list/{serverId}")
     public ArrayList<CheckList> index(@PathVariable("serverId") String serverId) {
         return checkListService.index(serverId);
     }
 
+    // 특정 서버에 최근에 추가되고, 최근에 변경된 순서로 상위 6개 가져오기
     @GetMapping("/recentlist/{serverId}")
     public ArrayList<CheckList> recentList(@PathVariable("serverId") String serverId) {
         return checkListService.recentList(serverId);
     }
 
+    // 특정 체크리스트 가져오기
     @GetMapping("{id}")
     public CheckList show(@PathVariable("id") String id) {
         return checkListService.show(id);
     }
 
     // POST
+    // 체크리스트 추가하기
     @PostMapping("")
     public ResponseEntity<CheckList> create(@RequestBody CheckListDto dto) {
         CheckList created = checkListService.create(dto);
@@ -46,6 +50,7 @@ public class CheckListController {
     }
 
     // PATCH
+    // 체크리스트 수정하기
     @PatchMapping("{id}")
     public ResponseEntity<CheckList> update(
             @PathVariable("id") String id,
@@ -59,6 +64,7 @@ public class CheckListController {
     }
 
     // DELETE
+    // 체크리스트 삭제하기
     @DeleteMapping("{id}")
     public ResponseEntity<CheckList> delete(@PathVariable("id") String id) {
         CheckList deleted = checkListService.delete(id);

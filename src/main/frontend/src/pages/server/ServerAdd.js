@@ -1,7 +1,7 @@
 import styles from 'styles/pages/server/serverAdd.module.css';
 import { Container, Form, InputGroup } from "react-bootstrap";
 import { Camera } from "react-bootstrap-icons";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { create } from 'api/server';
 import { useState } from 'react';
 

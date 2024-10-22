@@ -9,7 +9,7 @@ function ServerMainChecklist({serverChecklists}) {
             serverChecklists.map((el)=>{
                 return(
                     <li key={el.id}>
-                        <input type="checkbox" checked={el.checked}></input>
+                        <input type="checkbox" defaultChecked={el.checked}></input>
                         <span>{el.title}</span>
                     </li>
                 )

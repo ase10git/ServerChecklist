@@ -1,21 +1,18 @@
 .container{
     width: 90%;
-    margin: 50px 0;
+    margin: 20px 0;
     position: relative;
 }
 
-.title{
+.title_box{
     width: 100%;
     margin-bottom: 20px;
+    display: flex; justify-content: space-between;
+    align-items: center;
+}
+
+.title{
     text-align: left;
-}
-
-.add_btn_wrap{
-    position: absolute; top: 0; right: 0;
-}
-
-.add_btn{
-    margin-right: 5px;
 }
 
 .box{

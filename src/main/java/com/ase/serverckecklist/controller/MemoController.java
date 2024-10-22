@@ -20,22 +20,26 @@ public class MemoController {
     private final MemoService memoService;
 
     // GET
+    // 특정 서버의 모든 메모 가져오기
     @GetMapping("/list/{serverId}")
     public ArrayList<Memo> index(@PathVariable("serverId") String serverId) {
         return memoService.index(serverId);
     }
 
+    // 특정 서버에 가장 최근에 추가되고, 최신 변경 순서대로 상위 6개 가져오기
     @GetMapping("/recentlist/{serverId}")
     public ArrayList<Memo> recentList(@PathVariable("serverId") String serverId) {
         return memoService.recentList(serverId);
     }
 
+    // 특정 메모 가져오기
     @GetMapping("{id}")
     public Memo show(@PathVariable("id") String id) {
         return memoService.show(id);
     }
 
     // POST
+    // 메모 추가하기
     @PostMapping("")
     public ResponseEntity<Memo> create(@RequestBody MemoDto dto) {
         Memo created = memoService.create(dto);
@@ -46,6 +50,7 @@ public class MemoController {
     }
 
     // PATCH
+    // 메모 수정하기
     @PatchMapping("{id}")
     public ResponseEntity<Memo> update(
             @PathVariable("id") String id,
@@ -59,6 +64,7 @@ public class MemoController {
     }
 
     // DELETE
+    // 메모 삭제하기
     @DeleteMapping("{id}")
     public ResponseEntity<Memo> delete(@PathVariable("id") String id) {
         Memo deleted = memoService.delete(id);

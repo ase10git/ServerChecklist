@@ -21,17 +21,26 @@ public class MapController {
     private final MapService mapService;
 
     // GET
+    // 특정 서버의 모든 지도 가져오기
     @GetMapping("/list/{serverId}")
     public ArrayList<Map> index(@PathVariable("serverId") String serverId) {
         return mapService.index(serverId);
     }
 
+    // 특정 서버에 최근에 추가되고, 최근에 수정된 순서로 상위 6개 가져오기
+    @GetMapping("/recentlist/{serverId}")
+    public ArrayList<Map> recentList(@PathVariable("serverId") String id) {
+        return mapService.recentList(id);
+    }
+
+    // 특정 지도 가져오기
     @GetMapping("{id}")
     public Map show(@PathVariable("id") String id) {
         return mapService.show(id);
     }
 
     // POST
+    // 지도 추가하기
     @PostMapping("")
     public ResponseEntity<Map> create(@RequestBody MapDto dto) {
         Map created = mapService.create(dto);
@@ -42,6 +51,7 @@ public class MapController {
     }
 
     // PATCH
+    // 지도 수정하기
     @PatchMapping("{id}")
     public ResponseEntity<Map> update(
             @PathVariable("id") String id,
@@ -55,6 +65,7 @@ public class MapController {
     }
 
     // DELETE
+    // 지도 삭제하기
     @DeleteMapping("{id}")
     public ResponseEntity<Map> delete(@PathVariable("id") String id) {
         Map deleted = mapService.delete(id);

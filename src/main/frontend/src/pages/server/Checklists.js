@@ -4,7 +4,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import checklistSample from 'lib/sampleData/checklistSample';
 import { useEffect, useState } from 'react';
 import { CheckLg, PencilFill, PlusCircle, Trash, X, XLg } from 'react-bootstrap-icons';
-import { create, list, patch, remove } from 'api/checklist';
+import { create, list, patch, remove } from 'api/serverItems';
 import { show } from 'api/server';
 
 function Checklists() {
@@ -75,7 +75,7 @@ function Checklists() {
                 return;
             }
 
-            const res = await create(formData);
+            const res = await create(1, formData);
 
             if (res !== null) {
                 alert('체크리스트가 추가되었습니다');
@@ -100,7 +100,7 @@ function Checklists() {
         }
 
         try {
-            const res = await patch(updatedFormData);
+            const res = await patch(1, updatedFormData);
 
             if (res !== null) {
                 alert('체크리스트가 수정되었습니다');
@@ -140,7 +140,7 @@ function Checklists() {
         }
 
         try {
-            const res = await remove(id);
+            const res = await remove(1, id);
 
             if (res !== null) {
                 alert('체크리스트가 삭제되었습니다');
@@ -167,7 +167,7 @@ function Checklists() {
         }
 
         async function getChecklists() {
-            const res = await list(id);
+            const res = await list(1, id);
             setChecklists(res);
         }
 
@@ -177,13 +177,13 @@ function Checklists() {
 
     return(
         <Container className={styles.container}>
-            <h2 className={styles.title}>
-                <Link to={`/servers/${serverInfo.id}`}>{serverInfo.name}</Link> 체크리스트
-            </h2>
-            <div className={styles.btn_wrap}>
-                <button className={`add_btn ${styles.add_btn}`}
-                onClick={handleAddState}><PlusCircle/></button>
-                {/* <button className={`del_btn ${styles.del_btn}`}>제거</button> */}
+            <div className={styles.title_box}>
+                <h2 className={styles.title}>체크리스트</h2>
+                <div className={styles.btn_wrap}>
+                    <button className={`add_btn ${styles.add_btn}`}
+                    onClick={handleAddState}><PlusCircle/></button>
+                    <button className={`del_btn ${styles.del_btn}`}><Trash/></button>
+                </div>
             </div>
             <div className={styles.box}>
                 <ul>

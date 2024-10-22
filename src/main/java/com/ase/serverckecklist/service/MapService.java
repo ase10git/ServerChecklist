@@ -14,10 +14,14 @@ public class MapService {
 
     private final MapRepository mapRepository;
 
-
     // 서버의 맵 전체 조회
     public ArrayList<Map> index(String serverId) { // 서버 id를 매개변수로 받고, 메소드 추가!!!
         return mapRepository.findByServerId(serverId);
+    }
+
+    // 가장 최근에 서버에 추가된 맵 상위 6개만 가져오기
+    public ArrayList<Map> recentList(String serverId) {
+        return mapRepository.findByServerIdOrderByCreatedDateDescModifiedDateDesc(serverId);
     }
 
     // id로 맵 조회

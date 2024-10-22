@@ -21,17 +21,20 @@ public class ServerInfoController {
     private final ServerInfoService serverInfoService;
 
     // GET
+    // 서버 전체 목록 가져오기
     @GetMapping("/list")
     public ArrayList<ServerInfoVO> index() {
         return serverInfoService.index();
     }
 
+    // 특정 서버 정보 가져오기
     @GetMapping("{id}")
     public ServerInfo index(@PathVariable("id") String id) {
         return serverInfoService.show(id);
     }
 
     // POST
+    // 서버 추가하기
     @PostMapping("")
     public ResponseEntity<ServerInfo> create(@RequestBody ServerInfoDto dto) {
         ServerInfo created = serverInfoService.create(dto);
@@ -42,6 +45,7 @@ public class ServerInfoController {
     }
 
     // PATCH
+    // 서버 수정하기
     @PatchMapping("{id}")
     public ResponseEntity<ServerInfo> update(
             @PathVariable("id") String id,
@@ -55,6 +59,7 @@ public class ServerInfoController {
     }
 
     // DELETE
+    // 서버 삭제하기
     @DeleteMapping("{id}")
     public ResponseEntity<ServerInfo> delete(@PathVariable("id") String id) {
         ServerInfo deleted = serverInfoService.delete(id);

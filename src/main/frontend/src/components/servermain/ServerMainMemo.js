@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Dot } from 'react-bootstrap-icons';
 import styles from 'styles/components/servermain/servermainMemo.module.css';
 //import memoSample from 'lib/sampleData/memoSample';

@@ -1,15 +1,13 @@
 import styles from 'styles/pages/server/memo.module.css';
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 //import memoSample from 'lib/sampleData/memoSample';
 import { CheckLg, PencilFill, PlusCircle, Trash, XLg } from 'react-bootstrap-icons';
-import { create, list, patch, remove } from 'api/memo';
-import { show } from 'api/server';
+import { create, list, patch, remove } from 'api/serverItems';
 import { Container, Form } from "react-bootstrap";
 
 function Memo() {
 
-    const [serverInfo, setServerInfo] = useState({});
     const [memo, setMemo] = useState([]);
     const {id} = useParams(); // serverId
     const [isAdd, setIsAdd] = useState(false);
@@ -79,7 +77,7 @@ function Memo() {
                 return;
             }
 
-            const res = await create(formData);
+            const res = await create(0, formData);
 
             if (res !== null) {
                 alert('메모가 추가되었습니다');
@@ -106,7 +104,7 @@ function Memo() {
         });
 
         try {
-            const res = await patch(updatedFormData);
+            const res = await patch(0, updatedFormData);
 
             if (res !== null) {
                 alert('메모가 수정되었습니다');
@@ -148,7 +146,7 @@ function Memo() {
         }
 
         try {
-            const res = await remove(id);
+            const res = await remove(0, id);
 
             if (res !== null) {
                 alert('메모가 삭제되었습니다');
@@ -161,26 +159,19 @@ function Memo() {
     }
 
     useEffect(()=>{
-        // 서버 이름 가져오기
-        async function getServer() {
-            const res = await show(id);
-            setServerInfo(res);
-        }
-
         // 서버 메모 가져오기
         async function getMemo() {
-            const res = await list(id);
+            const res = await list(0, id);
             setMemo(res);
         }
 
-        getServer();
         getMemo();
     }, []);
 
     return (
         <Container className={styles.container}>
-            <h2 className={styles.title}><Link to={`/`}>{serverInfo.name}</Link> 메모</h2>
-            <div className={styles.add_btn_wrap}>
+            <div className={styles.title_box}>
+                <h2 className={styles.title}>메모 목록</h2>
                 <button className={`add_btn ${styles.add_btn}`}
                 onClick={handleAddState}><PlusCircle/></button>
             </div>

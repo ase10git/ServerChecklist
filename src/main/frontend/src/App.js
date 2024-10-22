@@ -19,6 +19,7 @@ import ServerAdd from 'pages/server/ServerAdd';
 import ServerEdit from 'pages/server/ServerEdit';
 import Favorites from 'pages/user/Favorites';
 import Error from 'pages/Error';
+import ServerInfoBox from 'components/servermain/ServerInfoBox';
 
 function App() {
 
@@ -32,17 +33,17 @@ function App() {
           <Route path="/register" Component={Register}/>
           <Route path="/resetpwd" Component={ResetPwd}/>
           <Route path="/user">
-            <Route path="" Component={User}/>
+            <Route index Component={User}/>
             <Route path="favorites" Component={Favorites}/>
           </Route>
           <Route path="/servers/add" Component={ServerAdd}/>
-          <Route path="/servers/:id">
-            <Route path="" Component={ServerMain}/>
+          <Route path="/servers/:id" Component={ServerMain}>
+            <Route index Component={ServerInfoBox}/>
             <Route path="edit" Component={ServerEdit}/>
             <Route path="checklists" Component={Checklists}/>
             <Route path="memo" Component={Memo}/>
             <Route path="maps">
-              <Route path="" Component={Maps}/>
+              <Route index Component={Maps}/>
               <Route path=":id" Component={MapDetail}/>
               <Route path="new" Component={MapAdd}/>
             </Route>
