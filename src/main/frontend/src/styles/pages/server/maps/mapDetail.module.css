@@ -1,12 +1,18 @@
 .container{
     width: 90%;
-    margin: 50px 0;
+    margin: 20px 0;
     position: relative;
+}
+
+.title_box{
+    width: 100%;
+    margin-bottom: 20px;
+    display: flex; justify-content: space-between;
+    align-items: center;
 }
 
 .title{
     width: 80%;
-    margin-bottom: 20px;
     text-align: left;
     white-space: nowrap;
     overflow: hidden;
@@ -14,10 +20,6 @@
 }
 
 /* default map info page */
-.btn_wrap{
-    position: absolute; top: 0; right: 0;
-}
-
 .edit_btn{
     margin-right: 5px;
 }

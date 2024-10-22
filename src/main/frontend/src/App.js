@@ -44,7 +44,7 @@ function App() {
             <Route path="memo" Component={Memo}/>
             <Route path="maps">
               <Route index Component={Maps}/>
-              <Route path=":id" Component={MapDetail}/>
+              <Route path=":mapid" Component={MapDetail}/>
               <Route path="new" Component={MapAdd}/>
             </Route>
           </Route>

@@ -1,35 +1,56 @@
 import styles from 'styles/pages/server/maps/maps.module.css';
-import { Link, useNavigate } from "react-router-dom";
-import mapSample from 'lib/sampleData/mapSample';
-import { useState } from 'react';
-import { PlusCircle } from 'react-bootstrap-icons';
-
-const { Container, button } = require("react-bootstrap");
+import { Link, useNavigate, useParams } from "react-router-dom";
+//import mapSample from 'lib/sampleData/mapSample';
+import { useEffect, useState } from 'react';
+import { Map, PlusCircle, PlusLg, Trash } from 'react-bootstrap-icons';
+import { list } from 'api/serverItems';
+import { Container } from "react-bootstrap";
 
 function Maps() {
 
-    const [maplist, setMaplist] = useState(mapSample);
+    const [maplist, setMaplist] = useState([]);
+    const {id} = useParams();
     const navigate = useNavigate();
 
+    // 지도 추가 페이지 이동
     function handleAddBtn() {
-        navigate(`/servers/${maplist[0].serverid}/maps/new`);
+        navigate(`/servers/${id}/maps/new`);
     }
+
+    useEffect(()=>{
+        // 지도 가져오기
+        async function getMaps() {
+            const res = await list(2, id);
+            setMaplist(res);
+        }
+        getMaps();
+    }, []);
 
     return (
         <Container className={styles.container}>
-            <h2 className={styles.title}><Link to={`/`}>서버(이름)</Link> 지도</h2>
-            <div className={styles.add_btn_wrap}>
-                <button className={`add_btn ${styles.add_btn}`}
-                onClick={handleAddBtn}>추가</button>
+            <div className={styles.title_box}>
+                <h2 className={styles.title}>지도 목록</h2>
+                <div className={styles.btn_wrap}>
+                    <button className={`add_btn ${styles.add_btn}`}
+                    onClick={handleAddBtn}><PlusLg/></button>
+                    <button className={`del_btn ${styles.del_btn}`}><Trash/></button>
+                </div>
             </div>
             <div className={styles.box}>
                 {
                     maplist.map((el)=>{
                         return(
-                        <div className={styles.map}>
-                            <Link to={`/servers/${el.serverid}/maps/${el.id}`}>
+                        <div className={styles.map} key={el.id}>
+                            <Link to={`/servers/${id}/maps/${el.id}`}>
                             <div className={styles.map_img_box}>
-                                <img src={el.photo} alt="mapimg"></img>
+                                {
+                                    el.photo ?
+                                    <img src={el.photo} alt="mapimg"></img>
+                                    :
+                                    <div className={styles.icon_default}>
+                                        <Map/>
+                                    </div>
+                                }
                             </div>
                             <p className={styles.map_title}>{el.title}</p>
                             </Link>

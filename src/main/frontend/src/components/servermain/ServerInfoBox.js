@@ -12,6 +12,7 @@ function ServerInfoBox() {
     const {serverInfo} = useOutletContext();
     const [serverMemo, setServerMemo] = useState([]);
     const [serverChecklists, setServerChecklists] = useState([]);
+    const [serverMaps, setServerMaps] = useState([]);
     const navigate = useNavigate();
 
     useEffect(()=>{
@@ -27,8 +28,14 @@ function ServerInfoBox() {
             setServerChecklists(res);
         }
 
+        // 서버 지도 가져오기
+        async function getMaps() {
+            const res = await recentList(2, id);
+            setServerMaps(res);
+        }
         getMemo();
         getChecklists();
+        getMaps();
     }, [id]);
 
     return(
@@ -54,7 +61,7 @@ function ServerInfoBox() {
                 <h2 className={styles.category_title}>서버 지도</h2>
                 <button className={styles.more_btn} 
                 onClick={()=>{navigate(`/servers/${serverInfo.id}/maps`)}}>더보기</button>
-                <ServerMainMap/>
+                <ServerMainMap serverMaps={serverMaps} serverId={id}/>
             </div>
         </div>
     )
