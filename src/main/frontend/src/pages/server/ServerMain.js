@@ -3,6 +3,7 @@ import styles from 'styles/pages/server/serverMain.module.css';
 import { Link, Outlet, useNavigate, useParams } from 'react-router-dom';
 import { show } from 'api/server';
 import { Pencil } from 'react-bootstrap-icons';
+import fileurl from 'api/image';
 
 function ServerMain() {
 
@@ -35,8 +36,11 @@ function ServerMain() {
                         onClick={handleServerEdit}><Pencil/></button>
                     </div>
                     <div className={styles.server_img_box}>
-                        <img src={`${process.env.PUBLIC_URL}/img/serverImg/minecraft.jpg`} alt="serverimg"></img>
-                        {/* <img src={serverInfo.photo} alt="serverimg"></img> */}
+                        {
+                            serverInfo.photoId ?
+                            <img src={`${fileurl}${serverInfo.photoId}`} alt="serverimg"/>
+                            : null
+                        }
                     </div>
                 </div>
                 <div className={styles.server_desc_box}>

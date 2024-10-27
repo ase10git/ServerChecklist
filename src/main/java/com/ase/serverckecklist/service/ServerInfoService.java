@@ -9,7 +9,9 @@ import com.ase.serverckecklist.repository.ServerInfoRepository;
 import com.ase.serverckecklist.vo.ServerInfoVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 @Service
@@ -20,14 +22,18 @@ public class ServerInfoService {
     private final MemoRepository memoRepository;
     private final CheckListRepository checkListRepository;
     private final MapRepository mapRepository;
+    private final FileService fileService;
 
     // 서버 전체 조회
     public ArrayList<ServerInfoVO> index() {
+        // 서버 정보들을 담은 VO 리스트
         ArrayList<ServerInfoVO> list = new ArrayList<>();
+
+        // 서버 정보 리스트
         ArrayList<ServerInfo> serverList = (ArrayList<ServerInfo>) serverInfoRepository.findAll();
 
         for (ServerInfo serverInfo : serverList) {
-            // 서버 정보와 각 서버의 메모, 체크리스트, 맵 수를 저장한 VO 생성
+            // 서버 정보, 사진, 각 서버의 메모, 체크리스트, 맵 수를 저장한 VO 생성
             ServerInfoVO vo = new ServerInfoVO(
                     serverInfo,
                     memoRepository.countByServerId(serverInfo.getId()),
@@ -47,8 +53,19 @@ public class ServerInfoService {
     }
 
     // 새 서버 추가
-    public ServerInfo create(ServerInfoDto dto) {
-        ServerInfo serverInfo = dto.toEntity();
+    public ServerInfo create(ServerInfoDto dto) throws IOException {
+        // 파일 id
+        String fileId = null;
+
+        // 파일이 있는 경우에만 파일 등록 수행 후 파일 id 가져오기
+        if (dto.getPhoto() != null) {
+            if (!dto.getPhoto().isEmpty()) {
+                fileId = fileService.addFile(dto.getPhoto());
+            }
+        }
+
+        // 파일 id를 넣은 dto를 entity로 변환
+        ServerInfo serverInfo = dto.toEntity(fileId);
 
         if (serverInfo.getId() != null) { // 중복id 존재 시 데이터 추가 x
             return null;
@@ -58,16 +75,32 @@ public class ServerInfoService {
     }
 
     // 서버 수정
-    public ServerInfo update(String id, ServerInfoDto dto) {
-        ServerInfo serverInfo = dto.toEntity();
-
+    public ServerInfo update(String id, ServerInfoDto dto) throws IOException {
         // 수정 대상
         ServerInfo target = serverInfoRepository.findById(id).orElse(null);
 
         // 잘못된 요청 처리
-        if (target == null || !id.equals(serverInfo.getId())) {
+        if (target == null || !id.equals(dto.getId())) {
             return null;
         }
+
+        // 수정할 파일 id
+        MultipartFile file = dto.getPhoto();
+        String fileId = target.getPhotoId();
+
+        // 파일 삭제 요청 여부
+        if (dto.isFileDeleteFlag() || (file != null && !file.isEmpty())) { // 삭제 요청 있을 때
+            // 기존 파일 제거
+            fileService.deleteFile(target.getPhotoId());
+            fileId = null;
+
+            // 파일이 있는 경우에만 파일 등록 수행 후 파일 id 가져오기
+            if (file != null && !file.isEmpty()) {
+                fileId = fileService.addFile(file);
+            }
+        }
+
+        ServerInfo serverInfo = dto.toEntity(fileId);
 
         // 기존 데이터에 새 데이터 붙이기
         target.patch(serverInfo);
@@ -83,7 +116,12 @@ public class ServerInfoService {
         if (target == null) {
             return null;
         }
-        
+
+        // 서버에 등록된 사진 제거
+        if (target.getPhotoId() != null) {
+            fileService.deleteFile(target.getPhotoId());
+        }
+
         serverInfoRepository.delete(target);
         return target; // HTTP 응답의 body가 없는 ResponseEntity 생성
     }

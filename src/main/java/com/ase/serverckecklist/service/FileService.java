@@ -38,7 +38,7 @@ public class FileService {
         return fileID.toString();
     }
 
-    // 파일 가져오기
+    // 특정 파일 가져오기
     public LoadFile downloadFile(String id) throws IOException {
         // GridFS에 저장된 파일 중 _id가 찾으려는 id와 일치하는 파일을 query
         // GridFsCriteria 클래스로 Query를 정의할 수 있음
@@ -47,9 +47,10 @@ public class FileService {
         // 받아올 파일 정보를 저장한 객체
         LoadFile loadFile = new LoadFile();
 
-        // GridFS에 검색한 파일이 존재하거나 메타 데이터가 존재할 때
-        if (gridFSFile != null || gridFSFile.getMetadata() != null) {
+        // GridFS에 검색한 파일과 메타 데이터가 존재할 때
+        if (gridFSFile != null && gridFSFile.getMetadata() != null) {
             // 받아올 파일 객체에 GridFS의 정보들을 저장
+            loadFile.setId(id);
             loadFile.setFilename(gridFSFile.getFilename());
             loadFile.setFileType(gridFSFile.getMetadata().get("_contentType").toString());
             loadFile.setFileSize(gridFSFile.getMetadata().get("fileSize").toString());
@@ -65,7 +66,7 @@ public class FileService {
         GridFSFile gridFSFile = template.findOne(query);
 
         if (gridFSFile != null) {
-            operations.delete(query);
+            template.delete(query);
         }
     }
 }

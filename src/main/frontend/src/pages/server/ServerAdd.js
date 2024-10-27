@@ -10,7 +10,7 @@ function ServerAdd() {
     // form 데이터
     const [formData, setFormData] = useState({
         name: '',
-        photo: '',
+        photo: null,
         usage: '',
         description: ''
     });
@@ -18,19 +18,31 @@ function ServerAdd() {
 
     // form 데이터 등록
     function handleChange(event) {
-        const { name, value } = event.currentTarget;
+        const { name, value, files } = event.currentTarget;
         setFormData((prev) => ({
             ...prev,
-            [name] : value,
-        }))
+            [name] : name === "photo" ? files[0] : value,
+        }));
     }
 
     // 서버 추가
     async function handleSubmit(event) {
         event.preventDefault();
 
+        // 전송할 formData 객체 생성
+        const formDataToSend = new FormData();
+        formDataToSend.append("name", formData.name);
+        formDataToSend.append("usage", formData.usage);
+        formDataToSend.append("description", formData.description);
+
+        // 파일이 있는 경우에만 첨부
+        // 만약 그냥 null이라도 FormData에 넣는 경우 서버에서 type mismatch 에러 발생
+        if (formData.photo) {
+            formDataToSend.append("photo", formData.photo);
+        }
+
         try {
-            const res = await create(formData);
+            const res = await create(formDataToSend);
 
             if (res !== null) {
                 alert('서버가 추가되었습니다');

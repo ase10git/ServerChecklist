@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 @RestController
@@ -23,7 +24,7 @@ public class ServerInfoController {
     // GET
     // 서버 전체 목록 가져오기
     @GetMapping("/list")
-    public ArrayList<ServerInfoVO> index() {
+    public ArrayList<ServerInfoVO> index() throws IOException {
         return serverInfoService.index();
     }
 
@@ -35,8 +36,12 @@ public class ServerInfoController {
 
     // POST
     // 서버 추가하기
-    @PostMapping("")
-    public ResponseEntity<ServerInfo> create(@RequestBody ServerInfoDto dto) {
+    @PostMapping(value = "")
+    public ResponseEntity<ServerInfo> create(
+            @ModelAttribute ServerInfoDto dto
+            ) throws IOException {
+        log.info(dto.toString());
+
         ServerInfo created = serverInfoService.create(dto);
 
         return (created != null) ?
@@ -46,11 +51,13 @@ public class ServerInfoController {
 
     // PATCH
     // 서버 수정하기
-    @PatchMapping("{id}")
+    @PatchMapping(value = "{id}")
     public ResponseEntity<ServerInfo> update(
             @PathVariable("id") String id,
-            @RequestBody ServerInfoDto dto
-    ) {
+            @ModelAttribute ServerInfoDto dto
+    ) throws IOException {
+        log.info(dto.toString());
+
         ServerInfo updated = serverInfoService.update(id, dto);
 
         return (updated != null) ?

@@ -15,7 +15,7 @@ function ServerEdit() {
     const [formData, setFormData] = useState({
         id: '',
         name: '',
-        photo: '',
+        photo: null,
         usage: '',
         description: ''
     });
@@ -27,7 +27,7 @@ function ServerEdit() {
             setFormData({
                 id: res.id,
                 name: res.name,
-                photo: res.photo,
+                photo: res.photo ?? null,
                 usage: res.usage,
                 description: res.description
             });
@@ -39,28 +39,38 @@ function ServerEdit() {
 
     // form 데이터 등록
     function handleChange(event) {
-        const { name, value } = event.currentTarget;
+        const { name, value, files } = event.currentTarget;
         setFormData((prev) => ({
             ...prev,
-            [name] : value,
+            [name] : name === "photo" ? files[0] : value,
         }));
+        console.log(formData)
     }
 
     // 서버 수정
     async function handleSubmit(event) {
         event.preventDefault();
 
-        const updatedFormData = {...formData};
-
-        // 빈 값 처리
-        Object.keys(updatedFormData).forEach((key)=>{
-            if (updatedFormData[key] === null || updatedFormData[key] === '') {
-                updatedFormData[key] = serverInfo[key];
+        // 전송할 formData 객체 생성
+        const formDataToSend = new FormData();
+        Object.keys(formData)
+        .filter(key => key !== "photo")
+        .forEach((key)=>{
+            if (formData[key] === null || formData[key] === '') {
+                formDataToSend.append(`${key}`, serverInfo[key]);
+            } else {
+                formDataToSend.append(`${key}`, formData[key]);
             }
         });
 
+        // 파일이 있는 경우에만 첨부
+        // 만약 그냥 null이라도 FormData에 넣는 경우 서버에서 type mismatch 에러 발생
+        if (formData.photo) {
+            formDataToSend.append("photo", formData.photo);
+        }
+
         try {
-            const res = await patch(updatedFormData);
+            const res = await patch(id, formDataToSend);
 
             if (res !== null) {
                 alert('서버가 수정되었습니다');
@@ -84,7 +94,8 @@ function ServerEdit() {
             className={styles.box}>
                 <div className={styles.img_box}>
                     <img src={serverInfo.photo} alt="serverimg"></img>
-                    <input type='file' name="photo" accept="image/*"></input>
+                    <input type='file' name="photo" accept="image/*"
+                    onChange={handleChange}></input>
                 </div>
                 <div className={styles.info_box}>
                     <Form.Group md="4" controlId="name" className={styles.form_box}>

@@ -1,6 +1,7 @@
 import { ListCheck, PencilSquare, PinMapFill } from 'react-bootstrap-icons';
 import { Link } from 'react-router-dom';
 import styles from 'styles/components/main/serverInfoContainer.module.css';
+import fileurl from 'api/image';
 
 function ServerInfoContainer({data}) {
 
@@ -9,7 +10,11 @@ function ServerInfoContainer({data}) {
             <span className={styles.server_name}>{data.serverInfo.name}</span>
             <div className={styles.server_photo_box}>
                 <Link to={`/servers/${data.serverInfo.id}`}>
-                    <img src={data.serverInfo.photo} alt="serverImg"></img>
+                {
+                    data.serverInfo.photoId ?
+                    <img src={`${fileurl}${data.serverInfo.photoId}`} alt="serverImg"/>
+                    : null
+                }
                 </Link>
             </div>
             <div className={styles.server_info_box}>

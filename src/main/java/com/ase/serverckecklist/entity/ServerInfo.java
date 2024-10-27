@@ -18,7 +18,7 @@ public class ServerInfo {
     private String id;
 
     private String name;
-    private String photo;
+    private String photoId;
     private String usage;
     private String description;
     private String managerId;
@@ -32,9 +32,9 @@ public class ServerInfo {
     // constructor
 
     // 신규 등록용
-    public ServerInfo(String name, String photo, String usage, String description) {
+    public ServerInfo(String name, String photoId, String usage, String description) {
         this.name = name;
-        this.photo = photo;
+        this.photoId = photoId;
         this.usage = usage;
         this.description = description;
         this.createdDate = LocalDateTime.now();
@@ -43,10 +43,10 @@ public class ServerInfo {
     }
 
     // 수정용
-    public ServerInfo(String id, String name, String photo, String usage, String description) {
+    public ServerInfo(String id, String name, String photoId, String usage, String description) {
         this.id = id;
         this.name = name;
-        this.photo = photo;
+        this.photoId = photoId;
         this.usage = usage;
         this.description = description;
     }
@@ -58,8 +58,8 @@ public class ServerInfo {
             this.name = serverInfo.name;
         }
 
-        if (photo != null) {
-            this.photo = serverInfo.photo;
+        if (photoId != null) {
+            this.photoId = serverInfo.photoId;
         }
 
         if (usage != null) {

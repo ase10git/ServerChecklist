@@ -2,25 +2,27 @@ package com.ase.serverckecklist.dto;
 
 import com.ase.serverckecklist.entity.ServerInfo;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class ServerInfoDto {
 
     private String id;
     private String name;
-    private String photo;
+    private MultipartFile photo;
     private String usage;
     private String description;
     private String managerId;
+    private boolean fileDeleteFlag = false;
 
     // DTO -> Entity
-    public ServerInfo toEntity() {
+    public ServerInfo toEntity(String photoId) {
         // id 유무에 따른 수정/추가 구분
         if (id == null) {
             // 신규 등록
             return new ServerInfo(
                     name,
-                    photo,
+                    photoId,
                     usage,
                     description
             );
@@ -29,7 +31,7 @@ public class ServerInfoDto {
             return new ServerInfo(
                     id,
                     name,
-                    photo,
+                    photoId,
                     usage,
                     description
             );

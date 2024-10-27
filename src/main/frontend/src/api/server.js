@@ -52,9 +52,9 @@ export async function create(formData) {
 }
 
 // 서버 수정하기
-export async function patch(formData) {
+export async function patch(id, formData) {
     return errorHandling(async ()=>{
-        const res = await axios.patch(`/servers/${formData.id}`, formData);
+        const res = await axios.patch(`/servers/${id}`, formData);
         
         if (res.statusText !== "OK") {
             //window.location.href = '/error';
