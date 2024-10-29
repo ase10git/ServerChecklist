@@ -7,6 +7,12 @@
     position: relative;
 }
 
+@media screen and (min-width: 1368px) {
+    .container{
+        width: 40%;
+    }
+}
+
 .server_name{
     padding: 8px;
     border-radius: 5px;

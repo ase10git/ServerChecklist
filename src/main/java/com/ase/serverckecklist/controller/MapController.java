@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 @RestController
@@ -41,7 +42,9 @@ public class MapController {
     // POST
     // 지도 추가하기
     @PostMapping("")
-    public ResponseEntity<Map> create(@RequestBody MapDto dto) {
+    public ResponseEntity<Map> create(
+            @ModelAttribute MapDto dto
+        ) throws IOException {
         Map created = mapService.create(dto);
 
         return (created != null) ?
@@ -54,8 +57,8 @@ public class MapController {
     @PatchMapping("{id}")
     public ResponseEntity<Map> update(
             @PathVariable("id") String id,
-            @RequestBody MapDto dto
-    ) {
+            @ModelAttribute MapDto dto
+    ) throws IOException {
         Map updated = mapService.update(id, dto);
 
         return (updated != null) ?

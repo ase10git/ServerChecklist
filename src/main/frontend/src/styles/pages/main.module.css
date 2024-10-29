@@ -37,6 +37,7 @@
     .server_box{
         margin-top: 40px;
         flex-direction: row;
+        flex-wrap: wrap;
     }
 }
 

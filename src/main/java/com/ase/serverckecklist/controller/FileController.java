@@ -25,7 +25,7 @@ public class FileController {
 
     // GET
     // 파일 다운로드하기
-    @GetMapping("/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<ByteArrayResource> download(@PathVariable("id") String id) throws IOException {
         LoadFile loadFile = fileService.downloadFile(id);
         String filename = URLEncoder.encode(loadFile.getFilename(), StandardCharsets.UTF_8.toString());

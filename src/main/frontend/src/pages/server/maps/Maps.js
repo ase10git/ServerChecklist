@@ -1,10 +1,10 @@
 import styles from 'styles/pages/server/maps/maps.module.css';
 import { Link, useNavigate, useParams } from "react-router-dom";
-//import mapSample from 'lib/sampleData/mapSample';
 import { useEffect, useState } from 'react';
 import { Map, PlusCircle, PlusLg, Trash } from 'react-bootstrap-icons';
 import { list } from 'api/serverItems';
 import { Container } from "react-bootstrap";
+import fileurl from 'api/image';
 
 function Maps() {
 
@@ -44,8 +44,9 @@ function Maps() {
                             <Link to={`/servers/${id}/maps/${el.id}`}>
                             <div className={styles.map_img_box}>
                                 {
-                                    el.photo ?
-                                    <img src={el.photo} alt="mapimg"></img>
+                                    el.photoId ?
+                                    <img src={`${fileurl}${el.photoId}`} alt="mapimg"
+                                    className={styles.map_img}></img>
                                     :
                                     <div className={styles.icon_default}>
                                         <Map/>

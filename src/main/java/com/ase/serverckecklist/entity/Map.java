@@ -19,7 +19,7 @@ public class Map {
 
     private String title;
     private String location;
-    private String photo;
+    private String photoId;
     private String ownerId;
     private String serverId;
     private String description;
@@ -32,10 +32,10 @@ public class Map {
 
     // constructor
     // 생성용
-    public Map(String title, String location, String photo, String ownerId, String serverId, String description) {
+    public Map(String title, String location, String photoId, String ownerId, String serverId, String description) {
         this.title = title;
         this.location = location;
-        this.photo = photo;
+        this.photoId = photoId;
         this.ownerId = ownerId;
         this.serverId = serverId;
         this.description = description;
@@ -44,11 +44,11 @@ public class Map {
     }
 
     // 수정용
-    public Map(String id, String title, String location, String photo, String ownerId, String serverId, String description) {
+    public Map(String id, String title, String location, String photoId, String ownerId, String serverId, String description) {
         this.id = id;
         this.title = title;
         this.location = location;
-        this.photo = photo;
+        this.photoId = photoId;
         this.ownerId = ownerId;
         this.serverId = serverId;
         this.description = description;
@@ -57,19 +57,19 @@ public class Map {
     // 데이터 수정
     public void patch(Map map) {
 
-        if (title != null) {
+        if (map.title != null) {
             this.title = map.title;
         }
 
-        if (location != null) {
+        if (map.location != null) {
             this.location = map.location;
         }
 
-        if (photo != null) {
-            this.photo = map.photo;
+        if (map.photoId != null) {
+            this.photoId = map.photoId;
         }
 
-        if (description != null) {
+        if (map.description != null) {
             this.description = map.description;
         }
 

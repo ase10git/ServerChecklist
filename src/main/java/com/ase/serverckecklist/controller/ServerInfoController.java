@@ -40,8 +40,6 @@ public class ServerInfoController {
     public ResponseEntity<ServerInfo> create(
             @ModelAttribute ServerInfoDto dto
             ) throws IOException {
-        log.info(dto.toString());
-
         ServerInfo created = serverInfoService.create(dto);
 
         return (created != null) ?
@@ -56,8 +54,6 @@ public class ServerInfoController {
             @PathVariable("id") String id,
             @ModelAttribute ServerInfoDto dto
     ) throws IOException {
-        log.info(dto.toString());
-
         ServerInfo updated = serverInfoService.update(id, dto);
 
         return (updated != null) ?

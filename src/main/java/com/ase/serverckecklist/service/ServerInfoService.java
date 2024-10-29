@@ -54,6 +54,11 @@ public class ServerInfoService {
 
     // 새 서버 추가
     public ServerInfo create(ServerInfoDto dto) throws IOException {
+        // 중복id 존재 시 데이터 추가 x
+        if (dto.getId() != null) {
+            return null;
+        }
+
         // 파일 id
         String fileId = null;
 
@@ -66,10 +71,6 @@ public class ServerInfoService {
 
         // 파일 id를 넣은 dto를 entity로 변환
         ServerInfo serverInfo = dto.toEntity(fileId);
-
-        if (serverInfo.getId() != null) { // 중복id 존재 시 데이터 추가 x
-            return null;
-        }
 
         return serverInfoRepository.save(serverInfo);
     }
