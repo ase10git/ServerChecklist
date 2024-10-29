@@ -9,3 +9,12 @@ async function errorHandling(targetFn) {
     }
 }
 
+export async function saveChecked(list) {
+    return errorHandling(async () => {
+        const res = await axios.patch('/checklists/checkboxs', list);
+
+        if (res.statusText !== "OK") {
+            //window.location.href = '/error';
+        }
+    });
+}

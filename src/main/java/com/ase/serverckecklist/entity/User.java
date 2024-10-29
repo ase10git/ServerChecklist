@@ -54,15 +54,15 @@ public class User {
     // 데이터 수정
     public void patch(User user) {
 
-        if (password != null) {
+        if (user.password != null) {
             this.password = user.password;
         }
 
-        if (nickname != null) {
+        if (user.nickname != null) {
             this.nickname = user.nickname;
         }
 
-        if (profile != null) {
+        if (user.profile != null) {
             this.profile = user.profile;
         }
 

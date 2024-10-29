@@ -63,6 +63,17 @@ public class CheckListController {
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
+    // 체크박스 변경하기
+    @PatchMapping("/checkboxs")
+    public ResponseEntity<ArrayList<CheckList>> saveChecked(@RequestBody ArrayList<CheckListDto> dtos) {
+        log.info(dtos.toString());
+
+        ArrayList<CheckList> updated = checkListService.saveChecked(dtos);
+        return (updated != null && !updated.isEmpty()) ?
+                ResponseEntity.status(HttpStatus.OK).body(updated) :
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    }
+
     // DELETE
     // 체크리스트 삭제하기
     @DeleteMapping("{id}")

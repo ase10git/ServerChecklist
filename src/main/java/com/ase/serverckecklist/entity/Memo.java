@@ -48,11 +48,11 @@ public class Memo {
     // 데이터 수정
     public void patch(Memo memo) {
 
-        if (name != null) {
+        if (memo.name != null) {
             this.name = memo.name;
         }
 
-        if (content != null) {
+        if (memo.content != null) {
             this.content = memo.content;
         }
 

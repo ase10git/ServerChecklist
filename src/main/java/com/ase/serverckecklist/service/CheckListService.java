@@ -4,6 +4,7 @@ import com.ase.serverckecklist.dto.CheckListDto;
 import com.ase.serverckecklist.entity.CheckList;
 import com.ase.serverckecklist.repository.CheckListRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CheckListService {
 
     private final CheckListRepository checkListRepository;
@@ -58,6 +60,27 @@ public class CheckListService {
         return checkListRepository.save(target);
     }
 
+    // 체크박스 변경하기
+    public ArrayList<CheckList> saveChecked(ArrayList<CheckListDto> dtos) {
+        // 결과물 배열
+        ArrayList<CheckList> list = new ArrayList<>();
+
+        for (CheckListDto dto : dtos) {
+            CheckList updated = dto.toEntity();
+
+            // 수정 대상
+            CheckList target = checkListRepository.findById(dto.getId()).orElse(null);
+
+            // 타겟이 있는 경우만 체크박스 수정
+            if (target != null) {
+                target.patch(updated);
+                checkListRepository.save(target);
+                list.add(target);
+            }
+        }
+
+        return list;
+    }
 
     // 체크리스트 삭제
     public CheckList delete(String id) {

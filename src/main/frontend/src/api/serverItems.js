@@ -73,9 +73,9 @@ export async function create(typenum, formData) {
 }
 
 // 타겟항목 수정하기
-export async function patch(typenum, formData) {
+export async function patch(typenum, id, formData) {
     return errorHandling(async ()=>{
-        const res = await axios.patch(`/${typebox[typenum]}/${formData.id}`, formData);
+        const res = await axios.patch(`/${typebox[typenum]}/${id}`, formData);
         
         if (res.statusText !== "OK") {
             //window.location.href = '/error';

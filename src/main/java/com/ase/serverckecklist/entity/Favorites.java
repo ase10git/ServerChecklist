@@ -1,6 +1,5 @@
 package com.ase.serverckecklist.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
@@ -39,19 +38,19 @@ public class Favorites {
     // 데이터 수정용
     public void patch(Favorites favorites) {
 
-        if (serverList != null) {
+        if (favorites.serverList != null) {
             this.serverList = favorites.serverList;
         }
 
-        if (checklist != null) {
+        if (favorites.checklist != null) {
             this.checklist = favorites.checklist;
         }
 
-        if (mapList != null) {
+        if (favorites.mapList != null) {
             this.mapList = favorites.mapList;
         }
 
-        if (memoList != null) {
+        if (favorites.memoList != null) {
             this.memoList = favorites.memoList;
         }
     }

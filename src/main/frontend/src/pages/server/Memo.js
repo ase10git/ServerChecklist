@@ -67,16 +67,17 @@ function Memo() {
     async function handleSubmit(event) {
         event.preventDefault();
 
-        try {
-            if (formData.name === null || formData.name === '') {
-                alert('제목을 입력해주세요!');
-                return;
-            }
-            if (formData.content === null || formData.content === '') {
-                alert('내용을 입력해주세요!');
-                return;
-            }
+        // 유효성 검사
+        if (formData.name === null || formData.name === '') {
+            alert('제목을 입력해주세요!');
+            return;
+        }
+        if (formData.content === null || formData.content === '') {
+            alert('내용을 입력해주세요!');
+            return;
+        }
 
+        try {
             const res = await create(0, formData);
 
             if (res !== null) {
@@ -86,7 +87,6 @@ function Memo() {
                 alert('메모 추가를 실패했습니다');
             }
         } catch (error) {
-            
         }
     }
 
@@ -104,7 +104,7 @@ function Memo() {
         });
 
         try {
-            const res = await patch(0, updatedFormData);
+            const res = await patch(0, editFormData.id, updatedFormData);
 
             if (res !== null) {
                 alert('메모가 수정되었습니다');
@@ -166,7 +166,7 @@ function Memo() {
         }
 
         getMemo();
-    }, []);
+    }, [id]);
 
     return (
         <Container className={styles.container}>
@@ -179,21 +179,21 @@ function Memo() {
                 {
                     memo.map((el)=>{
                         return(
-                            <>
+                            <div key={el.id} className={styles.memo_box}>
                             {
                                 isEdit === el.id ?
-                                <MemoEdit key={el.id}
+                                <MemoEdit
                                 memo={el}
                                 handleEditChange={handleEditChange}
                                 handleEdit={handleEdit}
                                 handleEditQuit={handleEditQuit}/>
                                 :
-                                <MemoBox key={el.id}
+                                <MemoBox
                                 memo={el}
                                 handleEditState={handleEditState}
                                 handleDelete={handleDelete}/>
                             }
-                            </>
+                            </div>
                         )
                     })
                 }
@@ -219,7 +219,7 @@ function MemoBox({
     handleDelete
 }) {
     return(
-        <div className={styles.memo_box}>
+        <>
             <div className={styles.info_box}>
                 <div className={styles.memo_title_box}>
                     <span>{memo.name}</span>
@@ -237,7 +237,7 @@ function MemoBox({
             <div className={styles.content_box}>
                 {memo.content}
             </div>
-        </div>  
+        </>  
     );
 }
 
@@ -277,7 +277,7 @@ function MemoEdit({
     handleEditQuit,
 }) {
     return(
-        <Form className={styles.memo_box}>
+        <Form>
             <div className={styles.info_box}>
                 <div className={styles.memo_title_box}>
                     <input name='name'

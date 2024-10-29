@@ -1,7 +1,6 @@
-import { button, Container, Form, InputGroup } from 'react-bootstrap';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Container, Form, InputGroup } from 'react-bootstrap';
+import { useNavigate, useParams } from 'react-router-dom';
 import styles from 'styles/pages/server/maps/mapAdd.module.css';
-import mapSample from 'lib/sampleData/mapSample';
 import { useState } from 'react';
 import { Camera } from 'react-bootstrap-icons';
 import { create } from 'api/serverItems';
@@ -23,10 +22,10 @@ function MapAdd() {
 
     // form 데이터 등록
     function handleChange(event) {
-        const { name, value } = event.currentTarget;
+        const { name, value, files } = event.currentTarget;
         setFormData((prev)=>({
             ...prev,
-            [name] : value,
+            [name] : name === "photo" ? files[0] : value,
         }));
     }
 
@@ -48,7 +47,21 @@ function MapAdd() {
                 return;
             }
             
-            const res = await create(2, formData);
+            // 전송할 formData 객체 생성
+            const formDataToSend = new FormData();
+            Object.keys(formData)
+                .filter(key => key !== "photo")
+                .forEach(key => {
+                    formDataToSend.append(`${key}`, formData[key]);    
+                });
+
+            // 파일이 있는 경우에만 첨부
+            // 만약 그냥 null아라도 FormData에 넣는 경우 서버에서 type mismatch 에러 발생
+            if (formData.photo) {
+                formDataToSend.append("photo", formData.photo);
+            }
+
+            const res = await create(2, formDataToSend);
 
             if (res !== null) {
                 alert('지도가 추가되었습니다');
@@ -71,17 +84,12 @@ function MapAdd() {
             <Form className={styles.box}>
                 <input type='hidden' name='ownerid'></input>
                 <div className={styles.map_img_box}>
-                    {
-                        formData.photo === '' ?
-                        <label htmlFor='photo'><Camera/></label>
-                        :
-                        <img src='' alt='uploaded img'></img>
-                    }
+                    <label htmlFor='photo'><Camera/></label>
                     <input type='file' 
                     name="photo"
                     id="photo"
                     accept="image/*"
-                    onChange={handleChange}></input>
+                    onChange={handleChange}/>
                 </div>
                 <div className={styles.info_box}>
                     <Form.Group md="4" controlId="title" className={styles.form_box}>

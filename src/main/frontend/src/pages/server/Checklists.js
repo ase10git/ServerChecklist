@@ -1,19 +1,19 @@
 import styles from 'styles/pages/server/checklists.module.css';
 import { Container, Form } from "react-bootstrap";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import checklistSample from 'lib/sampleData/checklistSample';
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from 'react';
 import { CheckLg, PencilFill, PlusCircle, Trash, X, XLg } from 'react-bootstrap-icons';
 import { create, list, patch, remove } from 'api/serverItems';
-import { show } from 'api/server';
+import { saveChecked } from 'api/checklist';
 
 function Checklists() {
 
-    const [checklists, setChecklists] = useState(checklistSample);
-    const [serverInfo, setServerInfo] = useState({});
+    const [checklists, setChecklists] = useState([]);
     const {id} = useParams(); // serverId
-    const [isAdd, setIsAdd] = useState(false);
-    const [isEdit, setIsEdit] = useState('');
+    const [isAdd, setIsAdd] = useState(false); // 추가 상태 플래그
+    const [isEdit, setIsEdit] = useState(''); // 수정 상태 플래그
+    const [isChecked, setIsChecked] = useState([]); // 체크박스 상태
+    const [isChanged, setIsChanged] = useState(false); // 체크박스 변경 사항 플래그
     const navigate = useNavigate();
 
     // 새 체크리스트 form
@@ -35,6 +35,28 @@ function Checklists() {
     // 체크리스트 추가 시 입력폼 생성
     function handleAddState() {
         setIsAdd(!isAdd);
+    }
+
+    // 체크리스트의 체크박스 변경
+    function handleCheckboxChange(event, cid) {
+        const checkedState = event.currentTarget.checked;        
+        const defaultChecked = checklists.find((el) => (el.id === cid)).checked;
+
+        let newChangeList = [...isChecked];
+        const target = newChangeList.find(el => el.id === cid);
+
+        // 배열 요소에 특정 id가 없는 경우에만 추가
+        if (target === null || target === undefined) {
+            if (checkedState !== defaultChecked) {
+                newChangeList.push({id: cid, checked : checkedState});
+                setIsChecked(newChangeList);
+                setIsChanged(true);
+            }
+        } else if (target) {
+            if (checkedState === defaultChecked) {
+                setIsChecked(newChangeList.filter(el => el.id !== cid));
+            }
+        }
     }
 
     // 체크리스트 수정 시 입력폼 생성
@@ -68,13 +90,13 @@ function Checklists() {
     // 새 체크리스트 추가
     async function handleSubmit(event) {
         event.preventDefault();
-
+        
+        // 유효성 검사
+        if (formData.title === null || formData.title === '') {
+            alert('제목을 입력해주세요!');
+            return;
+        }
         try {
-            if (formData.title === null || formData.title === '') {
-                alert('제목을 입력해주세요!');
-                return;
-            }
-
             const res = await create(1, formData);
 
             if (res !== null) {
@@ -84,7 +106,6 @@ function Checklists() {
                 alert('체크리스트 추가를 실패했습니다');
             }
         } catch (error) {
-            
         }
     }
 
@@ -100,7 +121,7 @@ function Checklists() {
         }
 
         try {
-            const res = await patch(1, updatedFormData);
+            const res = await patch(1, editFormData.id, updatedFormData);
 
             if (res !== null) {
                 alert('체크리스트가 수정되었습니다');
@@ -160,20 +181,33 @@ function Checklists() {
     }
 
     useEffect(()=>{
-        // 서버 정보 가져오기
-        async function getServer() {
-            const res = await show(id);
-            setServerInfo(res);
-        }
-
+        // 서버 체크리스트 가져오기
         async function getChecklists() {
             const res = await list(1, id);
             setChecklists(res);
         }
 
-        getServer();
         getChecklists();
-    }, []);
+    }, [id]);
+
+    // 페이지를 떠날 때 체크박스 변경 사항 저장하기
+    useEffect(()=>{
+        async function handleBeforeUnload(event) {
+            if (isChanged) {
+                event.preventDefault();
+
+                // 체크박스 변경사항 저장
+                if (isChecked.length !== 0) {
+                    await saveChecked(isChecked);
+                }
+            }
+        };
+
+        window.addEventListener("beforeunload", handleBeforeUnload);
+        return () => {
+            window.removeEventListener("beforeunload", handleBeforeUnload);
+        }
+    }, [isChecked, isChanged]);
 
     return(
         <Container className={styles.container}>
@@ -203,7 +237,9 @@ function Checklists() {
                                 checklist={el}
                                 handleEditState={handleEditState}
                                 handleDelete={handleDelete}
-                                makeUnderline={makeUnderline}/>
+                                makeUnderline={makeUnderline}
+                                handleCheckboxChange={handleCheckboxChange}
+                                />
                                 }
                             </li>
                         )
@@ -231,14 +267,16 @@ function CheckBox({
     checklist,
     handleEditState,
     handleDelete,
-    makeUnderline
+    makeUnderline,
+    handleCheckboxChange,
 }) {
     return (
         <div className={styles.info_box}>
             <div className={styles.check_info_box}>
                 <input type="checkbox" 
                 defaultChecked={checklist.checked}
-                className={styles.check_input}/>
+                className={styles.check_input}
+                onChange={(event)=>(handleCheckboxChange(event, checklist.id))}/>
                 <span className={`${styles.check_title} ${makeUnderline(checklist.checked)}`}>
                     {checklist.title}
                 </span>

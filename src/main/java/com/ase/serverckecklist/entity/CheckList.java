@@ -51,11 +51,11 @@ public class CheckList {
     // 데이터 수정
     public void patch(CheckList checkList) {
 
-        if (title != null) {
+        if (checkList.title != null && !checkList.title.isEmpty()) {
             this.title = checkList.title;
         }
 
-        if (checked != null) {
+        if (checkList.checked != null) {
             this.checked = checkList.checked;
         }
 

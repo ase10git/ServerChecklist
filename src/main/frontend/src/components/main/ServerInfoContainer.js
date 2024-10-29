@@ -7,7 +7,11 @@ function ServerInfoContainer({data}) {
 
     return(
         <div className={styles.container}>
-            <span className={styles.server_name}>{data.serverInfo.name}</span>
+            <span className={styles.server_name}>
+                <Link to={`/servers/${data.serverInfo.id}`}>
+                    {data.serverInfo.name}
+                </Link>
+            </span>
             <div className={styles.server_photo_box}>
                 <Link to={`/servers/${data.serverInfo.id}`}>
                 {

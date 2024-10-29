@@ -12,7 +12,8 @@ function ServerAdd() {
         name: '',
         photo: null,
         usage: '',
-        description: ''
+        description: '',
+        managerId: '1111', // for test
     });
     const navigate = useNavigate();
 
@@ -29,11 +30,27 @@ function ServerAdd() {
     async function handleSubmit(event) {
         event.preventDefault();
 
+        // 유효성 검사
+        if (formData.name === null || formData.name === '') {
+            alert('서버 이름을 입력해주세요!');
+            return;
+        }
+        if (formData.usage === null || formData.usage === '') {
+            alert('사용 용도를 입력해주세요!');
+            return;
+        }
+        if (formData.description === null || formData.description === '') {
+            alert('서버 설명을 입력해주세요!');
+            return;
+        }
+
         // 전송할 formData 객체 생성
         const formDataToSend = new FormData();
-        formDataToSend.append("name", formData.name);
-        formDataToSend.append("usage", formData.usage);
-        formDataToSend.append("description", formData.description);
+        Object.keys(formData)
+            .filter(key => key !== "photo")
+            .map(key => {
+                formDataToSend.append(`${key}`, formData[key]);    
+            });
 
         // 파일이 있는 경우에만 첨부
         // 만약 그냥 null이라도 FormData에 넣는 경우 서버에서 type mismatch 에러 발생

@@ -1,11 +1,11 @@
-import { button, Container, Form, InputGroup } from 'react-bootstrap';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Container, Form, InputGroup } from 'react-bootstrap';
+import { useNavigate, useParams } from 'react-router-dom';
 import styles from 'styles/pages/server/maps/mapDetail.module.css';
-//import mapSample from 'lib/sampleData/mapSample';
 import { useEffect, useState } from 'react';
 import MapContext, { useMap } from 'contexts/MapContext';
 import { patch, remove, show } from 'api/serverItems';
-import { Pencil, Trash } from 'react-bootstrap-icons';
+import { Map, Pencil, Trash } from 'react-bootstrap-icons';
+import fileurl from 'api/image';
 
 function MapDetail() {
 
@@ -17,12 +17,12 @@ function MapDetail() {
     // 수정 메모 form
     const [editFormData, setEditFormData] = useState({
         id: mapid,
-        title: map.title,
-        location: map.location,
-        photo: map.photo,
-        ownerId: map.ownerId,
+        title: '',
+        location: '',
+        photo: null,
+        ownerId: '',
         serverId: id,
-        description: map.description
+        description: ''
     });
 
     // 지도 목록으로 이동
@@ -40,13 +40,25 @@ function MapDetail() {
         async function getMap() {
             const res = await show(2, mapid);
             setMap(res);
+            setEditFormData({
+                id: mapid,
+                title: res.title,
+                location: res.location,
+                photo: null,
+                ownerId: res.ownerId,
+                serverId: id,
+                description: res.description
+            });
         }
         getMap();
     }, [id, mapid]);
 
     return (
         <Container className={styles.container}>
-            <MapContext.Provider value={{id, mapid, map, setMap, isEdit, setIsEdit, handleEditChange, navigate}}>
+            <MapContext.Provider value={{
+                id, mapid, map, setMap, 
+                isEdit, setIsEdit, handleEditChange, navigate
+            }}>
             {
                 isEdit === false ? 
                 <MapInfo handleBackBtn={handleBackBtn}/>
@@ -96,7 +108,14 @@ function MapInfo({
             </div>
             <div className={styles.box}>
                 <div className={styles.map_img_box}>
-                    <img src={map.photo} alt="mapimg"></img>
+                    {
+                        map.photoId ? 
+                        <img src={`${fileurl}${map.photoId}`} alt="mapimg"/>
+                        : 
+                        <div className={styles.icon_default}>
+                            <Map/>
+                        </div>
+                    }
                 </div>
                 <div className={styles.info_box}>
                     <span className={styles.nickname}>{map.ownerId}</span>
@@ -118,14 +137,14 @@ function MapEdit({
     editFormData,
     setEditFormData
 }) {
-    const {mapid, map, setMap, setIsEdit, handleEditChange} = useMap();
+    const {id, mapid, map, setMap, setIsEdit, handleEditChange} = useMap();
 
     // edit form 데이터 등록
     function handleChange(event) {
-        const { name, value } = event.currentTarget;
+        const { name, value, files } = event.currentTarget;
         setEditFormData((prev)=>({
             ...prev,
-            [name] : value
+            [name] : name === "photo" ? files[0] : value
         }));
     }
 
@@ -133,17 +152,27 @@ function MapEdit({
     async function handleSubmit(event) {
         event.preventDefault();
 
-        const updatedFormData = {...editFormData};
-
+        // 전송할 formData 객체 생성
+        const formDataToSend = new FormData();
         // 빈 값 처리
-        Object.keys(updatedFormData).forEach((key)=>{
-            if (updatedFormData[key] === null || updatedFormData[key] === '') {
-                updatedFormData[key] = map[key];
+        Object.keys(editFormData)
+        .filter(key => key !== "photo")
+        .forEach((key)=>{
+            if (editFormData[key] === null || editFormData[key] === '') {
+                formDataToSend.append(`${key}`, map[key]);
+            } else {
+                formDataToSend.append(`${key}`, editFormData[key]);
             }
         });
 
+        // 파일이 있는 경우에만 첨부
+        // 만약 그냥 null이라도 FormData에 넣는 경우 서버에서 type mismatch 에러 발생
+        if (editFormData.photo) {
+            formDataToSend.append("photo", editFormData.photo);
+        }
+
         try {
-            const res = await patch(2, updatedFormData);
+            const res = await patch(2, mapid, formDataToSend);
 
             if (res !== null) {
                 alert('지도가 수정되었습니다');
@@ -153,7 +182,6 @@ function MapEdit({
                     const newMap = await show(2, mapid);
                     setMap(newMap);
                 } catch (error) {
-                    
                 }
             } else {
                 alert('지도 수정을 실패했습니다');
@@ -165,7 +193,15 @@ function MapEdit({
     // 지도 수정 취소
     function handleEditQuit() {
         setIsEdit(false);
-        setEditFormData(map);
+        setEditFormData({
+            id: mapid,
+            title: map.title,
+            location: map.location,
+            photo: null,
+            ownerId: map.ownerId,
+            serverId: id,
+            description: map.description
+        });
     }
 
     return(
@@ -174,15 +210,9 @@ function MapEdit({
             <Form className={styles.box}>
                 <input type='hidden' name='ownerid'></input>
                 <div className={styles.map_img_box}>
-                    {
-                        map.photo === editFormData.photo ?
-                        <img src={map.photo} alt="mapimg"></img>
-                        :
-                        <img src={editFormData.photo} alt="newimg"></img>
-                    }
+                    <img src={`${fileurl}${map.photoId}`} alt="mapimg"/>
                     <input type='file' 
                     name="photo" accept="image/*"
-                    value={editFormData.photo}
                     onChange={handleChange}></input>
                 </div>
                 <div className={`${styles.info_box} ${styles.edit}`}>
@@ -193,7 +223,6 @@ function MapEdit({
                             type='text'
                             aria-label="title"
                             name="title"
-                            value={editFormData.title}
                             placeholder={map.title}
                             onChange={handleChange}
                             />
@@ -206,7 +235,6 @@ function MapEdit({
                             type='text'
                             aria-label="location"
                             name="location"
-                            value={editFormData.location}
                             placeholder={map.location}
                             onChange={handleChange}
                             />
@@ -219,7 +247,6 @@ function MapEdit({
                             type='text'
                             aria-label="description"
                             name="description"
-                            value={editFormData.description}
                             placeholder={map.description}
                             onChange={handleChange}
                             />

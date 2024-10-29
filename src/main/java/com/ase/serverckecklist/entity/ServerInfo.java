@@ -54,20 +54,24 @@ public class ServerInfo {
     // 데이터 수정
     public void patch(ServerInfo serverInfo) {
 
-        if (name != null) {
+        if (serverInfo.name != null) {
             this.name = serverInfo.name;
         }
 
-        if (photoId != null) {
+        if (serverInfo.photoId != null) {
             this.photoId = serverInfo.photoId;
         }
 
-        if (usage != null) {
+        if (serverInfo.usage != null) {
             this.usage = serverInfo.usage;
         }
 
-        if (description != null) {
+        if (serverInfo.description != null) {
             this.description = serverInfo.description;
+        }
+
+        if (serverInfo.managerId != null) {
+            this.managerId = serverInfo.managerId;
         }
 
         this.modifiedDate = LocalDateTime.now();
