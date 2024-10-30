@@ -84,7 +84,7 @@ public class MapService {
         Map map = dto.toEntity(fileId);
 
         // 기존 데이터에 새 데이터 붙이기
-        target.patch(map);
+        target.patch(map, dto.isFileDeleteFlag());
         return mapRepository.save(target);
     }
 

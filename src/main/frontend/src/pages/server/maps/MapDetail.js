@@ -1,10 +1,10 @@
-import { Container, Form, InputGroup } from 'react-bootstrap';
+import { Container, Form, InputGroup, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import styles from 'styles/pages/server/maps/mapDetail.module.css';
 import { useEffect, useState } from 'react';
 import MapContext, { useMap } from 'contexts/MapContext';
 import { patch, remove, show } from 'api/serverItems';
-import { Map, Pencil, Trash } from 'react-bootstrap-icons';
+import { Camera, Map, Pencil, Trash, XCircle } from 'react-bootstrap-icons';
 import fileurl from 'api/image';
 
 function MapDetail() {
@@ -71,7 +71,7 @@ function MapDetail() {
     )
 }
 
-// default map info page
+// default map info page ------------------------------------------------------------------
 function MapInfo({
     handleBackBtn
 }) {
@@ -132,20 +132,52 @@ function MapInfo({
     )
 }
 
-// map edit page
+// map edit box ------------------------------------------------------------------
 function MapEdit({
     editFormData,
     setEditFormData
 }) {
     const {id, mapid, map, setMap, setIsEdit, handleEditChange} = useMap();
 
+    // 변경할 파일 미리보기 url
+    const [fileUrl, setFileUrl] = useState('');
+    // 파일 제거 플래그
+    const [fileFlag, setFileFlag] = useState(false);
+
     // edit form 데이터 등록
     function handleChange(event) {
-        const { name, value, files } = event.currentTarget;
+        const { name, value } = event.currentTarget;
         setEditFormData((prev)=>({
             ...prev,
-            [name] : name === "photo" ? files[0] : value
+            [name] : value
         }));
+    }
+
+    // 파일 변경
+    function handlePhotoChange(event) {
+        const { files } = event.currentTarget;
+        setEditFormData((prev) => ({
+            ...prev,
+            "photo" : files[0],
+        }));
+
+        // 업로드한 파일 미리보기 url 생성
+        const currentImageUrl = URL.createObjectURL(files[0]);
+        setFileUrl(currentImageUrl);
+    }
+
+    // 업로드할 파일 삭제(파일 업로드 취소)
+    function handleFileUploadQuit() {
+        setEditFormData((prev)=>({
+            ...prev,
+            "photo" : null,
+        }));
+        setFileUrl('');
+    }
+
+    // 파일 삭제 플래그 변경
+    function handleFileRemove() {
+        setFileFlag(!fileFlag);
     }
 
     // 지도 수정
@@ -164,6 +196,7 @@ function MapEdit({
                 formDataToSend.append(`${key}`, editFormData[key]);
             }
         });
+        formDataToSend.append("fileDeleteFlag", fileFlag);
 
         // 파일이 있는 경우에만 첨부
         // 만약 그냥 null이라도 FormData에 넣는 경우 서버에서 type mismatch 에러 발생
@@ -204,16 +237,73 @@ function MapEdit({
         });
     }
 
+    // 서버 사진과 업로드한 사진 미리보기 생성
+    function ImageBox() {
+        if (editFormData.photo) {
+            return(
+                <img src={fileUrl}  
+                alt="mapimg"
+                className={styles.map_img}/>
+            )
+        } else {
+            if (map.photoId) {
+                return (                        
+                    <img src={`${fileurl}${map.photoId}`}  
+                    alt="mapimg"
+                    className={styles.map_img}/>)
+            } else {
+                return (
+                    <div className={styles.map_default_img}>
+                        <Camera/>
+                    </div>
+                )
+            }
+        }
+    }
+
     return(
         <div>
             <h2 className={styles.title}>지도 수정</h2> 
             <Form className={styles.box}>
                 <input type='hidden' name='ownerid'></input>
-                <div className={styles.map_img_box}>
-                    <img src={`${fileurl}${map.photoId}`} alt="mapimg"/>
-                    <input type='file' 
-                    name="photo" accept="image/*"
-                    onChange={handleChange}></input>
+                <div className={styles.top_box}>
+                    <OverlayTrigger
+                    placement='top'
+                    overlay={<Tooltip>업로드할 사진을 삭제합니다</Tooltip>}>
+                        <button type="button"
+                        className={styles.remove_img_btn}
+                        onClick={handleFileUploadQuit}>
+                            <XCircle/>
+                        </button>
+                    </OverlayTrigger>
+                    <OverlayTrigger
+                    placement='top'
+                    overlay={
+                        <Tooltip>사진을 수정하려면 여기를 누르세요</Tooltip>
+                    }>
+                        <div className={styles.img_box}>
+                            <label htmlFor='photo'>
+                                <ImageBox/>
+                            </label>
+                            <input type='file' name="photo" accept="image/*"
+                            onChange={handlePhotoChange}></input>
+                        </div>
+                    </OverlayTrigger>
+                    <OverlayTrigger
+                    placement='right'
+                    overlay={<Tooltip>지도에 이미 등록된 사진을 제거하거나 취소합니다</Tooltip>}>
+                        <button type="button" 
+                        className={
+                            `${styles.file_remove_btn} ${fileFlag ? styles.del_false : styles.del_true}`
+                        }
+                        onClick={handleFileRemove}>
+                            {
+                                fileFlag ? 
+                                '지도 제거 취소하기' 
+                                : '지도 사진 제거하기'
+                            }
+                        </button>
+                    </OverlayTrigger>
                 </div>
                 <div className={`${styles.info_box} ${styles.edit}`}>
                     <Form.Group md="4" controlId="title" className={styles.form_box}>

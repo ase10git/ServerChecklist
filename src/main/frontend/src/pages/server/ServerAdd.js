@@ -1,6 +1,6 @@
 import styles from 'styles/pages/server/serverAdd.module.css';
-import { Container, Form, InputGroup } from "react-bootstrap";
-import { Camera } from "react-bootstrap-icons";
+import { Container, Form, InputGroup, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { Camera, XCircle } from "react-bootstrap-icons";
 import { useNavigate } from "react-router-dom";
 import { create } from 'api/server';
 import { useState } from 'react';
@@ -17,13 +17,38 @@ function ServerAdd() {
     });
     const navigate = useNavigate();
 
+    // 변경할 파일 미리보기 url
+    const [fileUrl, setFileUrl] = useState('');
+
     // form 데이터 등록
     function handleChange(event) {
-        const { name, value, files } = event.currentTarget;
+        const { name, value } = event.currentTarget;
         setFormData((prev) => ({
             ...prev,
-            [name] : name === "photo" ? files[0] : value,
+            [name] : value,
         }));
+    }
+
+    // 파일 변경
+    function handlePhotoChange(event) {
+        const { files } = event.currentTarget;
+        setFormData((prev) => ({
+            ...prev,
+            "photo" : files[0],
+        }));
+
+        // 업로드한 파일 미리보기 url 생성
+        const currentImageUrl = URL.createObjectURL(files[0]);
+        setFileUrl(currentImageUrl);
+    }
+
+    // 업로드할 파일 삭제(파일 업로드 취소)
+    function handleFileUploadQuit() {
+        setFormData((prev)=>({
+            ...prev,
+            "photo" : null,
+        }));
+        setFileUrl('');
     }
 
     // 서버 추가
@@ -76,15 +101,48 @@ function ServerAdd() {
         navigate(`/`);
     }
 
+    // 업로드한 사진 미리보기 생성
+    function ImageBox() {
+        return (
+            (formData.photo) ?
+                <img src={fileUrl}  
+                alt="serverimg"
+                className={styles.server_img}/>
+                :
+                <div className={styles.server_default_img}>
+                    <Camera/>
+                </div>
+        )
+    }
+
     return(
         <Container className={styles.container}>
             <h2 className={styles.title}>새 서버 추가</h2> 
             <Form onSubmit={handleSubmit}
             className={styles.box}>
-                <div className={styles.img_box}>
-                    <label htmlFor='photo'><Camera/></label>
-                    <input type='file' name="photo" accept="image/*"
-                    onChange={handleChange}/>
+                <div className={styles.top_box}>
+                    <OverlayTrigger
+                    placement='top'
+                    overlay={<Tooltip>업로드할 사진을 삭제합니다</Tooltip>}>
+                        <button type="button"
+                        className={styles.remove_img_btn}
+                        onClick={handleFileUploadQuit}>
+                            <XCircle/>
+                        </button>
+                    </OverlayTrigger>
+                    <OverlayTrigger
+                    placement='top'
+                    overlay={
+                        <Tooltip>사진을 추가하려면 여기를 누르세요</Tooltip>
+                    }>
+                        <div className={styles.img_box}>
+                            <label htmlFor='photo'>
+                                <ImageBox/>
+                            </label>
+                            <input type='file' name="photo" accept="image/*"
+                            onChange={handlePhotoChange}></input>
+                        </div>
+                    </OverlayTrigger>
                 </div>
                 <div className={styles.info_box}>
                     <Form.Group md="4" controlId="name" className={styles.form_box}>

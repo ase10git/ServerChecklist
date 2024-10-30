@@ -52,7 +52,7 @@ public class ServerInfo {
     }
 
     // 데이터 수정
-    public void patch(ServerInfo serverInfo) {
+    public void patch(ServerInfo serverInfo, boolean fileDeleteFlag) {
 
         if (serverInfo.name != null) {
             this.name = serverInfo.name;
@@ -60,6 +60,8 @@ public class ServerInfo {
 
         if (serverInfo.photoId != null) {
             this.photoId = serverInfo.photoId;
+        } else if (fileDeleteFlag) {
+            this.photoId = null;
         }
 
         if (serverInfo.usage != null) {

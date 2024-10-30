@@ -104,7 +104,7 @@ public class ServerInfoService {
         ServerInfo serverInfo = dto.toEntity(fileId);
 
         // 기존 데이터에 새 데이터 붙이기
-        target.patch(serverInfo);
+        target.patch(serverInfo, dto.isFileDeleteFlag());
         return serverInfoRepository.save(target);
     }
 

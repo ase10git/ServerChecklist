@@ -262,7 +262,7 @@ function Checklists() {
     )
 }
 
-// checklist box
+// checklist box ------------------------------------------------------------------
 function CheckBox({
     checklist,
     handleEditState,
@@ -293,7 +293,7 @@ function CheckBox({
     )
 }
 
-// checklist add box
+// checklist add box ------------------------------------------------------------------
 function CheckAdd({
     handleAddChange,
     handleSubmit,
@@ -317,7 +317,7 @@ function CheckAdd({
     )
 }
 
-// checklist edit box
+// checklist edit box ------------------------------------------------------------------
 function CheckEdit({
     checklist,
     handleEditChange,

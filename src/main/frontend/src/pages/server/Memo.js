@@ -212,7 +212,7 @@ function Memo() {
     )
 }
 
-// memo box
+// memo box ------------------------------------------------------------------
 function MemoBox({
     memo,
     handleEditState,
@@ -241,7 +241,7 @@ function MemoBox({
     );
 }
 
-// memo adding box
+// memo adding box ------------------------------------------------------------------
 function MemoAdd({
     handleAddChange,
     handleSubmit,
@@ -269,7 +269,7 @@ function MemoAdd({
     )
 }
 
-// memo editting box
+// memo editting box ------------------------------------------------------------------
 function MemoEdit({
     memo,
     handleEditChange,

@@ -30,10 +30,13 @@ public class FileController {
         LoadFile loadFile = fileService.downloadFile(id);
         String filename = URLEncoder.encode(loadFile.getFilename(), StandardCharsets.UTF_8.toString());
 
-        return ResponseEntity.ok()
+        return (loadFile.getFile() != null) ?
+                ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(loadFile.getFileType()))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename*=UTF-8\""+filename+"\"")
-                .body(new ByteArrayResource(loadFile.getFile()));
+                .body(new ByteArrayResource(loadFile.getFile()))
+                :
+                ResponseEntity.notFound().build();
     }
 
     // POST

@@ -55,7 +55,7 @@ public class Map {
     }
 
     // 데이터 수정
-    public void patch(Map map) {
+    public void patch(Map map, boolean fileDeleteFlag) {
 
         if (map.title != null) {
             this.title = map.title;
@@ -67,6 +67,8 @@ public class Map {
 
         if (map.photoId != null) {
             this.photoId = map.photoId;
+        } else if (fileDeleteFlag) {
+            this.photoId = null;
         }
 
         if (map.description != null) {
