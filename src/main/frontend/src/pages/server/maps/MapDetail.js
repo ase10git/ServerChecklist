@@ -285,7 +285,9 @@ function MapEdit({
                             <label htmlFor='photo'>
                                 <ImageBox/>
                             </label>
-                            <input type='file' name="photo" accept="image/*"
+                            <input type='file' 
+                            accept="image/*"
+                            name="photo" id="photo"
                             onChange={handlePhotoChange}></input>
                         </div>
                     </OverlayTrigger>

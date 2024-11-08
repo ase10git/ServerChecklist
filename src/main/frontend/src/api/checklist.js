@@ -9,6 +9,7 @@ async function errorHandling(targetFn) {
     }
 }
 
+// 체크박스 변경 저장
 export async function saveChecked(list) {
     return errorHandling(async () => {
         const res = await axios.patch('/checklists/checkboxs', list);

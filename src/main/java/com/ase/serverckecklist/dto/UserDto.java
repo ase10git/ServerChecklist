@@ -1,9 +1,15 @@
 package com.ase.serverckecklist.dto;
 
 import com.ase.serverckecklist.entity.User;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserDto {
     private String id;
 
@@ -11,6 +17,7 @@ public class UserDto {
     private String password;
     private String nickname;
     private String profile;
+    private String joinedServerList;
 
     // DTO -> Entity
     public User toEntity() {
@@ -30,7 +37,8 @@ public class UserDto {
                     email,
                     password,
                     nickname,
-                    profile
+                    profile,
+                    joinedServerList
             );
         }
     }

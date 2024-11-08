@@ -169,7 +169,9 @@ function ServerEdit() {
                             <label htmlFor='photo'>
                                 <ImageBox/>
                             </label>
-                            <input type='file' name="photo" accept="image/*"
+                            <input type='file' 
+                            name="photo" id="photo"
+                            accept="image/*"
                             onChange={handlePhotoChange}></input>
                         </div>
                     </OverlayTrigger>

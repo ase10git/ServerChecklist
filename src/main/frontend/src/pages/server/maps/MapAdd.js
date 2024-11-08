@@ -140,9 +140,9 @@ function MapAdd() {
                             <label htmlFor='photo'>
                                 <ImageBox/>
                             </label>
-                            <input type='file' name="photo" 
-                            id="photo"
+                            <input type='file' 
                             accept="image/*"
+                            name="photo" id="photo"
                             onChange={handlePhotoChange}></input>
                         </div>
                     </OverlayTrigger>
