@@ -29,8 +29,7 @@ public class User implements UserDetails {
     private String nickname;
     private String profile;
     private Boolean verification = false;
-    private Boolean isOAuth = false;
-    private Collection<Role> roles;
+    private String[] roles;
     private boolean accountNonExpired = true;
     private boolean accountNonLocked = true;
     private boolean enabled = true;
@@ -45,20 +44,21 @@ public class User implements UserDetails {
 
     // constructor
     // 신규용
-    public User(String email, String password, String nickname, String profile) {
+    public User(String email, String password, String nickname, String[] roles) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
-        this.profile = profile;
+        this.roles = roles;
     }
 
     // 수정용
-    public User(String id, String email, String password, String nickname, String profile, String joinedServerList) {
+    public User(String id, String email, String password, String nickname, String profile, String[] roles, String joinedServerList) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.nickname = nickname;
         this.profile = profile;
+        this.roles = roles;
         this.joinedServerList = joinedServerList;
     }
 
@@ -83,17 +83,14 @@ public class User implements UserDetails {
         this.modifiedDate = LocalDateTime.now();
     }
 
-    // 이메일 인증
-    public void verify() {
-        this.verification = true;
-        this.modifiedDate = LocalDateTime.now();
+    // 사용자 권한 확인
+    public String[] getUsersRole() {
+        return this.roles;
     }
 
-    // OAuth 여부
-    public void ssoVerify() {
-        this.verification = true;
-        this.isOAuth = true;
-        this.modifiedDate = LocalDateTime.now();
+    // 이메일 인증 여부 확인
+    public boolean isVerified() {
+        return this.verification;
     }
 
     // implements

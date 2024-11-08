@@ -23,16 +23,6 @@ public class UserController {
         return userService.show(id);
     }
 
-    // POST
-    @PostMapping("")
-    public ResponseEntity<User> create(@RequestBody UserDto dto) {
-        User created = userService.create(dto);
-
-        return (created != null) ?
-                ResponseEntity.status(HttpStatus.OK).body(created) :
-                ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-    }
-
     // PATCH
     @PatchMapping("{id}")
     public ResponseEntity<User> update(

@@ -11,4 +11,6 @@ public class SecurityProperties {
     @Value("${app.security.secret-key}")
     private String secretKey;
 
+    @Value("${app.string-pallet}")
+    private String pallet;
 }

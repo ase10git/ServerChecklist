@@ -17,6 +17,7 @@ public class UserDto {
     private String password;
     private String nickname;
     private String profile;
+    private String[] roles;
     private String joinedServerList;
 
     // DTO -> Entity
@@ -28,7 +29,7 @@ public class UserDto {
                     email,
                     password,
                     nickname,
-                    profile
+                    roles
             );
         } else {
             // 수정용
@@ -38,6 +39,7 @@ public class UserDto {
                     password,
                     nickname,
                     profile,
+                    roles,
                     joinedServerList
             );
         }

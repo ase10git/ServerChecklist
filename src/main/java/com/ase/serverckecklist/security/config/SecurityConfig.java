@@ -13,6 +13,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 @Configuration
@@ -30,16 +31,25 @@ public class SecurityConfig {
                 // session stateless로 인해 꺼 둠
                 .csrf((auth)->auth.disable())
                 // form 로그인 끄기 - jwt 사용
-                .formLogin((form)->form.disable())
+                .formLogin((form)->form.disable());
+
+//        http
+//                .authorizeRequests()
+//                .requestMatchers("/api/auth") // 나열된 요청들은
+//                .permitAll() // 모두 허용
+//                .anyRequest() // 그 외의 모든 요청은
+//                .authenticated(); // 인증 필요
+//                //.and()
+        http
                 .authorizeRequests()
-                .requestMatchers("/api/auth") // 나열된 요청들은
-                .permitAll() // 모두 허용
                 .anyRequest() // 그 외의 모든 요청은
-                .authenticated() // 인증 필요
-                .and()
+                .permitAll(); // 모두 허용
+        //.and()
+
+        http
                 .sessionManagement((session)->
-                        session // session state는 저장되면 안되므로 stateless로 설정
-                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                    session // session state는 저장되면 안되므로 stateless로 설정
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter,
                         UsernamePasswordAuthenticationFilter.class); // jwt 필터 가동
@@ -60,7 +70,7 @@ public class SecurityConfig {
         // React client Origin을 허용
         corsConfiguration.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
         // React client로부터 오는 모든 메소드 허용
-        corsConfiguration.setAllowedMethods(Collections.singletonList("*"));
+        corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         // React client로부터 오는 credential(cookie) 허용
         corsConfiguration.setAllowCredentials(true);
         // React client로부터 오는 모든 헤더를 허용

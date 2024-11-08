@@ -1,9 +1,7 @@
 package com.ase.serverckecklist.controller;
 
 import com.ase.serverckecklist.dto.UserDto;
-import com.ase.serverckecklist.security.auth.AuthenticationRequest;
-import com.ase.serverckecklist.security.auth.AuthenticationResponse;
-import com.ase.serverckecklist.security.auth.AuthenticationService;
+import com.ase.serverckecklist.security.auth.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,7 +21,10 @@ public class AuthenticationController {
     public ResponseEntity<AuthenticationResponse> register (
             @RequestBody UserDto dto
     ) {
-        return ResponseEntity.ok(service.register(dto));
+        AuthenticationResponse response = service.register(dto);
+        return (response != null) ?
+                ResponseEntity.ok(response)
+                : ResponseEntity.badRequest().build();
     }
 
     // 로그인
@@ -31,6 +32,21 @@ public class AuthenticationController {
     public ResponseEntity<AuthenticationResponse> authenticate (
             @RequestBody AuthenticationRequest request
     ) {
-        return ResponseEntity.ok(service.authenticate(request));
+        AuthenticationResponse response = service.authenticate(request);
+        return (response != null) ?
+                ResponseEntity.ok(response)
+                : ResponseEntity.badRequest().build();
     }
+
+    // 이메일 인증
+    @PostMapping("/verifyemail")
+    public ResponseEntity<String> verification (
+            @RequestBody VerificationRequest request
+            ) {
+        VerificationResponse response = service.verifyEmail(request);
+        return (response.isVerified()) ?
+                ResponseEntity.ok(response.getResult())
+                : ResponseEntity.badRequest().body(response.getResult());
+    }
+
 }

@@ -4,6 +4,7 @@ import com.ase.serverckecklist.dto.UserDto;
 import com.ase.serverckecklist.entity.User;
 import com.ase.serverckecklist.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -11,28 +12,20 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository userRepository;
+    // 비밀번호 인코더
+    private final PasswordEncoder passwordEncoder;
 
     // id로 유저 조회
     public User show(String id) {
         return userRepository.findById(id).orElse(null);
     }
 
-    // 새 유저 추가
-    public User create(UserDto dto) {
-        User user = dto.toEntity();
-        //User origin = userRepository.findOne(dto.getEmail()).orElse(null);
-
-        if (user.getId() != null) { // 중복id 존재 시 데이터 추가 x
-            return null;
-        }
-
-        return userRepository.save(user);
-    }
-
     // 유저 수정
     public User update(String id, UserDto dto) {
         User user = dto.toEntity();
-
+        // 비밀번호 인코딩
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        
         // 수정 대상
         User target = userRepository.findById(id).orElse(null);
 
