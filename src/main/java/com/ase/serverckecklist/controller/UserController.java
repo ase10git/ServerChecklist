@@ -16,20 +16,14 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
-    
-    // GET
-    @GetMapping("{id}")
-    public User index(@PathVariable("id") String id) {
-        return userService.show(id);
-    }
 
     // PATCH
     @PatchMapping("{id}")
     public ResponseEntity<User> update(
-            @PathVariable("id") String id,
+            @PathVariable("email") String email,
             @RequestBody UserDto dto
     ) {
-        User updated = userService.update(id, dto);
+        User updated = userService.update(email, dto);
 
         return (updated != null) ?
                 ResponseEntity.status(HttpStatus.OK).body(updated) :
@@ -37,9 +31,9 @@ public class UserController {
     }
 
     // DELETE
-    @DeleteMapping("{id}")
-    public ResponseEntity<User> delete(@PathVariable("id") String id) {
-        User deleted = userService.delete(id);
+    @DeleteMapping("{email}")
+    public ResponseEntity<User> delete(@PathVariable("email") String email) {
+        User deleted = userService.delete(email);
 
         // Service에서 제대로 삭제했다면 삭제한 Entity를 반환해줌
         // Entity == null일 경우는 id에 해당하는 데이터가 없음을 의미

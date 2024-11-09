@@ -33,19 +33,13 @@ public class SecurityConfig {
                 // form 로그인 끄기 - jwt 사용
                 .formLogin((form)->form.disable());
 
-//        http
-//                .authorizeRequests()
-//                .requestMatchers("/api/auth") // 나열된 요청들은
-//                .permitAll() // 모두 허용
-//                .anyRequest() // 그 외의 모든 요청은
-//                .authenticated(); // 인증 필요
-//                //.and()
         http
                 .authorizeRequests()
-                .anyRequest() // 그 외의 모든 요청은
+                .requestMatchers("/api/**") // 나열된 요청들은
                 .permitAll(); // 모두 허용
-        //.and()
-
+                //.anyRequest() // 그 외의 모든 요청은
+                //.authenticated(); // 인증 필요
+                //.and()
         http
                 .sessionManagement((session)->
                     session // session state는 저장되면 안되므로 stateless로 설정

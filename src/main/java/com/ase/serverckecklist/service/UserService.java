@@ -11,26 +11,28 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserService {
 
+    // 사용자 DB 연결 repository
     private final UserRepository userRepository;
     // 비밀번호 인코더
     private final PasswordEncoder passwordEncoder;
 
-    // id로 유저 조회
-    public User show(String id) {
-        return userRepository.findById(id).orElse(null);
+    // 이메일로 유저 조회
+    public User show(String email) {
+        return userRepository.findByEmail(email).orElse(null);
     }
 
     // 유저 수정
-    public User update(String id, UserDto dto) {
+    public User update(String email, UserDto dto) {
         User user = dto.toEntity();
         // 비밀번호 인코딩
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
         
         // 수정 대상
-        User target = userRepository.findById(id).orElse(null);
+        User target = userRepository.findByEmail(email)
+                .orElse(null);
 
         // 잘못된 요청 처리
-        if (target == null || !id.equals(user.getId())) {
+        if (target == null || !email.equals(user.getEmail())) {
             return null;
         }
 
@@ -40,8 +42,8 @@ public class UserService {
     }
 
     // 유저 삭제
-    public User delete(String id) {
-       User target = userRepository.findById(id).orElse(null);
+    public User delete(String email) {
+       User target = userRepository.findByEmail(email).orElse(null);
 
        // 대상이 없으면 잘못된 요청 처리
         if (target == null) {
@@ -51,4 +53,6 @@ public class UserService {
         userRepository.delete(target);
         return target; // HTTP 응답의 body가 없는 ResponseEntity 생성
     }
+
+
 }

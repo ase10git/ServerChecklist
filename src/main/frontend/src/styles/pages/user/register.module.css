@@ -1,21 +1,54 @@
 .container{
-    width: 100%;
+    width: 80%;
     margin: 50px 0;
+    display: flex; justify-content: center;
+    align-items: center;
+}
+
+.login_img_box{
+    width: 50%;
+}
+
+.login_img_box img{
+    width: 100%;
 }
 
 .container h2{
     width: 100%;
+    margin-bottom: 20px;
     text-align: center;
 }
 
 .box{
-    width: 100%;
-    margin: 30px auto; padding: 20px;
-    background-color: var(--green-color-ml);
+    width: 50%;
+    margin: 0 auto; padding: 20px;
+    background-color: var(--green-color-m);
     border-radius: 10px;
+}
+
+.form_box{
+    margin-bottom: 15px;
+}
+
+.password_label{
+    position: relative;
+}
+
+.password_eye{
+    padding: none;
+    position: absolute; right:8%; top: 12%;
+    border: none;
+    background: transparent;
+    font-size: 1.5rem;
+    color:rgb(68, 68, 68);
+    cursor:pointer;
 }
 
 .btn_wrap{
     margin: 15px auto;
     display: flex; justify-content: space-around;
+}
+
+.btn_wrap button{
+    width: 40%;
 }

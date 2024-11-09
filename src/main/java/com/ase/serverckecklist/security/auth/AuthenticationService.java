@@ -45,13 +45,19 @@ public class AuthenticationService {
             return null;
         }
 
+        // -----테스트용
+        // 이메일 인증 완료
+        user.setVerification(true);
+
         // 사용자 저장
         userRepository.save(user);
-        // 토큰 생성 - 사용자 정보로 생성
-        var jwtToken = jwtService.generateToken(user);
+
+        // 이메일 인증 정보 생성 및 DB 저장
+        //saveVerification(user.getEmail());
+
         // 인증 응답 객체 생성
         return AuthenticationResponse.builder()
-                .token(jwtToken)
+                .token("succeed")
                 .build();
     }
 
