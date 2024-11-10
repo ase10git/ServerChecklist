@@ -13,4 +13,10 @@ public class SecurityProperties {
 
     @Value("${app.string-pallet}")
     private String pallet;
+
+    private String emailRegex = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$";
+
+    private String passwordRegex = "^\\S+(?=.*\\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&()_~\\[\\]\\+]).{8,20}\\S+$";
+
+    private String nameRegex = "^[가-힣\\w\\d]{2,13}$";
 }

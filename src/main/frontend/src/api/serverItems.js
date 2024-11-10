@@ -21,7 +21,7 @@ export async function list(typenum, serverId) {
     return errorHandling(async ()=>{
         const res = await axios.get(`/${typebox[typenum]}/list/${serverId}`);
     
-        if (res.statusText !== "OK") {
+        if (res.status !== "OK") {
             //window.location.href = '/error';
         }
     
@@ -35,7 +35,7 @@ export async function recentList(typenum, serverId) {
     return errorHandling(async ()=>{
         const res = await axios.get(`/${typebox[typenum]}/recentlist/${serverId}`);
     
-        if (res.statusText !== "OK") {
+        if (res.status !== "OK") {
             //window.location.href = '/error';
         }
     
@@ -49,7 +49,7 @@ export async function show(typenum, id) {
     return errorHandling(async ()=>{
         const res = await axios.get(`/${typebox[typenum]}/${id}`);
         
-        if (res.statusText !== "OK") {
+        if (res.status !== "OK") {
             //window.location.href = '/error';
         }
 
@@ -63,7 +63,7 @@ export async function create(typenum, formData) {
     return errorHandling(async ()=>{
         const res = await axios.post(`/${typebox[typenum]}`, formData);
         
-        if (res.statusText !== "OK") {
+        if (res.status !== "OK") {
             //window.location.href = '/error';
         }
 
@@ -77,7 +77,7 @@ export async function patch(typenum, id, formData) {
     return errorHandling(async ()=>{
         const res = await axios.patch(`/${typebox[typenum]}/${id}`, formData);
         
-        if (res.statusText !== "OK") {
+        if (res.status !== "OK") {
             //window.location.href = '/error';
         }
 
@@ -91,7 +91,7 @@ export async function remove(typenum, id) {
     return errorHandling(async ()=>{
         const res = await axios.delete(`/${typebox[typenum]}/${id}`);
         
-        if (res.statusText !== "OK") {
+        if (res.status !== "OK") {
             //window.location.href = '/error';
         }
 

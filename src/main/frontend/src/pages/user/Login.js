@@ -6,43 +6,47 @@ import REGEX from 'lib/regex';
 import { Eye, EyeSlash } from 'react-bootstrap-icons';
 import { login } from 'api/auth';
 import causes from 'lib/invalidCause';
+import axios from 'axios';
 
 function Login() {
 
     const [validated, setValidated] = useState(false); // 검사 진행 여부
     const [pwdVisible, setPwdVisible] = useState(false); // password 보이기 여부
-    // 로그인 form
-    const [formData, setFormData] = useState({ email: '', password: ''});
+    // 로그인 form ----------- 테스트용 나중에 변경
+    const [formData, setFormData] = useState({ email: 'asd@google.com', password: '123!@#123ASd'});
     // 유효성 결과 타입
-    const [invalidType, setInvalidType] = useState({email: 0, password: 0});
+    const [invalidType, setInvalidType] = useState([
+        {
+            type : "email",
+            cause : causes[0].reason
+        },
+        {
+            type : "password",
+            cause : causes[0].reason
+        }
+    ]);
     const navigate = useNavigate();
 
     // bootstrap 유효성 검사 및 제출
     const handleSubmit = async (event) => {
         const form = event.currentTarget;
         event.preventDefault();
-
-        // 유효성 검사 통과 못하면 로그인 중지
-        if (form.checkValidity() === false) {
+        
+        // // 유효성 검사 통과 못하면 로그인 중지
+        if (!form.checkValidity()) {
             event.stopPropagation();
-            setInvalidType({
-                email: 0, password: 0
-            });
         } 
-        // else if (!REGEX.EMAIL_REG.test(formData.email) 
-        //     || !REGEX.PASSWORD_REG.test(formData.password)) {
-        //         console.log(REGEX.EMAIL_REG.test(formData.email), REGEX.PASSWORD_REG.test(formData.password))
-        //         event.preventDefault();
-        //         event.stopPropagation();
-        //         setInvalidType({
-        //             email: 1, password: 1
-        //         });
-        // }
+
         else {
             try {
                 // 전송 
                 const res = await login(formData);
-
+                if (res.status === 200) {
+                    axios.
+                    navigate("/");
+                } else {
+                    alert('로그인에 실패했습니다');
+                }
             } catch (error) {
             }
         }
@@ -58,6 +62,24 @@ function Login() {
             ...prev,
             [name] : value,
         }));
+        
+        setInvalidType((prev)=>
+            prev.map((field)=>{
+                if (field.type === name) {
+                    return {
+                        ...field,
+                        cause: value === '' ? 
+                            causes[0].reason 
+                            : 
+                            causes[1].reason
+                    };
+                }
+                return field;
+            })
+        );
+
+        // 검사 재진행 필요
+        setValidated(false);
     }
 
     // 비밀번호 보임 처리
@@ -77,7 +99,7 @@ function Login() {
             </div>
             <div className={styles.box}>
                 <h2>로그인</h2>
-                <Form noValidate validated={validated} 
+                <Form noValidate validated={validated}
                 onSubmit={handleSubmit}>
                     <Form.Group md="4" controlId="email" className={styles.form_box}>
                         <InputGroup hasvalidation>
@@ -88,12 +110,14 @@ function Login() {
                             >
                                 <Form.Control
                                     required
-                                    type="text"
+                                    type="email"
                                     name="email"
                                     onChange={handleChange}
+                                    // ----------- 테스트용 나중에 변경
+                                    value="asd@google.com"
                                 />
-                                <Form.Control.Feedback type="invalid" tooltip>
-                                    {`이메일${causes[invalidType.email].reason}`}
+                                <Form.Control.Feedback type="invalid">
+                                    {`이메일${invalidType[0].cause}`}
                                 </Form.Control.Feedback>
                             </FloatingLabel>
                         </InputGroup>
@@ -114,9 +138,19 @@ function Login() {
                                     }
                                     name="password"
                                     onChange={handleChange}
+                                    pattern={REGEX.STR_PASSWORD_REG}
+                                    // ----------- 테스트용 나중에 변경
+                                    value="123!@#123ASd"
                                 />
-                                <Form.Control.Feedback type="invalid" tooltip>
-                                    {`비밀번호${causes[invalidType.password].reason}`}
+                                <Form.Control.Feedback type="invalid">
+                                    {`비밀번호${invalidType[1].cause}`}
+                                    {
+                                        (invalidType[1].cause.includes("형식")) ?
+                                        <p>
+                                            영어 대소문자, 숫자, 특수문자 포함 8~20자
+                                        </p>
+                                        : null
+                                    }
                                 </Form.Control.Feedback>
                                 <span className={styles.password_eye} 
                                 onClick={handlePasswordVisible}>

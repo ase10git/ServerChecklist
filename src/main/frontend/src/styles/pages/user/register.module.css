@@ -22,12 +22,13 @@
 .box{
     width: 50%;
     margin: 0 auto; padding: 20px;
-    background-color: var(--green-color-m);
+    background-color: var(--green-color-ml);
+    border : 1px solid var(--green-color-m);
     border-radius: 10px;
 }
 
 .form_box{
-    margin-bottom: 15px;
+    margin-bottom: 5px;
 }
 
 .password_label{

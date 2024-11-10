@@ -1,6 +1,6 @@
 import styles from 'styles/pages/user/register.module.css';
 import { Container, FloatingLabel, Form, InputGroup } from "react-bootstrap";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import REGEX from 'lib/regex';
 import { register } from 'api/auth';
@@ -18,29 +18,40 @@ function Register() {
         nickname: ''
     });
     // 유효성 결과 타입
-    const [invalidType, setInvalidType] = useState({
-        email: 0, 
-        password: 0, 
-        nickname: 0
-    });
+    const [invalidType, setInvalidType] = useState([
+        {
+            type : "email",
+            cause : causes[0].reason
+        },
+        {
+            type : "password",
+            cause : causes[0].reason
+        },
+        {
+            type : "nickname",
+            cause : causes[0].reason
+        }
+    ]);
     const navigate = useNavigate();
 
     // bootstrap 유효성 검사 및 제출
     const handleSubmit = async (event) => {
         const form = event.currentTarget;
-        
-        if (form.checkValidity() === false) {
-            event.preventDefault();
+        event.preventDefault();
+
+        if (!form.checkValidity()) {
             event.stopPropagation();
-            setInvalidType({
-                email: 0, password: 0, nickname: 0
-            });
         }
+
         else {
             try {
                 // 전송 
                 const res = await register(formData);
-
+                if (res.status === 200) {
+                    navigate("/login");
+                } else {
+                    alert('회원가입에 실패했습니다');
+                }
             } catch (error) {
             }
         }
@@ -56,6 +67,24 @@ function Register() {
             ...prev,
             [name] : value,
         }));
+
+        setInvalidType((prev)=>
+            prev.map((field)=>{
+                if (field.type === name) {
+                    return {
+                        ...field,
+                        cause: value === '' ? 
+                            causes[0].reason 
+                            : 
+                            causes[1].reason
+                    };
+                }
+                return field;
+            })
+        );
+
+        // 검사 재진행 필요
+        setValidated(false);
     }
 
     // 비밀번호 보임 처리
@@ -67,6 +96,10 @@ function Register() {
     function handleExitBtn() {
         navigate('/login');
     }
+
+    useEffect(()=>{
+        document.title = "회원가입";
+    }, []);
 
     return(
         <div className={styles.container}>
@@ -85,12 +118,12 @@ function Register() {
                             >
                                 <Form.Control
                                     required
-                                    type="text"
+                                    type="email"
                                     name="email"
                                     onChange={handleChange}
                                 />
-                                <Form.Control.Feedback type="invalid" tooltip>
-                                    {`이메일${causes[invalidType.email].reason}`}
+                                <Form.Control.Feedback type="invalid">
+                                {`이메일${invalidType[0].cause}`}
                                 </Form.Control.Feedback>
                             </FloatingLabel>
                         </InputGroup>
@@ -111,17 +144,25 @@ function Register() {
                                     }
                                     name="password"
                                     onChange={handleChange}
+                                    pattern={REGEX.STR_PASSWORD_REG}
                                 />
-                                    <span className={styles.password_eye} 
+                                <Form.Control.Feedback type="invalid">
+                                {`비밀번호${invalidType[1].cause}`}
+                                    {
+                                        (invalidType[1].cause.includes("형식")) ?
+                                        <p>
+                                            영어 대소문자, 숫자, 특수문자 포함 8~20자
+                                        </p>
+                                        : null
+                                    }
+                                </Form.Control.Feedback>
+                                <span className={styles.password_eye} 
                                     onClick={handlePasswordVisible}>
                                         {
                                             (pwdVisible) ? 
                                             <Eye/>:<EyeSlash/>
                                         }
-                                    </span>
-                                <Form.Control.Feedback type="invalid" tooltip>
-                                    {`비밀번호${causes[invalidType.email].reason}`}
-                                </Form.Control.Feedback>
+                                </span>
                             </FloatingLabel>
                         </InputGroup>
                     </Form.Group>
@@ -138,9 +179,17 @@ function Register() {
                                     type="text"
                                     name="nickname"
                                     onChange={handleChange}
+                                    pattern={REGEX.STR_NAME_REG}
                                 />
-                                <Form.Control.Feedback type="invalid" tooltip>
-                                    {`닉네임${causes[invalidType.email].reason}`}
+                                <Form.Control.Feedback type="invalid">
+                                    {`닉네임${invalidType[2].cause}`}
+                                    {
+                                        (invalidType[2].cause.includes("형식")) ?
+                                        <p>
+                                            특수문자 제외 한글/영어 2~13글자
+                                        </p>
+                                        : null
+                                    }
                                 </Form.Control.Feedback>
                             </FloatingLabel>
                         </InputGroup>

@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -34,12 +35,18 @@ public class SecurityConfig {
                 .formLogin((form)->form.disable());
 
         http
-                .authorizeRequests()
-                .requestMatchers("/api/**") // 나열된 요청들은
-                .permitAll(); // 모두 허용
-                //.anyRequest() // 그 외의 모든 요청은
-                //.authenticated(); // 인증 필요
-                //.and()
+                .authorizeHttpRequests((authorize)->authorize
+//                        .requestMatchers("/api/auth") // 나열된 요청들은
+//                        .permitAll() // 모두 허용
+//                        .requestMatchers("/api/user/").hasAuthority("USER")
+//                        .anyRequest() // 그 외의 모든 요청은
+//                        .authenticated() // 인증 필요
+
+                           // 개발용
+                        .anyRequest() // 그 외의 모든 요청은
+                        .permitAll() // 모두 허용
+                );
+
         http
                 .sessionManagement((session)->
                     session // session state는 저장되면 안되므로 stateless로 설정
@@ -49,9 +56,18 @@ public class SecurityConfig {
                         UsernamePasswordAuthenticationFilter.class); // jwt 필터 가동
 
         // cors 설정
-        http.
-                cors((corsConfigurer)->
+        http
+                .cors((corsConfigurer)->
                         corsConfigurer.configurationSource(corsConfigurationSource()));
+
+        // 로그아웃 설정
+        http
+                .logout((logout)->logout
+                        .logoutUrl("/api/auth/logout")
+                        .logoutSuccessHandler(
+                                new HttpStatusReturningLogoutSuccessHandler()
+                        )
+                );
 
         return http.build();
     }

@@ -36,14 +36,26 @@ public class AuthenticationService {
     public AuthenticationResponse register(UserDto dto) {
         // 요청으로부터 온 데이터로 사용자 객체 생성
         User user = dto.toEntity();
+
+        // 중복id 존재 시 데이터 추가 x
+        if (user.getId() != null) {
+            return null;
+        }
+
+        // 중요한 데이터가 빠지면 진행 중단
+        if (isInvalidUser(user)) {
+            return null;
+        }
+        
+        // 형식 유효성 검사
+        if (!isValidFormat(user)) {
+            return null;
+        }
+
         // 비밀번호 인코딩
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
         // 권한 설정 - 일반 사용자
         user.setRoles(new String[]{"USER"});
-
-        if (user.getId() != null) { // 중복id 존재 시 데이터 추가 x
-            return null;
-        }
 
         // -----테스트용
         // 이메일 인증 완료
@@ -61,6 +73,22 @@ public class AuthenticationService {
                 .build();
     }
 
+    // 사용자 데이터 확인
+    // 하나라도 빠진 데이터가 있으면 true를 반환
+    public boolean isInvalidUser(User user) {
+        return user.getEmail() == null || user.getEmail().isEmpty()
+                || user.getPassword() == null || user.getPassword().isEmpty()
+                || user.getNickname() == null || user.getNickname().isEmpty();
+    }
+
+    // 사용자 데이터 형식 검사
+    // 정규식 하나라도 통과 못하면 false 반환
+    public boolean isValidFormat(User user) {
+        return user.getEmail().matches(securityProperties.getEmailRegex()) &&
+               user.getPassword().matches(securityProperties.getPasswordRegex()) &&
+               user.getNickname().matches(securityProperties.getNameRegex());
+    }
+
     // 로그인
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         // 요청으로 들어온 사용자의 신원 확인
@@ -75,8 +103,7 @@ public class AuthenticationService {
                 .orElseThrow();
         
         // 사용자가 인증 안됬거나, 만료됬거나, 잠겼거나, 사용 불가면 토큰 발행 금지
-        if (!user.isVerified() || !user.isAccountNonExpired() 
-                || !user.isAccountNonLocked() || !user.isEnabled()) {
+        if (!isValidAccount(user)) {
             return null;
         }
         
@@ -86,6 +113,13 @@ public class AuthenticationService {
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();
+    }
+
+    // 사용자 계정 유효 검사
+    // 인증이 없거나, 만료됬거나, 잠겼거나, 사용 가능 상태 확인
+    public boolean isValidAccount(User user) {
+        return user.isVerified() && user.isAccountNonExpired()
+                && user.isAccountNonLocked() && user.isEnabled();
     }
 
     // 이메일 인증용 코드 생성
@@ -112,22 +146,22 @@ public class AuthenticationService {
         VerificationResponse response = new VerificationResponse();
 
         // 해당 이메일의 사용자 조회
-        User user = userRepository.findByEmail(request.getEmail()).orElseThrow();
-
-        // 사용자가 이미 인증된 상태면 절차 취소
-        if (user.isVerified()) {
-            response.setVerified(false);
-            response.setResult("User is already verified");
-            return response;
-        }
+        User user = userRepository.findByEmail(request.getEmail()).orElse(null);
 
         // DB에 저장된 이메일과 코드하고 비교
         Verification verification = verificationRepository.findByEmail(request.getEmail());
 
         // DB에 저장된 인증 코드가 없거나 만료되었다면 인증 절차 취소
-        if (verification == null || verification.isCodeExpired()) {
+        if (user == null || verification == null || verification.isCodeExpired()) {
             response.setVerified(false);
             response.setResult("Verification failed");
+            return response;
+        }
+
+        // 사용자가 이미 인증된 상태면 절차 취소
+        if (user.isVerified()) {
+            response.setVerified(false);
+            response.setResult("User is already verified");
             return response;
         }
 

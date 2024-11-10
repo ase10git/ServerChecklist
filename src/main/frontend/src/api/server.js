@@ -14,7 +14,7 @@ export async function index() {
     return errorHandling(async ()=>{
         const res = await axios.get('/servers/list');
     
-        if (res.statusText !== "OK") {
+        if (res.status !== "OK") {
             //window.location.href = '/error';
         }
     
@@ -28,7 +28,7 @@ export async function show(id) {
     return errorHandling(async ()=>{
         const res = await axios.get(`/servers/${id}`);
         
-        if (res.statusText !== "OK") {
+        if (res.status !== "OK") {
             //window.location.href = '/error';
         }
 
@@ -42,7 +42,7 @@ export async function create(formData) {
     return errorHandling(async ()=>{
         const res = await axios.post(`/servers`, formData);
         
-        if (res.statusText !== "OK") {
+        if (res.status !== "OK") {
             //window.location.href = '/error';
         }
 
@@ -56,7 +56,7 @@ export async function patch(id, formData) {
     return errorHandling(async ()=>{
         const res = await axios.patch(`/servers/${id}`, formData);
         
-        if (res.statusText !== "OK") {
+        if (res.status !== "OK") {
             //window.location.href = '/error';
         }
 
@@ -70,7 +70,7 @@ export async function remove(id) {
     return errorHandling(async ()=>{
         const res = await axios.delete(`/servers/${id}`);
         
-        if (res.statusText !== "OK") {
+        if (res.status !== "OK") {
             //window.location.href = '/error';
         }
 

@@ -14,7 +14,7 @@ export async function saveChecked(list) {
     return errorHandling(async () => {
         const res = await axios.patch('/checklists/checkboxs', list);
 
-        if (res.statusText !== "OK") {
+        if (res.status !== "OK") {
             //window.location.href = '/error';
         }
     });

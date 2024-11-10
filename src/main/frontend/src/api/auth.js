@@ -12,13 +12,13 @@ async function errorHandling(targetFn) {
 // 로그인
 export async function login(formData) {
     return errorHandling(async () => {
-        const res = await axios.post('/auth/login', formData);
+        const res = await axios.post('/auth/login', formData)
 
-        if (res.statusText !== "OK") {
-            //window.location.href = '/error';
-        }
 
-        const body = res.data;
+        const body = {
+            "status" : res.status,
+            "data" : res.data
+        };
         return body;
     })
 }
@@ -28,11 +28,23 @@ export async function register(formData) {
     return errorHandling(async () => {
         const res = await axios.post('/auth/register', formData);
 
-        if (res.statusText !== "OK") {
-            //window.location.href = '/error';
-        }
+        const body = {
+            "status" : res.status,
+            "data" : res.data
+        };
+        return body;
+    })
+}
 
-        const body = res.data;
+// 로그아웃
+export async function logout(formData) {
+    return errorHandling(async () => {
+        const res = await axios.post('/auth/logout', formData);
+
+        const body = {
+            "status" : res.status,
+            "data" : res.data
+        };
         return body;
     })
 }

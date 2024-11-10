@@ -1,15 +1,32 @@
-const EMAIL_REG = /^\S+[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i;
-
-const PASSWORD_REG = /^\S+(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&()_~\[\]\\]).{8,}\S+$/;
+// 비밀번호 : 영문 대소문자, 숫자, 특수문자 포함 8자리 이상
+const PASSWORD_REG = /^\S+(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&()_~\[\]\+]).{8,20}\S+$/;
 
 const NAME_REG = /^[가-힣\w\d]{2,}$/;
 
-const PHONE_REG = /^([0-9]{3}[-]+[0-9]{4}[-]+[0-9]{4})|([0-9]{3}[0-9]{4}[0-9]{4})$/;
-
 const CHAR_REG = /^[\w]*$/;
 
-const REGEX = {
-    EMAIL_REG, PASSWORD_REG, NAME_REG, PHONE_REG, CHAR_REG
+// String
+const STR_PASSWORD_REG = "^\\S+(?=.*\\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&\\(\\)_~\\[\\]\\+]).{8,20}\\S+$";
+
+const STR_NAME_REG = "^[가-힣\\w\\d]{2,13}$";
+
+
+function formRegexValidation(type, target) {
+    let result = null;
+    let regType = new String(type).toLowerCase();
+    
+    if (regType.match("password") || regType.match("pwd")) {
+        result = PASSWORD_REG.test(target);
+    } else if (regType.match("name")) {
+        result = NAME_REG.test(target);
+    }
+    return result;
 }
+
+const REGEX = {
+    PASSWORD_REG, NAME_REG, CHAR_REG, 
+    STR_PASSWORD_REG, STR_NAME_REG,
+    formRegexValidation
+};
 
 export default REGEX;
