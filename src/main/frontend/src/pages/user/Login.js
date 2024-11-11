@@ -12,8 +12,8 @@ function Login() {
 
     const [validated, setValidated] = useState(false); // 검사 진행 여부
     const [pwdVisible, setPwdVisible] = useState(false); // password 보이기 여부
-    // 로그인 form ----------- 테스트용 나중에 변경
-    const [formData, setFormData] = useState({ email: 'asd@google.com', password: '123!@#123ASd'});
+    // 로그인 form
+    const [formData, setFormData] = useState({ email: '', password: ''});
     // 유효성 결과 타입
     const [invalidType, setInvalidType] = useState([
         {
@@ -113,8 +113,6 @@ function Login() {
                                     type="email"
                                     name="email"
                                     onChange={handleChange}
-                                    // ----------- 테스트용 나중에 변경
-                                    value="asd@google.com"
                                 />
                                 <Form.Control.Feedback type="invalid">
                                     {`이메일${invalidType[0].cause}`}
@@ -139,8 +137,6 @@ function Login() {
                                     name="password"
                                     onChange={handleChange}
                                     pattern={REGEX.STR_PASSWORD_REG}
-                                    // ----------- 테스트용 나중에 변경
-                                    value="123!@#123ASd"
                                 />
                                 <Form.Control.Feedback type="invalid">
                                     {`비밀번호${invalidType[1].cause}`}
