@@ -3,7 +3,7 @@
 
 # Checklist Page
 
-1. 메인 화면에서 특정 서버의 "등록된 체크리스트" 부분을 클릭하거나, 서버 메인 화면에서 체크리스트 "더보기"를 누르면 해당 서버의 메모 페이지로 이동한다.
+1. 메인 화면에서 특정 서버의 "등록된 체크리스트" 부분을 클릭하거나, 서버 메인 화면에서 체크리스트 "더보기"를 누르면 해당 서버의 체크리스트 페이지로 이동한다.
 
 ![serverchecklist_server_checklist](https://github.com/user-attachments/assets/363140ac-5b63-48fb-a1cc-4df71815cc8a)
 
