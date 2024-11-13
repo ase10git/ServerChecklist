@@ -67,9 +67,17 @@ public class AuthenticationService {
         // 이메일 인증 정보 생성 및 DB 저장
         //saveVerification(user.getEmail());
 
+        // 토큰 생성 - 사용자 정보로 생성
+        var accessToken = jwtService.generateAccessToken(user);
+        var refreshToken = jwtService.generateRefreshToken(user);
+
+        // 토큰 저장
+        jwtService.saveUserToken(refreshToken, user);
+
         // 인증 응답 객체 생성
         return AuthenticationResponse.builder()
-                .token("succeed")
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
                 .build();
     }
 
@@ -106,12 +114,18 @@ public class AuthenticationService {
         if (!isValidAccount(user)) {
             return null;
         }
-        
+
         // 토큰 생성 - 사용자 정보로 생성
-        var jwtToken = jwtService.generateToken(user);
+        var accessToken = jwtService.generateAccessToken(user);
+        var refreshToken = jwtService.generateRefreshToken(user);
+
+        // 토큰 저장
+        jwtService.saveUserToken(refreshToken, user);
+
         // 인증 응답 객체 생성
         return AuthenticationResponse.builder()
-                .token(jwtToken)
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
                 .build();
     }
 

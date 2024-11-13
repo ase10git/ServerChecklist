@@ -1,11 +1,15 @@
 package com.ase.serverckecklist.security.config;
 
+import com.ase.serverckecklist.entity.Token;
+import com.ase.serverckecklist.entity.User;
+import com.ase.serverckecklist.repository.TokenRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -19,8 +23,25 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class JwtService {
 
+    // DB와 상호작용하는 token repo
+    private final TokenRepository tokenRepository;
+
     // security 설정
     private final SecurityProperties securityProperties;
+
+    // Access Token 만료기한
+    @Value("${app.security.jwt.access-token-expiration}")
+    private long accessTokenExpiration;
+
+    // Refresh Token 만료기한
+    @Value("${app.security.jwt.access-token-expiration}")
+    private long refreshTokenExpiration;
+
+    // DB에 토큰 저장
+    public void saveUserToken(String refreshToken, User user) {
+        Token token = new Token(refreshToken, user.getEmail());
+        tokenRepository.save(token);
+    }
 
     // 토큰에서 사용자 이름 추출
     public String extractUsername(String token) {
@@ -33,22 +54,45 @@ public class JwtService {
         return claimsResolver.apply(claims);
     }
 
-    // 토큰 생성 - UserDetail로만 생성
-    public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
+    // Access 토큰 생성 - UserDetail로만 생성
+    public String generateAccessToken(UserDetails userDetails) {
+        return generateAccessToken(new HashMap<>(), userDetails);
+    }
+
+    // Access 토큰 생성
+    public String generateAccessToken(
+            Map<String, Object> extraClaims, // 토큰에 보낼 정보
+            UserDetails userDetails
+    ) {
+
+        return generateToken(extraClaims, userDetails, accessTokenExpiration);
+    }
+
+    // Refresh 토큰 생성 - UserDetail로만 생성
+    public String generateRefreshToken(UserDetails userDetails) {
+        return generateRefreshToken(new HashMap<>(), userDetails);
+    }
+
+    // Refresh 토큰 생성
+    public String generateRefreshToken(
+            Map<String, Object> extraClaims, // 토큰에 보낼 정보
+            UserDetails userDetails
+    ) {
+        return generateToken(extraClaims, userDetails, refreshTokenExpiration);
     }
 
     // 토큰 생성
-    public String generateToken(
+    private String generateToken(
             Map<String, Object> extraClaims, // 토큰에 보낼 정보
-            UserDetails userDetails
+            UserDetails userDetails,
+            long expireTime
     ) {
         return Jwts
                 .builder()
                 .setClaims(extraClaims) // 클레임 추가
                 .setSubject(userDetails.getUsername()) // subject 추가
                 .setIssuedAt(new Date(System.currentTimeMillis())) // 토큰 발행일
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 5)) // 5분
+                .setExpiration(new Date(System.currentTimeMillis() + expireTime)) // 만료기한
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
