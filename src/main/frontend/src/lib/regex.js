@@ -1,14 +1,14 @@
 // 비밀번호 : 영문 대소문자, 숫자, 특수문자 포함 8자리 이상
 const PASSWORD_REG = /^\S+(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&()_~\[\]\+]).{8,20}\S+$/;
 
-const NAME_REG = /^[가-힣\w\d]{2,}$/;
+const NAME_REG = /^[가-힣\w]{2,13}$/;
 
 const CHAR_REG = /^[\w]*$/;
 
 // String
 const STR_PASSWORD_REG = "^\\S+(?=.*\\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&\\(\\)_~\\[\\]\\+]).{8,20}\\S+$";
 
-const STR_NAME_REG = "^[가-힣\\w\\d]{2,13}$";
+const STR_NAME_REG = "^[가-힣\\w]{2,13}$";
 
 
 function formRegexValidation(type, target) {

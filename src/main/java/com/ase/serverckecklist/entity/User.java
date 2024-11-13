@@ -28,7 +28,7 @@ public class User implements UserDetails {
     private String password;
     private String nickname;
     private String profile;
-    private Boolean verification = false;
+    private boolean verification = false;
     private String[] roles;
     private boolean accountNonExpired = true;
     private boolean accountNonLocked = true;

@@ -14,7 +14,6 @@ export async function login(formData) {
     return errorHandling(async () => {
         const res = await axios.post('/auth/login', formData)
 
-
         const body = {
             "status" : res.status,
             "data" : res.data

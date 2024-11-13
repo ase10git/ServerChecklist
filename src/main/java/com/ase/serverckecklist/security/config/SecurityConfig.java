@@ -36,15 +36,16 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests((authorize)->authorize
-//                        .requestMatchers("/api/auth") // 나열된 요청들은
-//                        .permitAll() // 모두 허용
+                        .requestMatchers("/api/**") // 나열된 요청들은
+
+                        .permitAll() // 모두 허용
 //                        .requestMatchers("/api/user/").hasAuthority("USER")
 //                        .anyRequest() // 그 외의 모든 요청은
 //                        .authenticated() // 인증 필요
-
-                           // 개발용
-                        .anyRequest() // 그 외의 모든 요청은
-                        .permitAll() // 모두 허용
+//
+//                           // 개발용
+//                        .anyRequest() // 그 외의 모든 요청은
+//                        .permitAll() // 모두 허용
                 );
 
         http
@@ -80,7 +81,7 @@ public class SecurityConfig {
         // React client Origin을 허용
         corsConfiguration.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
         // React client로부터 오는 모든 메소드 허용
-        corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         // React client로부터 오는 credential(cookie) 허용
         corsConfiguration.setAllowCredentials(true);
         // React client로부터 오는 모든 헤더를 허용
