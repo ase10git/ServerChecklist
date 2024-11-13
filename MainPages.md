@@ -1,7 +1,7 @@
 - 테스트에 사용한 이미지는 모두 구글에서 검색한 이미지들로, 테스트 이외의 목적으로 사용하지 않았습니다.
 - 수정일 : 2024.11.13
 
-# Main Pages
+# Main Page
 
 - 서버의 메인 화면으로, 전체 서버 데이터 목록과 각 서버의 아이템(메모, 체크리스트, 지도)의 개수를 확인할 수 있다.
 - 최근 업데이트 된 서버 항목에는 최신 등록 및 수정 순으로 5개 정도를 bootstrap의 carousel 기능으로 슬라이드 효과를 줄 예정이다.
@@ -10,7 +10,7 @@
 
 ![serverchecklist_main](https://github.com/user-attachments/assets/d63bc21d-fb75-40ff-84f1-e876b5d746f9)
 
-# Login Pages
+# Login Page
 - 로그인 후 동작은 JWT Access Token과 Refresh Token 관리로 인해 아직 수정중이다.
 1. Header의 로그인 버튼을 누르면 로그인 화면으로 이동한다.
 
@@ -28,7 +28,7 @@
 
 ![serverchecklist_server_login 5](https://github.com/user-attachments/assets/0c6e8640-6dd3-4a75-b65f-565b779f0a50)
 
-# Register Pages
+# Register Page
 - 회원가입의 이메일 중복 검사 기능과 이메일 인증 기능은 아직 추가하지 못했다.
 
 1. 로그인 페이지에서 회원가입을 누르면 회원가입 페이지로 이동한다.
