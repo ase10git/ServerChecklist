@@ -3,23 +3,23 @@
 
 # ServerAdd Page
 
-1. 메인 화면에서 서버 추가 버튼을 누르면 서버 추가 페이지로 이동한다.
+1. 메인 페이지에서 서버 추가 버튼을 누르면 서버 추가 페이지로 이동한다.
 - 현재 권한 별 동작 제어가 없어 이후에 사이트 회원만 서버를 추가할 수 있도록 수정할 예정이다.
 
 ![serverchecklist_main](https://github.com/user-attachments/assets/4dc71cef-0a58-469d-ba6c-cdea2e941106)
 
-2. 서버 추가 화면에선 서버의 이미지와 정보를 입력할 수 있다.
+2. 서버 추가 페이지에선 서버의 이미지와 정보를 입력할 수 있다.
 
 ![serverchecklist_server_add](https://github.com/user-attachments/assets/3530643b-a75b-4588-bc4c-04eae09ca25a)
 
 ![serverchecklist_server_add 2](https://github.com/user-attachments/assets/5fe135b9-9ea8-4d33-b31c-8a42e0602e3d)
 
-3. 서버를 추가하면 메인 화면에서 새로 추가된 서버를 확인할 수 있다.
+3. 서버를 추가하면 메인 페이지에서 새로 추가된 서버를 확인할 수 있다.
 
 ![serverchecklist_server_add 3](https://github.com/user-attachments/assets/16235019-b581-47ab-850b-127094abc3c5)
 
 # ServerMain Page
-- 메인 화면에서 서버를 선택하면 이동하는 페이지로, 서버에 대한 설명과 서버에 등록된 아이템(메모, 체크리스트, 지도)를 간단하게 확인할 수 있다.
+- 메인 페이지에서 서버를 선택하면 이동하는 페이지로, 서버에 대한 설명과 서버에 등록된 아이템(메모, 체크리스트, 지도)를 간단하게 확인할 수 있다.
   - 최신 등록 및 수정 순으로 6개를 가져오도록 수정할 예정이다.
 
 ![serverchecklist_server_main](https://github.com/user-attachments/assets/8756cd1f-d294-4cf8-abd6-211b1692b868)
@@ -32,7 +32,7 @@
 
 # ServerEdit Page
 
-1. 서버 메인 화면의 수정 버튼을 누르면 이동하는 페이지로, 서버의 정보를 수정할 수 있다.
+1. 서버 메인 페이지의 수정 버튼을 누르면 이동하는 페이지로, 서버의 정보를 수정할 수 있다.
 - 권한 설정이 되어 있지 않은 상태로, 권한 설정 뒤엔 서버의 매니저만 접근할 수 있도록 설정할 예정이다.
 
 ![serverchecklist_server_edit](https://github.com/user-attachments/assets/a9657c19-a910-44c0-abf7-cb8d311449ff)
