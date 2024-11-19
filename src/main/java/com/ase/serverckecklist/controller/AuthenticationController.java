@@ -2,6 +2,8 @@ package com.ase.serverckecklist.controller;
 
 import com.ase.serverckecklist.dto.UserDto;
 import com.ase.serverckecklist.security.auth.*;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -40,8 +42,17 @@ public class AuthenticationController {
                 : ResponseEntity.badRequest().build();
     }
 
+    // 재발급
+    @PostMapping("/refresh-token")
+    public ResponseEntity<AuthenticationResponse> authenticate (
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) {
+        return service.refreshToken(request, response);
+    }
+
     // 이메일 인증
-    @PostMapping("/verifyemail")
+    @PostMapping("/verify-email")
     public ResponseEntity<String> verification (
             @RequestBody VerificationRequest request
             ) {
@@ -50,5 +61,4 @@ public class AuthenticationController {
                 ResponseEntity.ok(response.getResult())
                 : ResponseEntity.badRequest().body(response.getResult());
     }
-
 }

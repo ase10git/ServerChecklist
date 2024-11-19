@@ -8,12 +8,19 @@ import com.ase.serverckecklist.repository.VerificationRepository;
 import com.ase.serverckecklist.security.config.JwtService;
 import com.ase.serverckecklist.security.config.RandomString;
 import com.ase.serverckecklist.security.config.SecurityProperties;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +40,7 @@ public class AuthenticationService {
     private final SecurityProperties securityProperties;
 
     // 회원가입
+    @Transactional
     public AuthenticationResponse register(UserDto dto) {
         // 요청으로부터 온 데이터로 사용자 객체 생성
         User user = dto.toEntity();
@@ -98,6 +106,7 @@ public class AuthenticationService {
     }
 
     // 로그인
+    @Transactional
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         // 요청으로 들어온 사용자의 신원 확인
         authenticationManager.authenticate(
@@ -119,6 +128,9 @@ public class AuthenticationService {
         var accessToken = jwtService.generateAccessToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
 
+        // 기존에 db에 저장된 사용자의 모든 Refresh Token 제거
+        jwtService.removeAllUserToken(user);
+
         // 토큰 저장
         jwtService.saveUserToken(refreshToken, user);
 
@@ -137,6 +149,7 @@ public class AuthenticationService {
     }
 
     // 이메일 인증용 코드 생성
+    @Transactional
     public Verification saveVerification(String email) {
         // 인증용 정보 객체
         Verification verification = new Verification();
@@ -154,7 +167,49 @@ public class AuthenticationService {
         return verification;
     }
 
+    // Access Token 재발급
+    @Transactional
+    public ResponseEntity<AuthenticationResponse> refreshToken(
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) {
+        // request의 authorization header에서 token 추출
+        String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+        }
+
+        // Refresh Token 추출
+        String token = authHeader.substring(7);
+        // jwt로부터 사용자 이메일을 추출
+        String userEmail = jwtService.extractUsername(token);
+
+        // 검증 절차
+        // 사용자 존재 여부
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(()->new UsernameNotFoundException("No user found"));
+
+        // Refresh Token 유효성 검사
+        if (jwtService.isRefreshTokenValid(token, user)) {
+            // 유효할 경우 재발급 진행
+            String accessToken = jwtService.generateAccessToken(user);
+            String refreshToken = jwtService.generateRefreshToken(user);
+
+            // 기존에 db에 저장된 Refresh Token 제거
+            jwtService.removeUserToken(token, user);
+
+            // 토큰을 db에 저장
+            jwtService.saveUserToken(refreshToken, user);
+
+            return new ResponseEntity<>(new AuthenticationResponse(accessToken, refreshToken), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+    }
+
     // 이메일 인증
+    @Transactional
     public VerificationResponse verifyEmail(VerificationRequest request) {
         // 인증 결과 전송용 객체
         VerificationResponse response = new VerificationResponse();
