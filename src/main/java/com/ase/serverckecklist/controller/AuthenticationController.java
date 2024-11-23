@@ -3,7 +3,6 @@ package com.ase.serverckecklist.controller;
 import com.ase.serverckecklist.dto.UserDto;
 import com.ase.serverckecklist.security.auth.*;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -22,13 +21,10 @@ public class AuthenticationController {
 
     // 회원가입
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register (
+    public ResponseEntity<?> register (
             @RequestBody UserDto dto
     ) {
-        AuthenticationResponse response = service.register(dto);
-        return (response != null) ?
-                ResponseEntity.ok(response)
-                : ResponseEntity.badRequest().build();
+        return service.register(dto);
     }
 
     // 로그인
@@ -36,19 +32,15 @@ public class AuthenticationController {
     public ResponseEntity<AuthenticationResponse> authenticate (
             @RequestBody AuthenticationRequest request
     ) {
-        AuthenticationResponse response = service.authenticate(request);
-        return (response != null) ?
-                ResponseEntity.ok(response)
-                : ResponseEntity.badRequest().build();
+        return service.authenticate(request);
     }
 
     // 재발급
     @PostMapping("/refresh-token")
     public ResponseEntity<AuthenticationResponse> authenticate (
-            HttpServletRequest request,
-            HttpServletResponse response
+            HttpServletRequest request
     ) {
-        return service.refreshToken(request, response);
+        return service.refreshToken(request);
     }
 
     // 이메일 인증

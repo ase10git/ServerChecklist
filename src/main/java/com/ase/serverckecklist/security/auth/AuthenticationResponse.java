@@ -14,7 +14,4 @@ public class AuthenticationResponse {
 
     @JsonProperty("access_token") // json에서 표기 수정
     private String accessToken;
-
-    @JsonProperty("refresh_token")
-    private String refreshToken;
 }

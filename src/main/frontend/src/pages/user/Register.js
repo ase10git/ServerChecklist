@@ -46,8 +46,9 @@ function Register() {
         else {
             try {
                 // 전송 
-                const res = await register(formData);
-                if (res.status === 200) {
+                const status = await register(formData);
+                if (status === 200) {
+                    alert("회원가입에 성공했습니다! 로그인 페이지로 이동합니다.");
                     navigate("/login");
                 } else {
                     alert('회원가입에 실패했습니다');

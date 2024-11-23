@@ -6,7 +6,6 @@ import REGEX from 'lib/regex';
 import { Eye, EyeSlash } from 'react-bootstrap-icons';
 import { login } from 'api/auth';
 import causes from 'lib/invalidCause';
-import axios from 'axios';
 
 function Login() {
 
@@ -40,9 +39,8 @@ function Login() {
         else {
             try {
                 // 전송 
-                const res = await login(formData);
-                if (res.status === 200) {
-                    axios.
+                const status = await login(formData);
+                if (status === 200) {
                     navigate("/");
                 } else {
                     alert('로그인에 실패했습니다');

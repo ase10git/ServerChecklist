@@ -54,7 +54,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // 검증 절차
         // 사용자가 존재하고, 아직 인증을 진행하지 않아 SecurityContextHolder에 저장되지 않았을 때
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
             // jwt 유효성 확인
             if (jwtService.isAccessTokenValid(jwt, userDetails)) {
                 // Spring SecurityContext에 업데이트에 필요한 객체

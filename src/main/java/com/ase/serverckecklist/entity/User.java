@@ -99,9 +99,10 @@ public class User implements UserDetails {
         return null;
     }
 
+    // UserDetails에서 사용하는 username을 email로 수정
     @Override
     public String getUsername() {
-        return this.nickname;
+        return this.email;
     }
 
     @Override
