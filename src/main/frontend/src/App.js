@@ -20,38 +20,41 @@ import ServerEdit from 'pages/server/ServerEdit';
 import Favorites from 'pages/user/Favorites';
 import Error from 'pages/Error';
 import ServerInfoBox from 'components/servermain/ServerInfoBox';
+import AuthProvider from 'contexts/AuthContext';
 
 function App() {
 
   return (
     <div className='app-wrapper'>
-      <Header/>
-      <div className='content-wrapper'>
-        <Routes>
-          <Route path="/" Component={Main}/>
-          <Route path="/login" Component={Login}/>
-          <Route path="/register" Component={Register}/>
-          <Route path="/resetpwd" Component={ResetPwd}/>
-          <Route path="/user">
-            <Route index Component={User}/>
-            <Route path="favorites" Component={Favorites}/>
-          </Route>
-          <Route path="/servers/add" Component={ServerAdd}/>
-          <Route path="/servers/:id" Component={ServerMain}>
-            <Route index Component={ServerInfoBox}/>
-            <Route path="edit" Component={ServerEdit}/>
-            <Route path="checklists" Component={Checklists}/>
-            <Route path="memo" Component={Memo}/>
-            <Route path="maps">
-              <Route index Component={Maps}/>
-              <Route path=":mapid" Component={MapDetail}/>
-              <Route path="new" Component={MapAdd}/>
+      <AuthProvider>
+        <Header/>
+        <div className='content-wrapper'>
+          <Routes>
+            <Route path="/" Component={Main}/>
+            <Route path="/login" Component={Login}/>
+            <Route path="/register" Component={Register}/>
+            <Route path="/resetpwd" Component={ResetPwd}/>
+            <Route path="/user">
+              <Route index Component={User}/>
+              <Route path="favorites" Component={Favorites}/>
             </Route>
-          </Route>
-          <Route path="/error" Component={Error}/>
-        </Routes>
-      </div>
-      <Footer/>
+            <Route path="/servers/add" Component={ServerAdd}/>
+            <Route path="/servers/:id" Component={ServerMain}>
+              <Route index Component={ServerInfoBox}/>
+              <Route path="edit" Component={ServerEdit}/>
+              <Route path="checklists" Component={Checklists}/>
+              <Route path="memo" Component={Memo}/>
+              <Route path="maps">
+                <Route index Component={Maps}/>
+                <Route path=":mapid" Component={MapDetail}/>
+                <Route path="new" Component={MapAdd}/>
+              </Route>
+            </Route>
+            <Route path="/error" Component={Error}/>
+          </Routes>
+        </div>
+        <Footer/>
+      </AuthProvider>
     </div>
   );
 }

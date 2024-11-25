@@ -3,12 +3,13 @@ import { Container, FloatingLabel, Form, InputGroup } from "react-bootstrap";
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import REGEX from 'lib/regex';
-import { register } from 'api/auth';
 import { Eye, EyeSlash } from 'react-bootstrap-icons';
 import causes from 'lib/invalidCause';
+import { useAuth } from 'contexts/AuthContext';
 
 function Register() {
     
+    const {register} = useAuth();
     const [validated, setValidated] = useState(false); // 검사 진행 여부
     const [pwdVisible, setPwdVisible] = useState(false); // password 보이기 여부
     // 회원가입 form

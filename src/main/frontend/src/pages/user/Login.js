@@ -4,11 +4,12 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import REGEX from 'lib/regex';
 import { Eye, EyeSlash } from 'react-bootstrap-icons';
-import { login } from 'api/auth';
 import causes from 'lib/invalidCause';
+import { useAuth } from 'contexts/AuthContext';
 
 function Login() {
 
+    const {login} = useAuth();
     const [validated, setValidated] = useState(false); // 검사 진행 여부
     const [pwdVisible, setPwdVisible] = useState(false); // password 보이기 여부
     // 로그인 form
@@ -39,8 +40,8 @@ function Login() {
         else {
             try {
                 // 전송 
-                const status = await login(formData);
-                if (status === 200) {
+                const res = await login(formData);
+                if (res.status === 200) {
                     navigate("/");
                 } else {
                     alert('로그인에 실패했습니다');

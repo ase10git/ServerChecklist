@@ -1,5 +1,6 @@
 package com.ase.serverckecklist.security.config;
 
+import com.ase.serverckecklist.security.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

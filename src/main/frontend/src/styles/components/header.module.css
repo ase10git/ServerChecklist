@@ -40,8 +40,11 @@
     background-color: var(--green-color-ml) !important;
 }
 
-.login_btn{
+.btn_wrap{
     width: 13%;
+}
+
+.login_btn{
     padding: 10px;
     font-size: 1.1rem;
     transition: 0.1s;

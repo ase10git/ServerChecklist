@@ -1,8 +1,7 @@
 package com.ase.serverckecklist.security.config;
 
-import com.ase.serverckecklist.repository.UserRepository;
+import com.ase.serverckecklist.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

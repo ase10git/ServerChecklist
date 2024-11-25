@@ -2,9 +2,11 @@ import { Person, Search } from 'react-bootstrap-icons';
 import styles from 'styles/components/header.module.css';
 import { Navbar} from "react-bootstrap";
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from 'contexts/AuthContext';
 
 function Header() {
 
+    const {user, logout} = useAuth();
     const navigate = useNavigate();
 
     function handleLoginBtn() {
@@ -26,8 +28,21 @@ function Header() {
                             <button type="submit" className={styles.search_btn}><Search/></button>
                         </div>
                     </div>
-                    <button className={styles.login_btn}
-                    onClick={handleLoginBtn}><Person/>로그인</button>
+                    <div className={styles.btn_wrap}>
+                        {
+                            user === null ?
+                            <button 
+                            className={styles.login_btn}
+                            onClick={handleLoginBtn}>
+                                <Person/>로그인
+                            </button>
+                            :
+                            <button
+                            className={styles.login_btn}
+                            onClick={()=>{logout()}}
+                            >로그아웃</button>
+                        }
+                    </div>
                 </div>
             </Navbar>
         </>
