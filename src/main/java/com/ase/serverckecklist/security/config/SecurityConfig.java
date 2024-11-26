@@ -37,16 +37,9 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests((authorize)->authorize
-                        .requestMatchers("/api/**") // 나열된 요청들은
-
-                        .permitAll() // 모두 허용
-//                        .requestMatchers("/api/user/").hasAuthority("USER")
-//                        .anyRequest() // 그 외의 모든 요청은
-//                        .authenticated() // 인증 필요
-//
-//                           // 개발용
-//                        .anyRequest() // 그 외의 모든 요청은
-//                        .permitAll() // 모두 허용
+                        .requestMatchers("/api/user/").hasAuthority("USER")
+                        .anyRequest() // 그 외의 모든 요청은
+                        .permitAll() // 인증 필요
                 );
 
         http

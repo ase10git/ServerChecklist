@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { Map, PlusCircle, PlusLg, Trash } from 'react-bootstrap-icons';
 import { list } from 'api/serverItems';
 import { Container } from "react-bootstrap";
-import fileurl from 'api/image';
+import { getImage } from 'api/image';
 
 function Maps() {
 
@@ -21,8 +21,21 @@ function Maps() {
         // 지도 가져오기
         async function getMaps() {
             const res = await list(2, id);
-            setMaplist(res);
+            
+            if (res) {
+                const newList = await Promise.all(
+                    res.map(async (el) => {
+                        if (el.photoId) {
+                            const imgUrl = await getImage(el.photoId);
+                            return {...el, imgUrl};
+                        }
+                        return el;
+                    })
+                );
+                setMaplist(newList);
+            }
         }
+
         getMaps();
     }, []);
 
@@ -45,8 +58,8 @@ function Maps() {
                             <div className={styles.map_img_box}>
                                 {
                                     el.photoId ?
-                                    <img src={`${fileurl}${el.photoId}`} alt="mapimg"
-                                    className={styles.map_img}></img>
+                                    <img src={el.imgUrl} alt="mapimg"
+                                    className={styles.map_img}/>
                                     :
                                     <div className={styles.icon_default}>
                                         <Map/>

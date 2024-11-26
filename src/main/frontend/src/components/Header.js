@@ -1,16 +1,68 @@
-import { Person, Search } from 'react-bootstrap-icons';
+import { DoorOpen, DoorOpenFill, Heart, HeartFill, Pen, PenFill, PersonCircle, Search } from 'react-bootstrap-icons';
 import styles from 'styles/components/header.module.css';
-import { Navbar} from "react-bootstrap";
+import { Dropdown, Navbar} from "react-bootstrap";
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from 'contexts/AuthContext';
 
 function Header() {
 
-    const {user, logout} = useAuth();
+    const {user, profileImage, logout} = useAuth();
     const navigate = useNavigate();
 
     function handleLoginBtn() {
         navigate('/login');
+    }
+
+    // 게스트 표시
+    function notLoggedIn() {
+        return(
+            <div className={styles.btn_wrap}>
+                <button 
+                className={styles.login_btn}
+                onClick={handleLoginBtn}>
+                    <DoorOpenFill/>로그인
+                </button>
+            </div>
+        )
+    }
+
+    // 로그인 표시
+    function loggedIn() {
+        return(
+            <Dropdown
+            className={`${styles.btn_wrap} ${styles.logged_in}`}
+            >
+                <Dropdown.Toggle 
+                variant="success" id="dropdown-basic"
+                className={styles.info_box}>
+                <div className={styles.img_box}>
+                    {
+                        user.profile ?
+                        <img 
+                        className={styles.profile_img}
+                        src={profileImage}/>
+                        :
+                        <PersonCircle/>
+                    }
+                </div>
+                <p>{user.nickname}</p>
+                </Dropdown.Toggle>
+
+                <Dropdown.Menu>
+                    <Dropdown.Item href="#/action-1"
+                    onClick={()=>{navigate('/user')}}
+                    ><Pen/> 내 정보</Dropdown.Item>
+                    <Dropdown.Item href="#/action-2"
+                    onClick={()=>{navigate('/user/favorites')}}
+                    ><Heart/> 즐겨찾기</Dropdown.Item>
+                    <Dropdown.Divider/>
+                    <Dropdown.Item href="#/action-3"
+                    className={styles.logout_btn}
+                    onClick={()=>{logout()}}
+                    ><DoorOpen/> 로그아웃</Dropdown.Item>
+                </Dropdown.Menu>
+            </Dropdown>
+        )
     }
 
     return(
@@ -28,21 +80,12 @@ function Header() {
                             <button type="submit" className={styles.search_btn}><Search/></button>
                         </div>
                     </div>
-                    <div className={styles.btn_wrap}>
-                        {
-                            user === null ?
-                            <button 
-                            className={styles.login_btn}
-                            onClick={handleLoginBtn}>
-                                <Person/>로그인
-                            </button>
-                            :
-                            <button
-                            className={styles.login_btn}
-                            onClick={()=>{logout()}}
-                            >로그아웃</button>
-                        }
-                    </div>
+                    {
+                        user === null ?
+                        notLoggedIn()
+                        :
+                        loggedIn()
+                    }
                 </div>
             </Navbar>
         </>

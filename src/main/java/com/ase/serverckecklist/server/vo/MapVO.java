@@ -2,23 +2,20 @@ package com.ase.serverckecklist.server.vo;
 
 import lombok.*;
 
-@Getter
 @Setter
+@Getter
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class ServerInfoVO {
+@NoArgsConstructor
+public class MapVO {
 
     private String id;
-    private String name;
+    private String title;
+    private String location;
     private String photoId;
-    private String usage;
+    private String ownerId;
+    private String serverId;
     private String description;
-    private String managerId;
     private String createdDate;
     private String modifiedDate;
-    private int numOfMemo;
-    private int numOfChecklists;
-    private int numOfMaps;
-
 }

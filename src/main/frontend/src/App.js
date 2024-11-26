@@ -20,13 +20,19 @@ import ServerEdit from 'pages/server/ServerEdit';
 import Favorites from 'pages/user/Favorites';
 import Error from 'pages/Error';
 import ServerInfoBox from 'components/servermain/ServerInfoBox';
-import AuthProvider from 'contexts/AuthContext';
+import { useAuth } from 'contexts/AuthContext';
+import { useEffect } from 'react';
 
 function App() {
 
+  const {getUserInfo} = useAuth();
+
+  useEffect(()=>{
+    getUserInfo();
+  }, []);
+
   return (
     <div className='app-wrapper'>
-      <AuthProvider>
         <Header/>
         <div className='content-wrapper'>
           <Routes>
@@ -54,7 +60,6 @@ function App() {
           </Routes>
         </div>
         <Footer/>
-      </AuthProvider>
     </div>
   );
 }

@@ -3,6 +3,7 @@ package com.ase.serverckecklist.server.controller;
 import com.ase.serverckecklist.server.dto.CheckListDto;
 import com.ase.serverckecklist.server.entity.CheckList;
 import com.ase.serverckecklist.server.service.CheckListService;
+import com.ase.serverckecklist.server.vo.CheckListVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,19 +23,19 @@ public class CheckListController {
     // GET
     // 특정 서버의 전체 체크리스트 가져오기
     @GetMapping("/list/{serverId}")
-    public ArrayList<CheckList> index(@PathVariable("serverId") String serverId) {
+    public ArrayList<CheckListVO> index(@PathVariable("serverId") String serverId) {
         return checkListService.index(serverId);
     }
 
     // 특정 서버에 최근에 추가되고, 최근에 변경된 순서로 상위 6개 가져오기
     @GetMapping("/recentlist/{serverId}")
-    public ArrayList<CheckList> recentList(@PathVariable("serverId") String serverId) {
+    public ArrayList<CheckListVO> recentList(@PathVariable("serverId") String serverId) {
         return checkListService.recentList(serverId);
     }
 
     // 특정 체크리스트 가져오기
     @GetMapping("{id}")
-    public CheckList show(@PathVariable("id") String id) {
+    public CheckListVO show(@PathVariable("id") String id) {
         return checkListService.show(id);
     }
 

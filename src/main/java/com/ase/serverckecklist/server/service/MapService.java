@@ -4,6 +4,7 @@ import com.ase.serverckecklist.server.dto.MapDto;
 import com.ase.serverckecklist.server.entity.Map;
 import com.ase.serverckecklist.server.repository.MapRepository;
 import com.ase.serverckecklist.file.service.FileService;
+import com.ase.serverckecklist.server.vo.MapVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,18 +20,72 @@ public class MapService {
     private final FileService fileService;
 
     // 서버의 맵 전체 조회
-    public ArrayList<Map> index(String serverId) { // 서버 id를 매개변수로 받고, 메소드 추가!!!
-        return mapRepository.findByServerId(serverId);
+    public ArrayList<MapVO> index(String serverId) {
+        // 지도 리스트
+        ArrayList<Map> list =  mapRepository.findByServerId(serverId);
+        // 결과를 반환할 리스트
+        ArrayList<MapVO> voList = new ArrayList<>();
+
+        // Map -> MapVO 변환
+        for(Map map : list) {
+            MapVO vo = MapVO.builder()
+                    .id(map.getId())
+                    .title(map.getTitle())
+                    .location(map.getLocation())
+                    .photoId(map.getPhotoId())
+                    .ownerId(map.getOwnerId())
+                    .serverId(map.getServerId())
+                    .description(map.getDescription())
+                    .createdDate(map.getCreatedDate().toString())
+                    .modifiedDate(map.getModifiedDate().toString())
+                    .build();
+            voList.add(vo);
+        }
+        return voList;
     }
 
     // 가장 최근에 서버에 추가된 맵 상위 6개만 가져오기
-    public ArrayList<Map> recentList(String serverId) {
-        return mapRepository.findByServerIdOrderByCreatedDateDescModifiedDateDesc(serverId);
+    public ArrayList<MapVO> recentList(String serverId) {
+        // 지도 리스트
+        ArrayList<Map> list = mapRepository.findTop6ByServerIdOrderByCreatedDateDescModifiedDateDesc(serverId);
+        // 결과를 반환할 리스트
+        ArrayList<MapVO> voList = new ArrayList<>();
+
+        // Map -> MapVO 변환
+        for(Map map : list) {
+            MapVO vo = MapVO.builder()
+                        .id(map.getId())
+                        .title(map.getTitle())
+                        .location(map.getLocation())
+                        .photoId(map.getPhotoId())
+                        .ownerId(map.getOwnerId())
+                        .serverId(map.getServerId())
+                        .description(map.getDescription())
+                        .createdDate(map.getCreatedDate().toString())
+                        .modifiedDate(map.getModifiedDate().toString())
+                        .build();
+            voList.add(vo);
+        }
+        return voList;
     }
 
     // id로 맵 조회
-    public Map show(String id) {
-        return mapRepository.findById(id).orElse(null);
+    public MapVO show(String id) {
+        Map map = mapRepository.findById(id).orElse(null);
+
+        return map != null ?
+                    MapVO.builder()
+                    .id(map.getId())
+                    .title(map.getTitle())
+                    .location(map.getLocation())
+                    .photoId(map.getPhotoId())
+                    .ownerId(map.getOwnerId())
+                    .serverId(map.getServerId())
+                    .description(map.getDescription())
+                    .createdDate(map.getCreatedDate().toString())
+                    .modifiedDate(map.getModifiedDate().toString())
+                    .build()
+                : null;
     }
 
     // 새 맵 추가

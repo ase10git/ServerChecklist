@@ -47,7 +47,7 @@ public class AuthenticationService {
     public HttpHeaders setCookieHeader(String refreshToken) {
         // Cookie 생성
         ResponseCookie cookie = ResponseCookie.from("refresh-token", refreshToken)
-                .path("/") // cookie가 전송될 경로 설정
+                .path("/api/auth") // cookie가 전송될 경로 설정
                 .httpOnly(true) // 클라이언트에서 javascript로 접근 불가
                 .secure(true) // https 적용
                 .sameSite("Strict") // sameSite 적용

@@ -4,6 +4,7 @@ import com.ase.serverckecklist.user.dto.UserDto;
 import com.ase.serverckecklist.user.entity.User;
 import com.ase.serverckecklist.user.service.UserService;
 import com.ase.serverckecklist.user.vo.UserVO;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,17 @@ public class UserController {
             @PathVariable("email") String email
     ) {
         UserVO user = userService.show(email);
+
+        return (user != null) ?
+                ResponseEntity.status(HttpStatus.OK).body(user) :
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    }
+
+    @GetMapping("/current-user")
+    public ResponseEntity<UserVO> currentUser(
+            HttpServletRequest request
+    ) {
+        UserVO user = userService.currentUser(request);
 
         return (user != null) ?
                 ResponseEntity.status(HttpStatus.OK).body(user) :

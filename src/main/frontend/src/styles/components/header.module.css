@@ -14,6 +14,7 @@
     font-size: 1.8rem;
 }
 
+/* 검색 */
 .input_form{
     width: 70%;
 }
@@ -40,6 +41,7 @@
     background-color: var(--green-color-ml) !important;
 }
 
+/* 게스트 상태일 때 */
 .btn_wrap{
     width: 13%;
 }
@@ -52,4 +54,33 @@
 }
 .login_btn:hover{
     background-color: var(--green-color-ml) !important;
+}
+
+/* 로그인 했을 때*/
+.btn_wrap .logged_in{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.info_box{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.img_box img{
+    width: 100%;
+    border-radius: 100%;
+    border: 1.5px solid white;
+}
+
+.img_box svg{
+    font-size: 2rem;
+}
+
+.info_box p{
+    margin: 0 5px 0;
+    font-size: 1rem;
 }

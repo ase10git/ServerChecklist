@@ -3,6 +3,7 @@ package com.ase.serverckecklist.server.service;
 import com.ase.serverckecklist.server.dto.MemoDto;
 import com.ase.serverckecklist.server.entity.Memo;
 import com.ase.serverckecklist.server.repository.MemoRepository;
+import com.ase.serverckecklist.server.vo.MemoVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,13 +15,49 @@ public class MemoService {
     private final MemoRepository memoRepository;
 
     // 서버의 모든 메모 조회
-    public ArrayList<Memo> index(String serverId) {
-        return memoRepository.findByServerId(serverId);
+    public ArrayList<MemoVO> index(String serverId) {
+        // 메모 리스트
+        ArrayList<Memo> list = memoRepository.findByServerId(serverId);
+        // 요청에 보낼 리스트
+        ArrayList<MemoVO> voList = new ArrayList<>();
+
+        // Memo -> MemoVO 변환
+        for (Memo memo : list) {
+            MemoVO vo = MemoVO.builder()
+                    .id(memo.getId())
+                    .name(memo.getName())
+                    .content(memo.getContent())
+                    .ownerId(memo.getOwnerId())
+                    .serverId(memo.getServerId())
+                    .createdDate(memo.getCreatedDate().toString())
+                    .modifiedDate(memo.getModifiedDate().toString())
+                    .build();
+            voList.add(vo);
+        }
+        return voList;
     }
 
     // 가장 최근에 서버에 추가된 메모 상위 6개만 가져오기
-    public ArrayList<Memo> recentList(String serverId) {
-        return memoRepository.findByServerIdOrderByCreatedDateDescModifiedDateDesc(serverId);
+    public ArrayList<MemoVO> recentList(String serverId) {
+        // 메모 리스트
+        ArrayList<Memo> list = memoRepository.findTop6ByServerIdOrderByCreatedDateDescModifiedDateDesc(serverId);
+        // 요청에 보낼 리스트
+        ArrayList<MemoVO> voList = new ArrayList<>();
+
+        // Memo -> MemoVO 변환
+        for (Memo memo : list) {
+            MemoVO vo = MemoVO.builder()
+                    .id(memo.getId())
+                    .name(memo.getName())
+                    .content(memo.getContent())
+                    .ownerId(memo.getOwnerId())
+                    .serverId(memo.getServerId())
+                    .createdDate(memo.getCreatedDate().toString())
+                    .modifiedDate(memo.getModifiedDate().toString())
+                    .build();
+            voList.add(vo);
+        }
+        return voList;
     }
 
     // 서버에 등록된 전체 메모 수 조회
@@ -29,8 +66,20 @@ public class MemoService {
     }
 
     // 특정 메모 조회
-    public Memo show(String id) {
-        return memoRepository.findById(id).orElse(null);
+    public MemoVO show(String id) {
+        Memo memo = memoRepository.findById(id).orElse(null);
+
+        return memo != null ?
+                MemoVO.builder()
+                    .id(memo.getId())
+                    .name(memo.getName())
+                    .content(memo.getContent())
+                    .ownerId(memo.getOwnerId())
+                    .serverId(memo.getServerId())
+                    .createdDate(memo.getCreatedDate().toString())
+                    .modifiedDate(memo.getModifiedDate().toString())
+                    .build()
+                : null;
     }
 
     // 새 메모 추가

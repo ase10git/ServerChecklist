@@ -4,6 +4,7 @@ import ServerInfoContainer from 'components/main/ServerInfoContainer';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { index } from 'api/server';
+import { getImage } from 'api/image';
 
 function Main() {
 
@@ -15,9 +16,22 @@ function Main() {
     }
 
     useEffect(()=>{
+        // 서버 리스트 가져오기
         async function getServers() {
             const res = await index();
-            setServerData(res);
+            
+            if (res) {
+                const newList = await Promise.all(
+                    res.map(async (el) => {
+                        if (el.photoId) {
+                            const imgUrl = await getImage(el.photoId);
+                            return {...el, imgUrl};
+                        }
+                        return el;
+                    })
+                );
+                setServerData(newList);
+            }
         }
         getServers();
     }, []);
@@ -31,7 +45,7 @@ function Main() {
                 {
                     serverData.map((el)=>{
                         return (
-                            <CarouselItem key={el.serverInfo.id}>
+                            <CarouselItem key={el.id}>
                                 <ServerInfoContainer data={el}/>
                             </CarouselItem>
                         );
@@ -49,7 +63,7 @@ function Main() {
                 {
                     serverData.map((el)=>{
                         return (
-                            <ServerInfoContainer key={el.serverInfo.id} data={el}/>
+                            <ServerInfoContainer key={el.id} data={el}/>
                         );
                     })
                 }

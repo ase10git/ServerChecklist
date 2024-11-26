@@ -3,6 +3,7 @@ package com.ase.serverckecklist.server.controller;
 import com.ase.serverckecklist.server.dto.MapDto;
 import com.ase.serverckecklist.server.entity.Map;
 import com.ase.serverckecklist.server.service.MapService;
+import com.ase.serverckecklist.server.vo.MapVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,19 +24,19 @@ public class MapController {
     // GET
     // 특정 서버의 모든 지도 가져오기
     @GetMapping("/list/{serverId}")
-    public ArrayList<Map> index(@PathVariable("serverId") String serverId) {
+    public ArrayList<MapVO> index(@PathVariable("serverId") String serverId) {
         return mapService.index(serverId);
     }
 
     // 특정 서버에 최근에 추가되고, 최근에 수정된 순서로 상위 6개 가져오기
     @GetMapping("/recentlist/{serverId}")
-    public ArrayList<Map> recentList(@PathVariable("serverId") String id) {
+    public ArrayList<MapVO> recentList(@PathVariable("serverId") String id) {
         return mapService.recentList(id);
     }
 
     // 특정 지도 가져오기
     @GetMapping("{id}")
-    public Map show(@PathVariable("id") String id) {
+    public MapVO show(@PathVariable("id") String id) {
         return mapService.show(id);
     }
 

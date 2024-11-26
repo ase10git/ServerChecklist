@@ -5,11 +5,11 @@ import { useEffect, useState } from 'react';
 import MapContext, { useMap } from 'contexts/MapContext';
 import { patch, remove, show } from 'api/serverItems';
 import { Camera, Map, Pencil, Trash, XCircle } from 'react-bootstrap-icons';
-import fileurl from 'api/image';
+import { getImage } from 'api/image';
 
 function MapDetail() {
 
-    const [map, setMap] = useState({});
+    const [map, setMap] = useState({}); // 지도 정보
     const {id, mapid} = useParams();
     const [isEdit, setIsEdit] = useState(false);
     const navigate = useNavigate();
@@ -39,7 +39,16 @@ function MapDetail() {
         // 지도 가져오기
         async function getMap() {
             const res = await show(2, mapid);
-            setMap(res);
+
+            if (res) {
+                if (res.photoId) {
+                    const imgUrl = await getImage(res.photoId);
+                    setMap({...res, imgUrl});
+                } else {
+                    setMap(res);
+                }
+            }
+
             setEditFormData({
                 id: mapid,
                 title: res.title,
@@ -110,7 +119,7 @@ function MapInfo({
                 <div className={styles.map_img_box}>
                     {
                         map.photoId ? 
-                        <img src={`${fileurl}${map.photoId}`} alt="mapimg"/>
+                        <img src={map.imgUrl} alt="mapimg"/>
                         : 
                         <div className={styles.icon_default}>
                             <Map/>
@@ -248,7 +257,7 @@ function MapEdit({
         } else {
             if (map.photoId) {
                 return (                        
-                    <img src={`${fileurl}${map.photoId}`}  
+                    <img src={map.imgUrl}  
                     alt="mapimg"
                     className={styles.map_img}/>)
             } else {

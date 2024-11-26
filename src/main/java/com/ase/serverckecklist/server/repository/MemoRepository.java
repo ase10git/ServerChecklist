@@ -13,7 +13,7 @@ public interface MemoRepository extends MongoRepository<Memo, String> {
     ArrayList<Memo> findByServerId(String serverId);
 
     // 특정 서버의 메모 중 최신 등록 순 상위 6개 가져오기
-    ArrayList<Memo> findByServerIdOrderByCreatedDateDescModifiedDateDesc(String serverId);
+    ArrayList<Memo> findTop6ByServerIdOrderByCreatedDateDescModifiedDateDesc(String serverId);
 
     // 서버 전체에 등록된 메모 수 가져오기
     int countByServerId(String serverId);

@@ -3,6 +3,7 @@ package com.ase.serverckecklist.server.service;
 import com.ase.serverckecklist.server.dto.CheckListDto;
 import com.ase.serverckecklist.server.repository.CheckListRepository;
 import com.ase.serverckecklist.server.entity.CheckList;
+import com.ase.serverckecklist.server.vo.CheckListVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,18 +19,66 @@ public class CheckListService {
     private final CheckListRepository checkListRepository;
 
     // 서버의 모든 체크리스트 전체 조회
-    public ArrayList<CheckList> index(String serverId) {
-        return checkListRepository.findByServerId(serverId);
+    public ArrayList<CheckListVO> index(String serverId) {
+        // 체크리스트 리스트
+        ArrayList<CheckList> list = checkListRepository.findByServerId(serverId);
+        // 결과로 반환할 리스트
+        ArrayList<CheckListVO> voList = new ArrayList<>();
+
+        for(CheckList checkList : list) {
+            CheckListVO vo = CheckListVO.builder()
+                    .id(checkList.getId())
+                    .title(checkList.getTitle())
+                    .ownerId(checkList.getOwnerId())
+                    .serverId(checkList.getServerId())
+                    .checked(checkList.getChecked())
+                    .createdDate(checkList.getCreatedDate().toString())
+                    .modifiedDate(checkList.getModifiedDate().toString())
+                    .build();
+            voList.add(vo);
+        }
+
+        return voList;
     }
 
     // 가장 최근에 서버에 추가된 메모 상위 6개만 가져오기
-    public ArrayList<CheckList> recentList(String serverId) {
-        return checkListRepository.findByServerIdOrderByCreatedDateDescModifiedDateDesc(serverId);
+    public ArrayList<CheckListVO> recentList(String serverId) {
+        // 체크리스트 리스트
+        ArrayList<CheckList> list = checkListRepository.findByServerIdOrderByCreatedDateDescModifiedDateDesc(serverId);
+        // 결과로 반환할 리스트
+        ArrayList<CheckListVO> voList = new ArrayList<>();
+
+        for(CheckList checkList : list) {
+            CheckListVO vo = CheckListVO.builder()
+                    .id(checkList.getId())
+                    .title(checkList.getTitle())
+                    .ownerId(checkList.getOwnerId())
+                    .serverId(checkList.getServerId())
+                    .checked(checkList.getChecked())
+                    .createdDate(checkList.getCreatedDate().toString())
+                    .modifiedDate(checkList.getModifiedDate().toString())
+                    .build();
+            voList.add(vo);
+        }
+
+        return voList;
     }
 
     // id로 특정 체크리스트 조회
-    public CheckList show(@PathVariable String id) {
-        return checkListRepository.findById(id).orElse(null);
+    public CheckListVO show(@PathVariable String id) {
+        CheckList checkList = checkListRepository.findById(id).orElse(null);
+
+        return checkList != null ?
+                CheckListVO.builder()
+                        .id(checkList.getId())
+                        .title(checkList.getTitle())
+                        .ownerId(checkList.getOwnerId())
+                        .serverId(checkList.getServerId())
+                        .checked(checkList.getChecked())
+                        .createdDate(checkList.getCreatedDate().toString())
+                        .modifiedDate(checkList.getModifiedDate().toString())
+                        .build()
+                : null;
     }
 
     // 새 체크리스트 추가

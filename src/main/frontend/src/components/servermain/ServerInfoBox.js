@@ -1,3 +1,4 @@
+import { getImage } from 'api/image';
 import { recentList } from 'api/serverItems';
 import ServerMainChecklist from 'components/servermain/ServerMainChecklist';
 import ServerMainMap from 'components/servermain/ServerMainMap';
@@ -31,8 +32,21 @@ function ServerInfoBox() {
         // 서버 지도 가져오기
         async function getMaps() {
             const res = await recentList(2, id);
-            setServerMaps(res);
+            
+            if (res) {
+                const newMapList = await Promise.all(
+                    res.map(async el=>{
+                        if (el.photoId) {
+                            const imgUrl = await getImage(el.photoId);
+                            return {...el, imgUrl};
+                        }
+                        return el;
+                    })
+                );
+                setServerMaps(newMapList);
+            }
         }
+
         getMemo();
         getChecklists();
         getMaps();

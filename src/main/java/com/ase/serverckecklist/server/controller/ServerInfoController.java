@@ -30,7 +30,7 @@ public class ServerInfoController {
 
     // 특정 서버 정보 가져오기
     @GetMapping("{id}")
-    public ServerInfo index(@PathVariable("id") String id) {
+    public ServerInfoVO index(@PathVariable("id") String id) {
         return serverInfoService.show(id);
     }
 

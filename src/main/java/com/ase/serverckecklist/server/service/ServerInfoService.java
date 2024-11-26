@@ -35,12 +35,19 @@ public class ServerInfoService {
 
         for (ServerInfo serverInfo : serverList) {
             // 서버 정보, 사진, 각 서버의 메모, 체크리스트, 맵 수를 저장한 VO 생성
-            ServerInfoVO vo = new ServerInfoVO(
-                    serverInfo,
-                    memoRepository.countByServerId(serverInfo.getId()),
-                    checkListRepository.countByServerId(serverInfo.getId()),
-                    mapRepository.countByServerId(serverInfo.getId())
-            );
+            ServerInfoVO vo = ServerInfoVO.builder()
+                        .id(serverInfo.getId())
+                        .name(serverInfo.getName())
+                        .photoId(serverInfo.getPhotoId())
+                        .usage(serverInfo.getUsage())
+                        .description(serverInfo.getDescription())
+                        .managerId(serverInfo.getManagerId())
+                        .createdDate(serverInfo.getCreatedDate().toString())
+                        .modifiedDate(serverInfo.getModifiedDate().toString())
+                        .numOfMemo(memoRepository.countByServerId(serverInfo.getId()))
+                        .numOfChecklists(checkListRepository.countByServerId(serverInfo.getId()))
+                        .numOfMaps(mapRepository.countByServerId(serverInfo.getId()))
+                    .build();
             // 리스트에 저장
             list.add(vo);
         }
@@ -49,8 +56,21 @@ public class ServerInfoService {
     }
 
     // id로 서버 조회
-    public ServerInfo show(String id) {
-        return serverInfoRepository.findById(id).orElse(null);
+    public ServerInfoVO show(String id) {
+        ServerInfo info = serverInfoRepository.findById(id).orElse(null);
+
+        return info != null ?
+                ServerInfoVO.builder()
+                    .id(info.getId())
+                        .name(info.getName())
+                        .photoId(info.getPhotoId())
+                        .usage(info.getUsage())
+                        .description(info.getDescription())
+                        .managerId(info.getManagerId())
+                        .createdDate(info.getCreatedDate().toString())
+                        .modifiedDate(info.getModifiedDate().toString())
+                    .build()
+                : null;
     }
 
     // 새 서버 추가

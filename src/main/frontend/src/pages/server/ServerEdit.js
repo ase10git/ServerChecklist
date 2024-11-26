@@ -1,16 +1,14 @@
 import styles from 'styles/pages/server/serverAdd.module.css';
 import { Container, Form, InputGroup, OverlayTrigger, Tooltip } from "react-bootstrap";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import { useEffect, useState } from 'react';
-import { patch, show } from 'api/server';
-import fileurl from 'api/image';
+import { patch } from 'api/server';
 import { Camera, XCircle } from 'react-bootstrap-icons';
 
 function ServerEdit() {
 
     const {id} = useParams();
-
-    const [serverInfo, setServerInfo] = useState({});
+    const {serverInfo} = useOutletContext(); // 서버 정보
     // 파일 제거 플래그
     const [fileFlag, setFileFlag] = useState(false);
 
@@ -28,19 +26,14 @@ function ServerEdit() {
 
     useEffect(()=>{
         // 서버 정보 가져온 후 formData 수정하기
-        async function getServer() {
-            const res = await show(id);
-            setServerInfo(res);
-            setFormData({
-                id: res.id,
-                name: res.name,
-                photo: res.photo ?? null,
-                usage: res.usage,
-                description: res.description
-            });
-        }
-        getServer();
-    }, []);
+        setFormData({
+            id: serverInfo.id,
+            name: serverInfo.name,
+            photo: serverInfo.photo ?? null,
+            usage: serverInfo.usage,
+            description: serverInfo.description
+        });
+    }, [serverInfo]);
 
     const navigate = useNavigate();
 
@@ -132,7 +125,7 @@ function ServerEdit() {
         } else {
             if (serverInfo.photoId) {
                 return (                        
-                    <img src={`${fileurl}${serverInfo.photoId}`}  
+                    <img src={serverInfo.imgUrl}  
                     alt="serverimg"
                     className={styles.server_img}/>)
             } else {

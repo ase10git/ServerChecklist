@@ -1,9 +1,11 @@
 package com.ase.serverckecklist.user.service;
 
+import com.ase.serverckecklist.security.auth.service.JwtService;
 import com.ase.serverckecklist.user.dto.UserDto;
 import com.ase.serverckecklist.user.entity.User;
 import com.ase.serverckecklist.user.repository.UserRepository;
 import com.ase.serverckecklist.user.vo.UserVO;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,7 +19,23 @@ public class UserService {
     private final UserRepository userRepository;
     // 비밀번호 인코더
     private final PasswordEncoder passwordEncoder;
+    // jwt
+    private final JwtService jwtService;
 
+    // header에서 token 추출
+    public String resolveToken(HttpServletRequest request) {
+        // 요청으로 온 header 내용 추출
+        final String authHeader = request.getHeader("Authorization");
+
+        // jwt가 없으면 null 반환
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return null;
+        }
+
+        // jwt
+        return authHeader.substring(7);
+    }
+    
     // 이메일로 유저 조회
     public UserVO show(String email) {
         User target = userRepository.findByEmail(email).orElse(null);
@@ -35,6 +53,22 @@ public class UserService {
             }
 
         return null;
+    }
+
+    // token으로 확인하는 현재 유저
+    public UserVO currentUser(HttpServletRequest request) {
+        // header에서 token 추출
+        final String jwt = resolveToken(request);
+        
+        if (jwt == null) {
+            return null;
+        }
+        
+        // jwt에서 사용자 이메일 추출
+        final String userEmail = jwtService.extractUsername(jwt);
+
+        // 이메일로 사용자를 조회한 결과 반환
+        return show(userEmail);
     }
 
     // 유저 수정
@@ -71,6 +105,5 @@ public class UserService {
         userRepository.delete(target);
         return target; // HTTP 응답의 body가 없는 ResponseEntity 생성
     }
-
 
 }

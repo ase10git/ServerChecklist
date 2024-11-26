@@ -3,6 +3,7 @@ package com.ase.serverckecklist.server.controller;
 import com.ase.serverckecklist.server.dto.MemoDto;
 import com.ase.serverckecklist.server.entity.Memo;
 import com.ase.serverckecklist.server.service.MemoService;
+import com.ase.serverckecklist.server.vo.MemoVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,19 +23,19 @@ public class MemoController {
     // GET
     // 특정 서버의 모든 메모 가져오기
     @GetMapping("/list/{serverId}")
-    public ArrayList<Memo> index(@PathVariable("serverId") String serverId) {
+    public ArrayList<MemoVO> index(@PathVariable("serverId") String serverId) {
         return memoService.index(serverId);
     }
 
     // 특정 서버에 가장 최근에 추가되고, 최신 변경 순서대로 상위 6개 가져오기
     @GetMapping("/recentlist/{serverId}")
-    public ArrayList<Memo> recentList(@PathVariable("serverId") String serverId) {
+    public ArrayList<MemoVO> recentList(@PathVariable("serverId") String serverId) {
         return memoService.recentList(serverId);
     }
 
     // 특정 메모 가져오기
     @GetMapping("{id}")
-    public Memo show(@PathVariable("id") String id) {
+    public MemoVO show(@PathVariable("id") String id) {
         return memoService.show(id);
     }
 
