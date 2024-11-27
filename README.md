@@ -35,14 +35,14 @@
 | 2024.11.09 | 이메일 인증과 관련된 Controller 메소드 및 클래스 추가                              |
 | 2024.11.10 | 로그인과 회원가입 Controller 및 서비스 수정                                    |
 | 2024.11.11 | 로그인과 회원가입에 정규 표현식 검사 추가                                          |
+| ~2024.11.26 | JWT Token 관리와 로그인 유지 기능 추가                                         |
 
 ## 진행 혹은 예정된 작업
 <details>
 	<summary>1. Spring Security 기능 추가</summary>
 
-	- JWT Refresh Token 관리
-	- Session 관리
-	- 로그인 유지
+	- [O] JWT Refresh Token 관리
+	- [O] 로그인 유지
 	- 권한 별 접근 설정
 	- OAuth2를 사용한 구글 로그인 연동
 </details>
@@ -141,4 +141,9 @@
  
 # 권한과 동작 제어(예정)
 
-![serverchecklist_authorization](https://github.com/user-attachments/assets/164b5032-a045-47b8-a659-05248d2668ad)
+## 서버 API와 권한
+<img width="6512" alt="ServerChecklist_actions" src="https://github.com/user-attachments/assets/1f8a9152-fc92-49a4-b68b-fdda9b2ad072">
+
+## 클라이언트 페이지 접근 권한
+<img width="6160" alt="ServerChecklist_actions_client" src="https://github.com/user-attachments/assets/7aa6873f-edf1-40c1-8ec6-73dd1b64ae6a">
+
