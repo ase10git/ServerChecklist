@@ -71,7 +71,8 @@
 }
 
 .img_box img{
-    width: 100%;
+    width: 30px; height: 30px;
+    aspect-ratio: 1/1;
     border-radius: 100%;
     border: 1.5px solid white;
 }
