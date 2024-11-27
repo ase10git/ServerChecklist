@@ -47,12 +47,10 @@ export async function patch(id, formData) {
 export async function remove(id) {
     try {
         const res = await axios.delete(`/servers/${id}`);
-        
 
         const body = res.data;
         return body;    
     } catch (error) {
         alert("서버 삭제에 실패했습니다");
     }
-    
 }

@@ -32,7 +32,7 @@ function Login() {
         const form = event.currentTarget;
         event.preventDefault();
         
-        // // 유효성 검사 통과 못하면 로그인 중지
+        // 유효성 검사 통과 못하면 로그인 중지
         if (!form.checkValidity()) {
             event.stopPropagation();
         } 
@@ -62,6 +62,7 @@ function Login() {
             [name] : value,
         }));
         
+        // 유효성 검사 통과 실패 사유 설정
         setInvalidType((prev)=>
             prev.map((field)=>{
                 if (field.type === name) {

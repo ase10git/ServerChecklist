@@ -14,10 +14,8 @@
     margin-top: 30px;
 }
 
-.server_box{
-    width: 100%;
-    margin: 20px 0 20px;
-    display: flex; flex-direction: column;
-    justify-content: center;
+.btn_wrap{
+    margin-top: 10px;
+    display: flex; justify-content: right;
     align-items: center;
 }

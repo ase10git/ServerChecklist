@@ -1,7 +1,8 @@
 package com.ase.serverckecklist.user.service;
 
+import com.ase.serverckecklist.file.service.FileService;
 import com.ase.serverckecklist.security.auth.service.JwtService;
-import com.ase.serverckecklist.user.dto.UserDto;
+import com.ase.serverckecklist.user.dto.UserInfoDto;
 import com.ase.serverckecklist.user.entity.User;
 import com.ase.serverckecklist.user.repository.UserRepository;
 import com.ase.serverckecklist.user.vo.UserVO;
@@ -10,6 +11,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
@@ -17,6 +21,8 @@ public class UserService {
 
     // 사용자 DB 연결 repository
     private final UserRepository userRepository;
+    // file 관리
+    private final FileService fileService;
     // 비밀번호 인코더
     private final PasswordEncoder passwordEncoder;
     // jwt
@@ -73,24 +79,42 @@ public class UserService {
 
     // 유저 수정
     @Transactional
-    public User update(String email, UserDto dto) {
-        User user = dto.toEntity();
-        // 비밀번호 인코딩
-        user.setPassword(passwordEncoder.encode(dto.getPassword()));
-        
+    public User update(String email, UserInfoDto dto) throws IOException {
         // 수정 대상
         User target = userRepository.findByEmail(email)
                 .orElse(null);
 
         // 잘못된 요청 처리
-        if (target == null || !email.equals(user.getEmail())) {
+        if (target == null || !email.equals(dto.getEmail())) {
             return null;
         }
 
+        // 수정할 파일 id
+        MultipartFile file = dto.getProfile();
+        String fileId = target.getProfile();
+
+        // 파일 삭제 요청 여부
+        if (dto.isFileDeleteFlag() || (file != null && !file.isEmpty())) { // 삭제 요청 있을 때
+            // 기존 파일 제거
+            fileService.deleteFile(target.getProfile());
+            fileId = null;
+
+            // 파일이 있는 경우에만 파일 등록 수행 후 파일 id 가져오기
+            if (file != null && !file.isEmpty()) {
+                fileId = fileService.addFile(file);
+            }
+
+        }
+
+        User user = dto.toEntity(fileId);
+
         // 기존 데이터에 새 데이터 붙이기
-        target.patch(user);
+        target.patch(user, dto.isFileDeleteFlag());
         return userRepository.save(target);
     }
+
+    // 사용자 비밀번호 수정
+
 
     // 유저 삭제
     @Transactional

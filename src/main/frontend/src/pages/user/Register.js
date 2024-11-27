@@ -70,6 +70,7 @@ function Register() {
             [name] : value,
         }));
 
+        // 유효성 검사 통과 실패 사유 설정
         setInvalidType((prev)=>
             prev.map((field)=>{
                 if (field.type === name) {

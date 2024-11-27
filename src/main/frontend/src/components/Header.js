@@ -49,17 +49,21 @@ function Header() {
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu>
-                    <Dropdown.Item href="#/action-1"
-                    onClick={()=>{navigate('/user')}}
-                    ><Pen/> 내 정보</Dropdown.Item>
-                    <Dropdown.Item href="#/action-2"
-                    onClick={()=>{navigate('/user/favorites')}}
-                    ><Heart/> 즐겨찾기</Dropdown.Item>
+                    <Dropdown.Item
+                    onClick={()=>{navigate("/user")}}>
+                        <Pen/> 내 정보
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                    onClick={()=>{navigate("/user/favorites")}}>
+                        <Heart/> 즐겨찾기
+                    </Dropdown.Item>
                     <Dropdown.Divider/>
-                    <Dropdown.Item href="#/action-3"
+                    <Dropdown.Item
                     className={styles.logout_btn}
                     onClick={()=>{logout()}}
-                    ><DoorOpen/> 로그아웃</Dropdown.Item>
+                    >
+                        <DoorOpen/> 로그아웃
+                    </Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>
         )

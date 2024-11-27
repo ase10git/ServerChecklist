@@ -22,6 +22,9 @@ import Error from 'pages/Error';
 import ServerInfoBox from 'components/servermain/ServerInfoBox';
 import { useAuth } from 'contexts/AuthContext';
 import { useEffect } from 'react';
+import NewPassword from 'pages/user/NewPassword';
+import UserEdit from 'components/user/UserEdit';
+import UserInfo from 'components/user/UserInfo';
 
 function App() {
 
@@ -29,7 +32,7 @@ function App() {
 
   useEffect(()=>{
     getUserInfo();
-  }, []);
+  },[]);
 
   return (
     <div className='app-wrapper'>
@@ -40,8 +43,10 @@ function App() {
             <Route path="/login" Component={Login}/>
             <Route path="/register" Component={Register}/>
             <Route path="/resetpwd" Component={ResetPwd}/>
-            <Route path="/user">
-              <Route index Component={User}/>
+            <Route path="/user" Component={User}>
+              <Route index Component={UserInfo}/>
+              <Route path="edit" Component={UserEdit}/>
+              <Route path="newpwd" Component={NewPassword}/>
               <Route path="favorites" Component={Favorites}/>
             </Route>
             <Route path="/servers/add" Component={ServerAdd}/>

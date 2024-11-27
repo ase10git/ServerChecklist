@@ -1,16 +1,16 @@
 package com.ase.serverckecklist.security.auth.service;
 
-import com.ase.serverckecklist.user.dto.UserDto;
-import com.ase.serverckecklist.user.entity.User;
-import com.ase.serverckecklist.security.auth.entity.Verification;
-import com.ase.serverckecklist.user.repository.UserRepository;
-import com.ase.serverckecklist.security.auth.repository.VerificationRepository;
 import com.ase.serverckecklist.security.auth.dto.AuthenticationRequest;
 import com.ase.serverckecklist.security.auth.dto.AuthenticationResponse;
 import com.ase.serverckecklist.security.auth.dto.VerificationRequest;
 import com.ase.serverckecklist.security.auth.dto.VerificationResponse;
+import com.ase.serverckecklist.security.auth.entity.Verification;
+import com.ase.serverckecklist.security.auth.repository.VerificationRepository;
 import com.ase.serverckecklist.security.config.RandomString;
 import com.ase.serverckecklist.security.config.SecurityProperties;
+import com.ase.serverckecklist.user.dto.UserRegisterDto;
+import com.ase.serverckecklist.user.entity.User;
+import com.ase.serverckecklist.user.repository.UserRepository;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -74,13 +74,16 @@ public class AuthenticationService {
 
     // 회원가입
     @Transactional
-    public ResponseEntity<?> register(UserDto dto) {
+    public ResponseEntity<?> register(UserRegisterDto dto) {
         // 요청으로부터 온 데이터로 사용자 객체 생성
         User user = dto.toEntity();
 
+        // 같은 이메일 사용자 확인
+        User sameEmailUser = userRepository.findByEmail(user.getEmail()).orElse(null);
+
         // 중복id 존재 시 데이터 추가 x
-        if (user.getId() != null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        if (sameEmailUser != null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 등록된 이메일입니다.");
         }
 
         // 중요한 데이터가 빠지면 진행 중단

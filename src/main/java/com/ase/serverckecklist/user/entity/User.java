@@ -52,11 +52,9 @@ public class User implements UserDetails {
         this.modifiedDate = LocalDateTime.now();
     }
 
-    // 수정용
-    public User(String id, String email, String password, String nickname, String profile, String[] roles, String[] joinedServerList) {
-        this.id = id;
+    // 수정용 - 사용자 정보
+    public User(String email, String nickname, String profile, String[] roles, String[] joinedServerList) {
         this.email = email;
-        this.password = password;
         this.nickname = nickname;
         this.profile = profile;
         this.roles = roles;
@@ -78,6 +76,33 @@ public class User implements UserDetails {
             this.profile = user.profile;
         }
 
+        if (user.roles != null) {
+            this.roles = user.roles;
+        }
+
+        if (user.joinedServerList != null) {
+            this.joinedServerList = user.joinedServerList;
+        }
+        this.modifiedDate = LocalDateTime.now();
+    }
+
+    // 사용자 프로필 수정용
+    public void patch(User user, boolean fileDeleteFlag) {
+
+        if (user.nickname != null) {
+            this.nickname = user.nickname;
+        }
+
+        if (user.profile != null) {
+            this.profile = user.profile;
+        } else if (fileDeleteFlag) {
+            this.profile = null;
+        }
+
+        if (user.roles != null) {
+            this.roles = user.roles;
+        }
+        
         if (user.joinedServerList != null) {
             this.joinedServerList = user.joinedServerList;
         }

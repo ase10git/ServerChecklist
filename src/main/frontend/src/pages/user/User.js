@@ -1,19 +1,22 @@
 import styles from 'styles/pages/user/user.module.css';
 import { Container } from "react-bootstrap";
-import serverListSample from 'lib/sampleData/serverListSample';
-import { useState } from 'react';
-import UserInput from 'components/user/UserInput';
+import { useEffect, useState } from 'react';
+import { Outlet, useNavigate } from 'react-router-dom';
+import { useAuth } from 'contexts/AuthContext';
+import UserInfo from 'components/user/UserInfo';
 
 function User() {
-    const [serverData, setServerData] = useState(serverListSample);
-    
+    const {getUserInfo} = useAuth();
+
+    useEffect(()=>{
+        document.title = "마이페이지";
+        getUserInfo();
+    }, []);
 
     return(
         <Container className={styles.container}>
-            <div>
-                <h2 className={styles.title}>마이페이지</h2>
-                <UserInput/>
-            </div>
+            <h2 className={styles.title}>마이페이지</h2>
+            <Outlet/>
         </Container>
     )
 }

@@ -1,6 +1,6 @@
 package com.ase.serverckecklist.user.controller;
 
-import com.ase.serverckecklist.user.dto.UserDto;
+import com.ase.serverckecklist.user.dto.UserInfoDto;
 import com.ase.serverckecklist.user.entity.User;
 import com.ase.serverckecklist.user.service.UserService;
 import com.ase.serverckecklist.user.vo.UserVO;
@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/user")
@@ -46,8 +48,8 @@ public class UserController {
     @PatchMapping("{email}")
     public ResponseEntity<User> update(
             @PathVariable("email") String email,
-            @RequestBody UserDto dto
-    ) {
+            @ModelAttribute UserInfoDto dto
+    ) throws IOException {
         User updated = userService.update(email, dto);
 
         return (updated != null) ?

@@ -36,7 +36,7 @@ public class ServerInfoController {
 
     // POST
     // 서버 추가하기
-    @PostMapping(value = "")
+    @PostMapping()
     public ResponseEntity<ServerInfo> create(
             @ModelAttribute ServerInfoDto dto
             ) throws IOException {
@@ -49,7 +49,7 @@ public class ServerInfoController {
 
     // PATCH
     // 서버 수정하기
-    @PatchMapping(value = "{id}")
+    @PatchMapping("{id}")
     public ResponseEntity<ServerInfo> update(
             @PathVariable("id") String id,
             @ModelAttribute ServerInfoDto dto

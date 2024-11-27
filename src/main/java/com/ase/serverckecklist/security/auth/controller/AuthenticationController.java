@@ -1,11 +1,11 @@
 package com.ase.serverckecklist.security.auth.controller;
 
-import com.ase.serverckecklist.user.dto.UserDto;
 import com.ase.serverckecklist.security.auth.dto.AuthenticationRequest;
 import com.ase.serverckecklist.security.auth.dto.AuthenticationResponse;
 import com.ase.serverckecklist.security.auth.dto.VerificationRequest;
 import com.ase.serverckecklist.security.auth.dto.VerificationResponse;
 import com.ase.serverckecklist.security.auth.service.AuthenticationService;
+import com.ase.serverckecklist.user.dto.UserRegisterDto;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +26,7 @@ public class AuthenticationController {
     // 회원가입
     @PostMapping("/register")
     public ResponseEntity<?> register (
-            @RequestBody UserDto dto
+            @RequestBody UserRegisterDto dto
     ) {
         return service.register(dto);
     }
