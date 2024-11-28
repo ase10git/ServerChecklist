@@ -1,3 +1,4 @@
+import fileApi from 'api/image';
 import { ListCheck, PencilSquare, PinMapFill } from 'react-bootstrap-icons';
 import { Link } from 'react-router-dom';
 import styles from 'styles/components/main/serverInfoContainer.module.css';
@@ -15,7 +16,7 @@ function ServerInfoContainer({data}) {
                 <Link to={`/servers/${data.id}`}>
                 {
                     data.photoId ?
-                    <img src={data.imgUrl} alt="serverImg"/>
+                    <img src={`${fileApi}${data.photoId}`} alt="serverImg"/>
                     : null
                 }
                 </Link>

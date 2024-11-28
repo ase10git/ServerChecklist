@@ -3,7 +3,7 @@ import styles from 'styles/pages/server/serverMain.module.css';
 import { Link, Outlet, useNavigate, useParams } from 'react-router-dom';
 import { remove, show } from 'api/server';
 import { Pencil, Trash } from 'react-bootstrap-icons';
-import { getImage } from 'api/image';
+import fileApi, { getImage } from 'api/image';
 
 function ServerMain() {
 
@@ -34,12 +34,7 @@ function ServerMain() {
             const res = await show(id);
 
             if (res) {
-                if (res.photoId) {
-                    const imgUrl = await getImage(res.photoId);
-                    setServerInfo({...res, imgUrl});
-                } else {
-                    setServerInfo(res);
-                }
+                setServerInfo(res);
             }
         }
 
@@ -62,7 +57,7 @@ function ServerMain() {
                     <div className={styles.server_img_box}>
                         {
                             serverInfo.photoId ?
-                            <img src={serverInfo.imgUrl} alt="serverimg"/>
+                            <img src={`${fileApi}${serverInfo.photoId}`} alt="serverimg"/>
                             : null
                         }
                     </div>

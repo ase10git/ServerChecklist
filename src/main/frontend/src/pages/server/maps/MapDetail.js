@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import MapContext, { useMap } from 'contexts/MapContext';
 import { patch, remove, show } from 'api/serverItems';
 import { Camera, Map, Pencil, Trash, XCircle } from 'react-bootstrap-icons';
-import { getImage } from 'api/image';
+import fileApi, { getImage } from 'api/image';
 
 function MapDetail() {
 
@@ -41,12 +41,7 @@ function MapDetail() {
             const res = await show(2, mapid);
 
             if (res) {
-                if (res.photoId) {
-                    const imgUrl = await getImage(res.photoId);
-                    setMap({...res, imgUrl});
-                } else {
-                    setMap(res);
-                }
+                setMap(res);
             }
 
             setEditFormData({
@@ -119,7 +114,7 @@ function MapInfo({
                 <div className={styles.map_img_box}>
                     {
                         map.photoId ? 
-                        <img src={map.imgUrl} alt="mapimg"/>
+                        <img src={`${fileApi}${map.photoId}`} alt="mapimg"/>
                         : 
                         <div className={styles.icon_default}>
                             <Map/>
@@ -257,7 +252,7 @@ function MapEdit({
         } else {
             if (map.photoId) {
                 return (                        
-                    <img src={map.imgUrl}  
+                    <img src={`${fileApi}${map.photoId}`}
                     alt="mapimg"
                     className={styles.map_img}/>)
             } else {

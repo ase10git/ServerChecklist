@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { Map, PlusCircle, PlusLg, Trash } from 'react-bootstrap-icons';
 import { list } from 'api/serverItems';
 import { Container } from "react-bootstrap";
-import { getImage } from 'api/image';
+import fileApi, { getImage } from 'api/image';
 
 function Maps() {
 
@@ -23,16 +23,7 @@ function Maps() {
             const res = await list(2, id);
             
             if (res) {
-                const newList = await Promise.all(
-                    res.map(async (el) => {
-                        if (el.photoId) {
-                            const imgUrl = await getImage(el.photoId);
-                            return {...el, imgUrl};
-                        }
-                        return el;
-                    })
-                );
-                setMaplist(newList);
+                setMaplist(res);
             }
         }
 
@@ -58,7 +49,7 @@ function Maps() {
                             <div className={styles.map_img_box}>
                                 {
                                     el.photoId ?
-                                    <img src={el.imgUrl} alt="mapimg"
+                                    <img src={`${fileApi}${el.photoId}`} alt="mapimg"
                                     className={styles.map_img}/>
                                     :
                                     <div className={styles.icon_default}>

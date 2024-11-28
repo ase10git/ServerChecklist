@@ -19,18 +19,8 @@ function Main() {
         // 서버 리스트 가져오기
         async function getServers() {
             const res = await index();
-            
             if (res) {
-                const newList = await Promise.all(
-                    res.map(async (el) => {
-                        if (el.photoId) {
-                            const imgUrl = await getImage(el.photoId);
-                            return {...el, imgUrl};
-                        }
-                        return el;
-                    })
-                );
-                setServerData(newList);
+                setServerData(res);
             }
         }
         getServers();

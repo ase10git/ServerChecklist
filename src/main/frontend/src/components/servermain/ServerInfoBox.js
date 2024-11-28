@@ -34,16 +34,7 @@ function ServerInfoBox() {
             const res = await recentList(2, id);
             
             if (res) {
-                const newMapList = await Promise.all(
-                    res.map(async el=>{
-                        if (el.photoId) {
-                            const imgUrl = await getImage(el.photoId);
-                            return {...el, imgUrl};
-                        }
-                        return el;
-                    })
-                );
-                setServerMaps(newMapList);
+                setServerMaps(res);
             }
         }
 

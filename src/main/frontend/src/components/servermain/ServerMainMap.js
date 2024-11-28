@@ -1,3 +1,4 @@
+import fileApi from 'api/image';
 import { Map } from 'react-bootstrap-icons';
 import { Link } from 'react-router-dom';
 import styles from 'styles/components/servermain/servermainMap.module.css';
@@ -15,7 +16,7 @@ function ServerMainMap({serverMaps, serverId}) {
                             <div className={styles.map_img_box}>
                                 {
                                     el.photoId ?
-                                    <img src={el.imgUrl} 
+                                    <img src={`${fileApi}${el.photoId}`} 
                                     alt="mapimg"
                                     className={styles.map_img}/>
                                     :

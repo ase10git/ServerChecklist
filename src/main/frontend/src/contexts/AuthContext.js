@@ -115,12 +115,6 @@ function AuthProvider({children}) {
     
                 if (res.status === 200) {
                     setUser(res.data);
-
-                    // 프로필 정보가 있다면 가져오기
-                    if (res.data.profile) {
-                        const imgRes = await getImage(res.data.profile);
-                        setProfileImage(imgRes);
-                    }
                 }
             } catch (error) {
             }
