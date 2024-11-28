@@ -46,6 +46,7 @@ function AuthProvider({children}) {
             }
             return res;
         } catch (error) {
+            alert("로그인에 실패했습니다. 이메일이나 비밀번호를 다시 확인해주세요");
         }
     }
 
@@ -56,6 +57,7 @@ function AuthProvider({children}) {
 
             return res.status;
         } catch (error) {
+            alert("회원가입에 실패했습니다. 다시 시도해주세요");
         }
     }
 
@@ -153,6 +155,25 @@ function AuthProvider({children}) {
         authFetch(patchAxios);
     }
 
+    // 비밀번호 수정
+    async function patchUserPwd(formData, email) {
+        async function patchAxios() {
+            try {
+                const res = await axios.patch(`/user/new-password/${email}`, formData);
+
+                if (res.status === 200) {
+                    alert("비밀번호를 수정했습니다");
+                    navigate("/user");
+                }
+            } catch (error) {
+                alert(error.response.data);
+            }
+        }
+        
+        // token이 있을때만 요청
+        authFetch(patchAxios);
+    }
+
     // 회원 탈퇴
     async function deleteUser(email) {
         
@@ -176,7 +197,7 @@ function AuthProvider({children}) {
     return(
         <AuthContext.Provider
         value={{user, profileImage, login, register, refreshToken, logout, 
-        getUserInfo, patchUser, deleteUser}}>
+        getUserInfo, patchUser, patchUserPwd, deleteUser}}>
             {children}
         </AuthContext.Provider>
     )

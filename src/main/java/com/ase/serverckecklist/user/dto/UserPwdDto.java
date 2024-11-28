@@ -6,8 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Data
 @Builder
 @AllArgsConstructor
@@ -18,10 +16,10 @@ public class UserPwdDto {
     private String currentPassword;
     private String newPassword;
 
-    public User toEntity() {
+    public User toEntity(String encodedPassword) {
         return User.builder()
                 .email(this.email)
-                .password(this.newPassword)
+                .password(encodedPassword)
                 .build();
     }
 }

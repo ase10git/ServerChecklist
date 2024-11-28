@@ -1,6 +1,6 @@
 import styles from 'styles/pages/user/login.module.css';
-import { Button, Container, Form, FloatingLabel, InputGroup } from "react-bootstrap";
-import { useEffect, useRef, useState } from 'react';
+import { Form, FloatingLabel, InputGroup } from "react-bootstrap";
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import REGEX from 'lib/regex';
 import { Eye, EyeSlash } from 'react-bootstrap-icons';
@@ -31,7 +31,7 @@ function Login() {
     const handleSubmit = async (event) => {
         const form = event.currentTarget;
         event.preventDefault();
-        
+
         // 유효성 검사 통과 못하면 로그인 중지
         if (!form.checkValidity()) {
             event.stopPropagation();
@@ -43,8 +43,6 @@ function Login() {
                 const res = await login(formData);
                 if (res.status === 200) {
                     navigate("/");
-                } else {
-                    alert('로그인에 실패했습니다');
                 }
             } catch (error) {
             }

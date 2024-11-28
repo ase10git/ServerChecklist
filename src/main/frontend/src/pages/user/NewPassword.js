@@ -3,12 +3,12 @@ import { useAuth } from "contexts/AuthContext";
 import causes from "lib/invalidCause";
 import REGEX from "lib/regex";
 import { useEffect, useState } from "react";
-import { Container, FloatingLabel, Form, InputGroup } from "react-bootstrap";
+import { FloatingLabel, Form, InputGroup } from "react-bootstrap";
 import { Eye, EyeSlash } from "react-bootstrap-icons";
 import { useNavigate } from "react-router-dom";
 
 function NewPassword() {
-    const {user, patchUser} = useAuth(); // 로그인 한 사용자
+    const {user, patchUserPwd} = useAuth(); // 로그인 한 사용자
     const [validated, setValidated] = useState(false); // Form validation
     const [pwdVisible, setPwdVisible] = useState(false); // password 보이기 여부
     const navigate = useNavigate();
@@ -67,32 +67,34 @@ function NewPassword() {
         setValidated(false);
     }
 
-        // 유효성 검사 및 사용자 수정
-        const handleSubmit = async (event) => {
-            const form = event.currentTarget;
-            event.preventDefault();
-    
-            // 유효성 검사 통과 못하면 수정 중지
-            if (!form.checkValidity()) {
-                event.stopPropagation();
-            }
-    
-            else {
-                // 두 비밀번호 비교
-                if (!formData.newPassword.equals(formData.currentPassword)) {
-                    alert("두 비밀번호가 일치하지 않습니다");
-                    return;
-                }
+    // 유효성 검사 및 사용자 수정
+    const handleSubmit = async (event) => {
+        const form = event.currentTarget;
+        event.preventDefault();
 
+        // 유효성 검사 통과 못하면 수정 중지
+        if (!form.checkValidity()) {
+            event.stopPropagation();
+        } 
+
+        else {
+            // 두 비밀번호 비교
+            if (formData.newPassword !== "" 
+            && formData.currentPassword  !== "" 
+            && !(formData.newPassword === formData.currentPassword)) 
+            {
                 try {
                     // 수정 요청 전송
-                    
+                    await patchUserPwd(formData, user.email);
                 } catch (error) {
                 }
+            } else {
+                alert("두 비밀번호가 동일합니다. 다른 비밀번호로 변경해주세요");
             }
-    
-            setValidated(true);
-        };
+        }
+        // 유효성 검사를 진행했음 - was-validated
+        setValidated(true);
+    };
 
     // 비밀번호 보임 처리
     function handlePasswordVisible() { 
@@ -101,14 +103,13 @@ function NewPassword() {
 
     return(
         <div>
-            <Form noValidate validated={validated} 
+            <Form noValidate validated={validated}
             onSubmit={handleSubmit} className={styles.box}>
-                {/* password */}
-                <Form.Group md="4" controlId="password" 
+                <Form.Group md="4" controlId="currentPassword" 
                 className={styles.form_box}>
                     <InputGroup hasValidation>
                         <FloatingLabel
-                            controlId="floatingPassword"
+                            controlId="currentPassword"
                             label="현재 비밀번호"
                             className="mb-3"
                         >
@@ -119,14 +120,13 @@ function NewPassword() {
                                     "text" : "password"
                                 }
                                 name="currentPassword"
-                                id="currentPassword"
                                 onChange={handleChange}
                                 pattern={REGEX.STR_PASSWORD_REG}
                             />
                             <Form.Control.Feedback type="invalid">
-                                {`비밀번호${invalidType[1].cause}`}
+                                {`비밀번호${invalidType[0].cause}`}
                                 {
-                                    (invalidType[1].cause.includes("형식")) ?
+                                    (invalidType[0].cause.includes("형식")) ?
                                     <p>
                                         영어 대소문자, 숫자, 특수문자 포함 8~20자
                                     </p>
@@ -144,11 +144,11 @@ function NewPassword() {
                     </InputGroup>
                 </Form.Group>
 
-                <Form.Group md="4" controlId="password" 
+                <Form.Group md="4" controlId="newPassword" 
                 className={styles.form_box}>
                     <InputGroup hasValidation>
                         <FloatingLabel
-                            controlId="floatingPassword"
+                            controlId="newPassword"
                             label="새 비밀번호"
                             className="mb-3"
                         >
@@ -159,7 +159,6 @@ function NewPassword() {
                                     "text" : "password"
                                 }
                                 name="newPassword"
-                                id="newPassword"
                                 onChange={handleChange}
                                 pattern={REGEX.STR_PASSWORD_REG}
                             />
@@ -183,13 +182,14 @@ function NewPassword() {
                         </FloatingLabel>
                     </InputGroup>
                 </Form.Group>
-
                 <div className={styles.btn_wrap}>
                     <button
-                    onClick={handleSubmit} 
+                    type="submit"
                     className='edit_btn'
                     >확인</button>
-                    <button onClick={()=>{navigate("/user")}} 
+                    <button 
+                    type="button"
+                    onClick={()=>{navigate("/user")}} 
                     className={`del_btn ${styles.del_btn}`}
                     >취소</button>
                 </div>

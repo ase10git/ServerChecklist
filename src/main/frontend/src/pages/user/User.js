@@ -2,15 +2,10 @@ import styles from 'styles/pages/user/user.module.css';
 import { Container } from "react-bootstrap";
 import { useEffect, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
-import { useAuth } from 'contexts/AuthContext';
-import UserInfo from 'components/user/UserInfo';
 
 function User() {
-    const {getUserInfo} = useAuth();
-
     useEffect(()=>{
         document.title = "마이페이지";
-        getUserInfo();
     }, []);
 
     return(

@@ -1,6 +1,7 @@
 package com.ase.serverckecklist.user.controller;
 
 import com.ase.serverckecklist.user.dto.UserInfoDto;
+import com.ase.serverckecklist.user.dto.UserPwdDto;
 import com.ase.serverckecklist.user.entity.User;
 import com.ase.serverckecklist.user.service.UserService;
 import com.ase.serverckecklist.user.vo.UserVO;
@@ -55,6 +56,14 @@ public class UserController {
         return (updated != null) ?
                 ResponseEntity.status(HttpStatus.OK).body(updated) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    }
+
+    @PatchMapping("/new-password/{email}")
+    public ResponseEntity<String> update(
+            @PathVariable("email") String email,
+            @RequestBody UserPwdDto dto
+    ) {
+        return userService.update(email, dto);
     }
 
     // DELETE

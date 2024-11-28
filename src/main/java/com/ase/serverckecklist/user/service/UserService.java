@@ -3,11 +3,15 @@ package com.ase.serverckecklist.user.service;
 import com.ase.serverckecklist.file.service.FileService;
 import com.ase.serverckecklist.security.auth.service.JwtService;
 import com.ase.serverckecklist.user.dto.UserInfoDto;
+import com.ase.serverckecklist.user.dto.UserPwdDto;
 import com.ase.serverckecklist.user.entity.User;
 import com.ase.serverckecklist.user.repository.UserRepository;
 import com.ase.serverckecklist.user.vo.UserVO;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +21,7 @@ import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserService {
 
     // 사용자 DB 연결 repository
@@ -114,7 +119,34 @@ public class UserService {
     }
 
     // 사용자 비밀번호 수정
+    @Transactional
+    public ResponseEntity<String> update(String email, UserPwdDto dto) {
+        // 수정 대상
+        User target = userRepository.findByEmail(email).orElse(null);
 
+        // 잘못된 요청 처리
+        if (target == null || !email.equals(dto.getEmail())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("존재하지 않는 사용자입니다");
+        }
+
+        // 현재 비밀번호가 DB에 저장된 비밀번호와 일치하는지 확인
+        if (!passwordEncoder.matches(dto.getCurrentPassword(), target.getPassword())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("현재 비밀번호가 일치하지 않습니다");
+        }
+
+        // 저장할 데이터를 담은 User 인스턴스
+        User user = dto.toEntity(passwordEncoder.encode(dto.getNewPassword()));
+
+        // 기존 데이터에 새 데이터 붙이기
+        target.patch(user);
+
+        log.info(user.toString());
+        log.info(target.toString());
+
+        // 저장
+        userRepository.save(target);
+        return ResponseEntity.ok().build();
+    }
 
     // 유저 삭제
     @Transactional
