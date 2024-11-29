@@ -87,7 +87,7 @@ function Login() {
 
     useEffect(()=>{
         // 타이틀 설정
-        document.title = "로그인";
+        document.title = "서버메모 - 로그인";
     }, []);
 
     return(

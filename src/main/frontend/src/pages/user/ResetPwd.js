@@ -33,7 +33,6 @@ function ResetPwd() {
                                 label="이메일"
                                 className="mb-3"
                             >
-                                
                                 <Form.Control
                                     required
                                     type="text"

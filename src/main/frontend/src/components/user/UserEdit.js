@@ -1,14 +1,15 @@
 import styles from 'styles/components/user/userEdit.module.css';
 import { useEffect, useState } from "react";
-import { FloatingLabel, Form, InputGroup, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { Form, InputGroup, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { useAuth } from 'contexts/AuthContext';
-import { Eye, EyeSlash, Person, XCircle } from 'react-bootstrap-icons';
+import { Person, XCircle } from 'react-bootstrap-icons';
 import REGEX from 'lib/regex';
 import causes from 'lib/invalidCause';
 import { useNavigate } from 'react-router-dom';
+import fileApi from 'api/image';
 
 function UserEdit() {
-    const {user, profileImage, patchUser} = useAuth(); // 로그인 한 사용자
+    const {user, patchUser} = useAuth(); // 로그인 한 사용자
     const navigate = useNavigate();
 
     // 파일 제거 플래그
@@ -78,7 +79,6 @@ function UserEdit() {
         .filter(key => key !== "profile")
         .forEach((key)=>{
             if (formData[key] === null || formData[key] === '') {
-                formDataToSend.append(`${key}`, user[key]);
             } else {
                 formDataToSend.append(`${key}`, formData[key]);
             }
@@ -124,8 +124,8 @@ function UserEdit() {
                                 alt="profile"
                                 />
                                 :
-                                profileImage ?
-                                <img src={profileImage}
+                                user.profile ?
+                                <img src={`${fileApi}${user.profile}`}
                                 alt="profile"
                                 />
                                 : <Person/>

@@ -1,5 +1,7 @@
 package com.ase.serverckecklist.security.config;
 
+import com.ase.serverckecklist.security.auth.handler.CustomLogoutHandler;
+import com.ase.serverckecklist.security.auth.handler.CustomLogoutSuccessHandler;
 import com.ase.serverckecklist.security.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -10,7 +12,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
+import org.springframework.security.web.authentication.logout.HeaderWriterLogoutHandler;
+import org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -23,17 +26,27 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+    // filter
     private final JwtAuthenticationFilter jwtAuthFilter;
+    // authentication provider
     private final AuthenticationProvider authenticationProvider;
+    // logout handler
+    private final CustomLogoutHandler customLogoutHandler;
+    // logout success handler
+    private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+        // ClearSiteDataHeader를 작성하는 LogoutHandler 생성
+        HeaderWriterLogoutHandler clearSiteData =
+                new HeaderWriterLogoutHandler(new ClearSiteDataHeaderWriter(ClearSiteDataHeaderWriter.Directive.ALL));
+
 
         http
                 // session stateless로 인해 꺼 둠
-                .csrf((auth)->auth.disable())
+                .csrf(auth->auth.disable())
                 // form 로그인 끄기 - jwt 사용
-                .formLogin((form)->form.disable());
+                .formLogin(form->form.disable());
 
         http
                 .authorizeHttpRequests((authorize)->authorize
@@ -43,7 +56,7 @@ public class SecurityConfig {
                 );
 
         http
-                .sessionManagement((session)->
+                .sessionManagement(session->
                     session // session state는 저장되면 안되므로 stateless로 설정
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
@@ -52,16 +65,16 @@ public class SecurityConfig {
 
         // cors 설정
         http
-                .cors((corsConfigurer)->
+                .cors(corsConfigurer->
                         corsConfigurer.configurationSource(corsConfigurationSource()));
 
         // 로그아웃 설정
         http
-                .logout((logout)->logout
+                .logout(logout->logout
                         .logoutUrl("/api/auth/logout")
-                        .logoutSuccessHandler(
-                                new HttpStatusReturningLogoutSuccessHandler()
-                        )
+                        .addLogoutHandler(customLogoutHandler)
+                        .addLogoutHandler(clearSiteData)
+                        .logoutSuccessHandler(customLogoutSuccessHandler)
                 );
 
         return http.build();

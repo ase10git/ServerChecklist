@@ -1,6 +1,6 @@
 import axios from 'lib/axios';
 import { createContext, useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { getImage } from 'api/image';
 
 const AuthContext = createContext();
@@ -9,9 +9,9 @@ const AuthContext = createContext();
 function AuthProvider({children}) {
 
     const [user, setUser] = useState(null); // 로그인 한 사용자
-    const [profileImage, setProfileImage] = useState(''); // 이미지 파일
     //const [token, setToken] = useState(null); // Access Token
     const navigate = useNavigate();
+    const location = useLocation();
 
     // header 설정
     function setHeader(response) {
@@ -22,7 +22,7 @@ function AuthProvider({children}) {
         axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
 
         // token state에 Access Token 추가
-        //setToken(access_token);
+        // setToken(access_token);
     }
 
     // 로그인
@@ -81,11 +81,30 @@ function AuthProvider({children}) {
 
     // 로그아웃
     async function logout() {
-        try {
-            const res = await axios.post('/auth/logout', user);
 
-            return res;    
-        } catch (error) {
+        async function sendLogout() {
+            try {
+                const res = await axios.get('/auth/logout');
+                if (res.status === 200) {
+                    console.log(location.pathname)
+                    if (location.pathname !== "/") {
+                        window.location.replace("/");
+                    }
+                    window.location.reload();
+                }
+            } catch (error) {
+            }
+        }
+
+        // token이 있을때만 요청
+        if (axios.defaults.headers.common['Authorization']) {
+            sendLogout();
+        } else {
+            // 재발급
+            const token_status = await refreshToken();
+            if (token_status === 200) {
+                sendLogout();
+            }
         }
     }
 
@@ -196,7 +215,7 @@ function AuthProvider({children}) {
 
     return(
         <AuthContext.Provider
-        value={{user, profileImage, login, register, refreshToken, logout, 
+        value={{user, login, register, refreshToken, logout, 
         getUserInfo, patchUser, patchUserPwd, deleteUser}}>
             {children}
         </AuthContext.Provider>

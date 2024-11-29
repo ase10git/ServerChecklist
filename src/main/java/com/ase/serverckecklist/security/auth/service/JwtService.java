@@ -1,6 +1,8 @@
 package com.ase.serverckecklist.security.auth.service;
 
+import com.ase.serverckecklist.security.auth.entity.Blacklist;
 import com.ase.serverckecklist.security.auth.entity.Token;
+import com.ase.serverckecklist.security.auth.repository.BlacklistRepository;
 import com.ase.serverckecklist.user.entity.User;
 import com.ase.serverckecklist.security.auth.repository.TokenRepository;
 import com.ase.serverckecklist.security.config.SecurityProperties;
@@ -28,6 +30,9 @@ public class JwtService {
     // DB와 상호작용하는 token repo
     private final TokenRepository tokenRepository;
 
+    // blacklist
+    private final BlacklistRepository blacklistRepository;
+
     // security 설정
     private final SecurityProperties securityProperties;
 
@@ -54,7 +59,9 @@ public class JwtService {
     // DB에 저장된 사용자의 모든 토큰 제거
     public void removeAllUserToken(User user) {
         List<Token> list = tokenRepository.findAllByEmail(user.getEmail());
-        list.forEach(tokenRepository::delete);
+        if (list != null && !list.isEmpty()) {
+            list.forEach(tokenRepository::delete);
+        }
     }
 
     // 토큰에서 사용자 이름 추출
@@ -113,9 +120,15 @@ public class JwtService {
     // Access Token 유효성 검사
     public boolean isAccessTokenValid(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
+        // Access Token이 BlackList에 있는지 조회
+        Blacklist blackList = blacklistRepository.findByAccessToken(token).orElse(null);
+        boolean isBlackListToken = (blackList != null);
+
         // 토큰의 사용자 정보가 DB의 정보와 일치 여부 + 만료 기한 확인
         // DB에 사용자 정보가 없다면 여기서 false를 반환하여 유효하지 않음을 확인
-        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+        return (username.equals(userDetails.getUsername()))
+                && !isTokenExpired(token)
+                && !isBlackListToken;
     }
 
     // Refresh Token 유효성 검사

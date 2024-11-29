@@ -16,6 +16,7 @@ function Main() {
     }
 
     useEffect(()=>{
+        document.title = "서버메모";
         // 서버 리스트 가져오기
         async function getServers() {
             const res = await index();

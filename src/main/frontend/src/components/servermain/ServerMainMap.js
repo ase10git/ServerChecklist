@@ -4,8 +4,6 @@ import { Link } from 'react-router-dom';
 import styles from 'styles/components/servermain/servermainMap.module.css';
 
 function ServerMainMap({serverMaps, serverId}) {
-
-    console.log(serverMaps)
     return(
         <div className={styles.map_box}>
         {

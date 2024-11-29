@@ -2,17 +2,18 @@ import styles from 'styles/components/user/userInfo.module.css';
 import { useAuth } from 'contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { Person } from 'react-bootstrap-icons';
+import fileApi from 'api/image';
 
 function UserInfo() {
-    const {user, profileImage} = useAuth(); // 로그인 한 사용자
+    const {user} = useAuth(); // 로그인 한 사용자
     const navigate = useNavigate();
 
     return(
         <div className={styles.box}>
             <div className={styles.profile_box}>
                 {
-                    profileImage ?
-                    <img src={profileImage} alt='profile'/>
+                    user.profile ?
+                    <img src={`${fileApi}${user.profile}`} alt='profile'/>
                     : <div className={styles.default_img_box}><Person/></div>
                 }
             </div>

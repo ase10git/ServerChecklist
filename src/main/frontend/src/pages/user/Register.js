@@ -101,7 +101,7 @@ function Register() {
     }
 
     useEffect(()=>{
-        document.title = "회원가입";
+        document.title = "서버메모 - 회원가입";
     }, []);
 
     return(

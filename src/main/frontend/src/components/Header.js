@@ -1,12 +1,13 @@
-import { DoorOpen, DoorOpenFill, Heart, HeartFill, Pen, PenFill, PersonCircle, Search } from 'react-bootstrap-icons';
+import { DoorOpen, DoorOpenFill, Heart, Pen, PersonCircle, Search } from 'react-bootstrap-icons';
 import styles from 'styles/components/header.module.css';
 import { Dropdown, Navbar} from "react-bootstrap";
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from 'contexts/AuthContext';
+import fileApi from 'api/image';
 
 function Header() {
 
-    const {user, profileImage, logout} = useAuth();
+    const {user, logout} = useAuth();
     const navigate = useNavigate();
 
     function handleLoginBtn() {
@@ -40,7 +41,7 @@ function Header() {
                         user.profile ?
                         <img 
                         className={styles.profile_img}
-                        src={profileImage}/>
+                        src={`${fileApi}${user.profile}`}/>
                         :
                         <PersonCircle/>
                     }
