@@ -1,6 +1,6 @@
 import styles from 'styles/components/user/userEdit.module.css';
 import { useEffect, useState } from "react";
-import { Form, InputGroup, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { Form, InputGroup, OverlayTrigger, Spinner, Tooltip } from "react-bootstrap";
 import { useAuth } from 'contexts/AuthContext';
 import { Person, XCircle } from 'react-bootstrap-icons';
 import REGEX from 'lib/regex';
@@ -30,7 +30,7 @@ function UserEdit() {
             email: user?.email,
             nickname: user?.nickname,
             profile: null
-        }))
+        }));
     }, [user]);
 
     // form 데이터 등록

@@ -3,7 +3,7 @@ import { useAuth } from "contexts/AuthContext";
 import causes from "lib/invalidCause";
 import REGEX from "lib/regex";
 import { useEffect, useState } from "react";
-import { FloatingLabel, Form, InputGroup } from "react-bootstrap";
+import { FloatingLabel, Form, InputGroup, Spinner } from "react-bootstrap";
 import { Eye, EyeSlash } from "react-bootstrap-icons";
 import { useNavigate } from "react-router-dom";
 
@@ -32,12 +32,13 @@ function NewPassword() {
 
     useEffect(()=>{
         document.title = "비밀번호 변경";
+
         // 현재 로그인한 사용자 정보로 formData 수정하기
         setFormData((prev)=>({
             ...prev,
             email: user?.email,
         }))
-    }, []);
+    }, [user]);
 
     // form 데이터 등록
     function handleChange(event) {

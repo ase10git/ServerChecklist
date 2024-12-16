@@ -25,13 +25,17 @@ import { useEffect } from 'react';
 import NewPassword from 'pages/user/NewPassword';
 import UserEdit from 'components/user/UserEdit';
 import UserInfo from 'components/user/UserInfo';
+import ProtectedRoute from 'contexts/ProtectedRoute';
 
 function App() {
 
-  const {getUserInfo} = useAuth();
+  const {loading, getUserInfo} = useAuth();
 
   useEffect(()=>{
-    getUserInfo();
+    const initializeUser = async () =>{
+      await getUserInfo();
+    }
+    initializeUser();
   },[]);
 
   return (
@@ -39,26 +43,31 @@ function App() {
         <Header/>
         <div className='content-wrapper'>
           <Routes>
+            {/* 일반 사용자 접근 가능 */}
             <Route path="/" Component={Main}/>
             <Route path="/login" Component={Login}/>
             <Route path="/register" Component={Register}/>
             <Route path="/resetpwd" Component={ResetPwd}/>
-            <Route path="/user" Component={User}>
-              <Route index Component={UserInfo}/>
-              <Route path="edit" Component={UserEdit}/>
-              <Route path="newpwd" Component={NewPassword}/>
-              <Route path="favorites" Component={Favorites}/>
-            </Route>
-            <Route path="/servers/add" Component={ServerAdd}/>
-            <Route path="/servers/:id" Component={ServerMain}>
-              <Route index Component={ServerInfoBox}/>
-              <Route path="edit" Component={ServerEdit}/>
-              <Route path="checklists" Component={Checklists}/>
-              <Route path="memo" Component={Memo}/>
-              <Route path="maps">
-                <Route index Component={Maps}/>
-                <Route path=":mapid" Component={MapDetail}/>
-                <Route path="new" Component={MapAdd}/>
+            
+            {/* 보호된 라우트 */}
+            <Route element={<ProtectedRoute loading={loading}/>}>
+              <Route path="/user" Component={User}>
+                <Route index Component={UserInfo}/>
+                <Route path="edit" Component={UserEdit}/>
+                <Route path="newpwd" Component={NewPassword}/>
+                <Route path="favorites" Component={Favorites}/>
+              </Route>
+              <Route path="/servers/add" Component={ServerAdd}/>
+              <Route path="/servers/:id" Component={ServerMain}>
+                <Route index Component={ServerInfoBox}/>
+                <Route path="edit" Component={ServerEdit}/>
+                <Route path="checklists" Component={Checklists}/>
+                <Route path="memo" Component={Memo}/>
+                <Route path="maps">
+                  <Route index Component={Maps}/>
+                  <Route path=":mapid" Component={MapDetail}/>
+                  <Route path="new" Component={MapAdd}/>
+                </Route>
               </Route>
             </Route>
             <Route path="/error" Component={Error}/>

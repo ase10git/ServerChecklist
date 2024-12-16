@@ -1,6 +1,6 @@
 import axios from 'lib/axios';
 import { createContext, useContext, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { getImage } from 'api/image';
 
 const AuthContext = createContext();
@@ -10,6 +10,7 @@ function AuthProvider({children}) {
 
     const [user, setUser] = useState(null); // 로그인 한 사용자
     //const [token, setToken] = useState(null); // Access Token
+    const [loading, setLoading] = useState(true); // 로딩 상태
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -77,6 +78,7 @@ function AuthProvider({children}) {
             return res.status;
         } catch (error) {
         }
+        setLoading(false);
     }
 
     // 로그아웃
@@ -138,6 +140,8 @@ function AuthProvider({children}) {
                     setUser(res.data);
                 }
             } catch (error) {
+            } finally {
+                setLoading(false);
             }
         }
 
@@ -215,7 +219,7 @@ function AuthProvider({children}) {
 
     return(
         <AuthContext.Provider
-        value={{user, login, register, refreshToken, logout, 
+        value={{user, login, loading, register, refreshToken, logout, 
         getUserInfo, patchUser, patchUserPwd, deleteUser}}>
             {children}
         </AuthContext.Provider>
