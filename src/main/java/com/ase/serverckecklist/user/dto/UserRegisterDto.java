@@ -1,5 +1,6 @@
 package com.ase.serverckecklist.user.dto;
 
+import com.ase.serverckecklist.user.entity.Role;
 import com.ase.serverckecklist.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +15,7 @@ public class UserRegisterDto {
     private String email;
     private String password;
     private String nickname;
-    private String[] roles;
+    private Role role;
 
     // DTO -> Entity
     public User toEntity() {
@@ -23,7 +24,7 @@ public class UserRegisterDto {
                 email,
                 password,
                 nickname,
-                roles
+                role
         );
     }
 }

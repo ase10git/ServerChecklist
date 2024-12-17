@@ -1,5 +1,6 @@
 package com.ase.serverckecklist.user.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,7 +9,9 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
@@ -29,7 +32,9 @@ public class User implements UserDetails {
     private String nickname;
     private String profile;
     private boolean verification = false;
-    private String[] roles;
+    @Field
+    @JsonFormat(shape = JsonFormat.Shape.STRING) // string 형태로 변환
+    private Role role;
     private String[] joinedServerList = null;
     private boolean accountNonExpired = true;
     private boolean accountNonLocked = true;
@@ -43,21 +48,21 @@ public class User implements UserDetails {
 
     // constructor
     // 신규용
-    public User(String email, String password, String nickname, String[] roles) {
+    public User(String email, String password, String nickname, Role role) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
-        this.roles = roles;
+        this.role = role;
         this.registerDate = LocalDateTime.now();
         this.modifiedDate = LocalDateTime.now();
     }
 
     // 수정용 - 사용자 정보
-    public User(String email, String nickname, String profile, String[] roles, String[] joinedServerList) {
+    public User(String email, String nickname, String profile, Role role, String[] joinedServerList) {
         this.email = email;
         this.nickname = nickname;
         this.profile = profile;
-        this.roles = roles;
+        this.role = role;
         this.joinedServerList = joinedServerList;
     }
 
@@ -76,8 +81,8 @@ public class User implements UserDetails {
             this.profile = user.profile;
         }
 
-        if (user.roles != null) {
-            this.roles = user.roles;
+        if (user.role != null) {
+            this.role = user.role;
         }
 
         if (user.joinedServerList != null) {
@@ -99,8 +104,8 @@ public class User implements UserDetails {
             this.profile = null;
         }
 
-        if (user.roles != null) {
-            this.roles = user.roles;
+        if (user.role != null) {
+            this.role = user.role;
         }
         
         if (user.joinedServerList != null) {
@@ -110,8 +115,8 @@ public class User implements UserDetails {
     }
 
     // 사용자 권한 확인
-    public String[] getUsersRole() {
-        return this.roles;
+    public Collection<SimpleGrantedAuthority> getUsersRole() {
+        return role.getAuthorities();
     }
 
     // 이메일 인증 여부 확인

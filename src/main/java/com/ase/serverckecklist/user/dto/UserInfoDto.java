@@ -1,5 +1,6 @@
 package com.ase.serverckecklist.user.dto;
 
+import com.ase.serverckecklist.user.entity.Role;
 import com.ase.serverckecklist.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +16,7 @@ public class UserInfoDto {
     private String email;
     private String nickname;
     private MultipartFile profile;
-    private String[] roles;
+    private Role role;
     private String[] joinedServerList;
     private boolean fileDeleteFlag = false;
 
@@ -26,7 +27,7 @@ public class UserInfoDto {
                 email,
                 nickname,
                 photoId,
-                roles,
+                role,
                 joinedServerList
         );
     }

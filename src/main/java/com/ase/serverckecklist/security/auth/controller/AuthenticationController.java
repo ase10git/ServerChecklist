@@ -2,8 +2,6 @@ package com.ase.serverckecklist.security.auth.controller;
 
 import com.ase.serverckecklist.security.auth.dto.AuthenticationRequest;
 import com.ase.serverckecklist.security.auth.dto.AuthenticationResponse;
-import com.ase.serverckecklist.security.auth.dto.VerificationRequest;
-import com.ase.serverckecklist.security.auth.dto.VerificationResponse;
 import com.ase.serverckecklist.security.auth.service.AuthenticationService;
 import com.ase.serverckecklist.user.dto.UserRegisterDto;
 import jakarta.servlet.http.HttpServletRequest;
@@ -48,13 +46,13 @@ public class AuthenticationController {
     }
 
     // 이메일 인증
-    @PostMapping("/verify-email")
-    public ResponseEntity<String> verification (
-            @RequestBody VerificationRequest request
-            ) {
-        VerificationResponse response = service.verifyEmail(request);
-        return (response.isVerified()) ?
-                ResponseEntity.ok(response.getResult())
-                : ResponseEntity.badRequest().body(response.getResult());
-    }
+//    @PostMapping("/verify-email")
+//    public ResponseEntity<String> verification (
+//            @RequestBody VerificationRequest request
+//            ) {
+//        VerificationResponse response = service.verifyEmail(request);
+//        return (response.isVerified()) ?
+//                ResponseEntity.ok(response.getResult())
+//                : ResponseEntity.badRequest().body(response.getResult());
+//    }
 }

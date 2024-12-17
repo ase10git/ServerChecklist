@@ -3,10 +3,14 @@ package com.ase.serverckecklist.security.config;
 import com.ase.serverckecklist.security.auth.handler.CustomLogoutHandler;
 import com.ase.serverckecklist.security.auth.handler.CustomLogoutSuccessHandler;
 import com.ase.serverckecklist.security.filter.JwtAuthenticationFilter;
+import com.ase.serverckecklist.user.entity.Permission;
+import com.ase.serverckecklist.user.entity.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -24,6 +28,7 @@ import java.util.Collections;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@EnableMethodSecurity
 public class SecurityConfig {
 
     // filter
@@ -35,12 +40,17 @@ public class SecurityConfig {
     // logout success handler
     private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
 
+    // 가시성을 위한 static 처리
+    private static final Role USER = Role.USER;
+    private static final Role ADMIN = Role.ADMIN;
+    private static final Role SERVER_USER = Role.SERVER_USER;
+    private static final Role SERVER_ADMIN = Role.SERVER_ADMIN;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         // ClearSiteDataHeader를 작성하는 LogoutHandler 생성
         HeaderWriterLogoutHandler clearSiteData =
                 new HeaderWriterLogoutHandler(new ClearSiteDataHeaderWriter(ClearSiteDataHeaderWriter.Directive.ALL));
-
 
         http
                 // session stateless로 인해 꺼 둠
@@ -50,9 +60,35 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests((authorize)->authorize
-                        .requestMatchers("/api/user/").hasAuthority("USER")
+                        // auth
+                        .requestMatchers("/api/auth/refresh-token").hasAnyRole(USER.name(), ADMIN.name())
+                        .requestMatchers(HttpMethod.GET,"/api/auth/refresh-token").hasAnyAuthority(
+                                Permission.USER_READ.name(), Permission.ADMIN_READ.name()
+                        )
+
+                        // user
+                        .requestMatchers("/api/user/**").hasAnyRole(USER.name(), ADMIN.name())
+
+                        // favorites
+                        .requestMatchers("/api/favorites/**").hasAnyRole(USER.name())
+
+                        // server
+                        .requestMatchers("/api/servers/**").hasAnyRole(USER.name(), SERVER_USER.name(), SERVER_ADMIN.name(), ADMIN.name())
+
+                        // memo
+                        .requestMatchers("/api/memo/**").hasAnyRole(SERVER_USER.name(), SERVER_ADMIN.name(), ADMIN.name())
+
+                        // checklists
+                        .requestMatchers("/api/checklists/**").hasAnyRole(SERVER_USER.name(), SERVER_ADMIN.name(), ADMIN.name())
+
+                        // map
+                        .requestMatchers("/api/maps/**").hasAnyRole(SERVER_USER.name(), SERVER_ADMIN.name(), ADMIN.name())
+
+                        // file
+                        .requestMatchers("/api/file/**").hasAnyRole(USER.name(), SERVER_USER.name(), SERVER_ADMIN.name(), ADMIN.name())
+
                         .anyRequest() // 그 외의 모든 요청은
-                        .permitAll() // 인증 필요
+                        .permitAll() // 허용
                 );
 
         http

@@ -39,6 +39,8 @@ public class FileController {
                 ResponseEntity.notFound().build();
     }
 
+    // 서버 아이템 중 지도 사진은 서버 회원만 요청할 수 있는 요청이 따로 필요
+    
     // POST
     // 파일 업로드하기
     /*
