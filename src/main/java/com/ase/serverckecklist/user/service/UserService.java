@@ -60,12 +60,14 @@ public class UserService {
                         .verification(target.isVerified())
                         .registerDate(target.getRegisterDate().toString())
                         .modifiedDate(target.getModifiedDate().toString())
+                        .joinedServerList(target.getJoinedServerList())
+                        .role(target.getRole())
                         .build();
             }
 
         return null;
     }
-
+    
     // token으로 확인하는 현재 유저
     public UserVO currentUser(HttpServletRequest request) {
         // header에서 token 추출
@@ -84,7 +86,14 @@ public class UserService {
 
     // 유저 수정
     @Transactional
-    public User update(String email, UserInfoDto dto) throws IOException {
+    public User update(HttpServletRequest request, String email, UserInfoDto dto) throws IOException {
+        // 현재 로그인 한 사용자 정보 가져오기
+        UserVO loggedinUser = currentUser(request);
+        // 로그인 안 한 사용자나 다른 사용자의 정보 변경 시도 차단
+        if (loggedinUser == null || !loggedinUser.getEmail().equals(email)) {
+            return null;
+        }
+
         // 수정 대상
         User target = userRepository.findByEmail(email)
                 .orElse(null);
@@ -120,7 +129,15 @@ public class UserService {
 
     // 사용자 비밀번호 수정
     @Transactional
-    public ResponseEntity<String> update(String email, UserPwdDto dto) {
+    public ResponseEntity<String> update(HttpServletRequest request, String email, UserPwdDto dto) {
+        // 현재 로그인 한 사용자 정보 가져오기
+        UserVO currentUser = currentUser(request);
+
+        // 로그인 안 한 사용자나 다른 사용자의 정보 변경 시도 차단
+        if (currentUser == null || !currentUser.getEmail().equals(email)) {
+            return null;
+        }
+
         // 수정 대상
         User target = userRepository.findByEmail(email).orElse(null);
 

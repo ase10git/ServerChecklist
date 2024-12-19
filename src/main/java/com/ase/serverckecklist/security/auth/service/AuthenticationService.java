@@ -9,6 +9,7 @@ import com.ase.serverckecklist.security.auth.repository.VerificationRepository;
 import com.ase.serverckecklist.security.config.RandomString;
 import com.ase.serverckecklist.security.config.SecurityProperties;
 import com.ase.serverckecklist.user.dto.UserRegisterDto;
+import com.ase.serverckecklist.user.entity.Role;
 import com.ase.serverckecklist.user.entity.User;
 import com.ase.serverckecklist.user.repository.UserRepository;
 import jakarta.servlet.http.Cookie;
@@ -99,7 +100,7 @@ public class AuthenticationService {
         // 비밀번호 인코딩
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
         // 권한 설정 - 일반 사용자
-        user.setRoles(new String[]{"USER"});
+        user.setRole(Role.USER);
 
         // -----테스트용
         // 이메일 인증 완료

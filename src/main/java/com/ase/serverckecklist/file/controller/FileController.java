@@ -23,31 +23,48 @@ public class FileController {
 
     private final FileService fileService;
 
-    // GET
-    // 파일 다운로드하기
-    @GetMapping("{id}")
-    public ResponseEntity<ByteArrayResource> download(@PathVariable("id") String id) throws IOException {
-        LoadFile loadFile = fileService.downloadFile(id);
-        String filename = URLEncoder.encode(loadFile.getFilename(), StandardCharsets.UTF_8.toString());
+    // 파일 다운로드
+    private ResponseEntity<ByteArrayResource> sendFile(LoadFile file) throws IOException {
+        String filename = URLEncoder.encode(file.getFilename(), StandardCharsets.UTF_8.toString());
 
-        return (loadFile.getFile() != null) ?
+        return (file.getFile() != null) ?
                 ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(loadFile.getFileType()))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename*=UTF-8\""+filename+"\"")
-                .body(new ByteArrayResource(loadFile.getFile()))
+                        .contentType(MediaType.parseMediaType(file.getFileType()))
+                        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename*=UTF-8\""+filename+"\"")
+                        .body(new ByteArrayResource(file.getFile()))
                 :
                 ResponseEntity.notFound().build();
     }
-
-    // 서버 아이템 중 지도 사진은 서버 회원만 요청할 수 있는 요청이 따로 필요
     
-    // POST
-    // 파일 업로드하기
-    /*
-    @PostMapping("/upload")
-    public ResponseEntity<?> upload(@RequestParam("file") MultipartFile file) throws IOException {
-        // 응답의 body에 파일 id를 넣어 전송
-        return new ResponseEntity<>(fileService.addFile(file), HttpStatus.OK);
+    // GET
+    // 사용자 프로필 이미지 파일 다운로드하기
+    @GetMapping("/user/{email}")
+    public ResponseEntity<ByteArrayResource> downloadProfileImage(@PathVariable("email") String email) throws IOException {
+        // 사용자 이메일로 프로필 사진 조회
+        LoadFile loadFile = fileService.findUserProfile(email);
+        
+        // file download
+        return sendFile(loadFile);
     }
-    */
+    
+    // 서버 이미지 파일 다운로드하기
+    @GetMapping("/servers/{id}")
+    public ResponseEntity<ByteArrayResource> downloadServerImage(@PathVariable("id") String id) throws IOException {
+        // 서버 id로 서버 조회
+        LoadFile loadFile = fileService.findServerImage(id);
+
+        // file download
+        return sendFile(loadFile);
+    }
+
+    // 서버 지도 파일 다운로드하기
+    @GetMapping("/maps/{id}")
+    public ResponseEntity<ByteArrayResource> downloadMapImage(@PathVariable("id") String id) throws IOException {
+        // 지도 id로 지도 조회
+        LoadFile loadFile = fileService.findMapImage(id);
+
+        // file download
+        return sendFile(loadFile);
+    }
+
 }

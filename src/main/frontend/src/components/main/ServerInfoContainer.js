@@ -16,32 +16,26 @@ function ServerInfoContainer({data}) {
                 <Link to={`/servers/${data.id}`}>
                 {
                     data.photoId ?
-                    <img src={`${fileApi}${data.photoId}`} alt="serverImg"/>
+                    <img src={`${fileApi}/servers/${data.id}`} alt="serverImg"/>
                     : null
                 }
                 </Link>
             </div>
             <div className={styles.server_info_box}>
                 <div className={styles.server_info}>
-                    <Link to={`/servers/${data.id}/memo`}>
-                        <p>
-                            <span><PencilSquare/></span>등록된 메모 : {data.numOfMemo}
-                        </p>
-                    </Link>
+                    <p>
+                        <span><PencilSquare/></span>등록된 메모 : {data.numOfMemo}
+                    </p>
                 </div>
                 <div className={styles.server_info}>
-                    <Link to={`/servers/${data.id}/checklists`}>
-                        <p>
-                            <span><ListCheck/></span>등록된 체크리스트 : {data.numOfChecklists}
-                        </p>
-                    </Link>
+                    <p>
+                        <span><ListCheck/></span>등록된 체크리스트 : {data.numOfChecklists}
+                    </p>
                 </div>
                 <div className={styles.server_info}>
-                    <Link to={`/servers/${data.id}/maps`}>
-                        <p>
-                            <span><PinMapFill/></span>등록된 지도 : {data.numOfMaps}
-                        </p>
-                    </Link>
+                    <p>
+                        <span><PinMapFill/></span>등록된 지도 : {data.numOfMaps}
+                    </p>
                 </div>
             </div>
         </div>

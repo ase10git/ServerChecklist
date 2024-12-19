@@ -48,10 +48,11 @@ public class UserController {
     // PATCH
     @PatchMapping("{email}")
     public ResponseEntity<User> update(
+            HttpServletRequest request,
             @PathVariable("email") String email,
             @ModelAttribute UserInfoDto dto
     ) throws IOException {
-        User updated = userService.update(email, dto);
+        User updated = userService.update(request, email, dto);
 
         return (updated != null) ?
                 ResponseEntity.status(HttpStatus.OK).body(updated) :
@@ -60,10 +61,11 @@ public class UserController {
 
     @PatchMapping("/new-password/{email}")
     public ResponseEntity<String> update(
+            HttpServletRequest request,
             @PathVariable("email") String email,
             @RequestBody UserPwdDto dto
     ) {
-        return userService.update(email, dto);
+        return userService.update(request, email, dto);
     }
 
     // DELETE

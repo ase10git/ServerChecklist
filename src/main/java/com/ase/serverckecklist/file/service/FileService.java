@@ -1,6 +1,12 @@
 package com.ase.serverckecklist.file.service;
 
 import com.ase.serverckecklist.file.dto.LoadFile;
+import com.ase.serverckecklist.server.entity.Map;
+import com.ase.serverckecklist.server.entity.ServerInfo;
+import com.ase.serverckecklist.server.repository.MapRepository;
+import com.ase.serverckecklist.server.repository.ServerInfoRepository;
+import com.ase.serverckecklist.user.entity.User;
+import com.ase.serverckecklist.user.repository.UserRepository;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.client.gridfs.model.GridFSFile;
@@ -21,6 +27,9 @@ public class FileService {
 
     private final GridFsTemplate template;
     private final GridFsOperations operations;
+    private final UserRepository userRepository;
+    private final ServerInfoRepository serverInfoRepository;
+    private final MapRepository mapRepository;
 
     // 파일 저장하기
     public String addFile(MultipartFile file) throws IOException {
@@ -68,5 +77,44 @@ public class FileService {
         if (gridFSFile != null) {
             template.delete(query);
         }
+    }
+
+    // 사용자 이메일로 프로필 사진 가져오기
+    public LoadFile findUserProfile(String email) throws IOException {
+        // 사용자 조회
+        User user = userRepository.findByEmail(email).orElse(null);
+
+        // null 처리
+        if (user == null)  return null;
+
+        // 사용자 프로필 사진 id를 가져와서 파일 받기
+        String fileId = user.getProfile();
+        return downloadFile(fileId);
+    }
+
+    // 서버 id로 서버 사진 가져오기
+    public LoadFile findServerImage(String id) throws IOException {
+        // 서버 조회
+        ServerInfo serverInfo = serverInfoRepository.findById(id).orElse(null);
+
+        // null 처리
+        if (serverInfo == null)  return null;
+
+        // 서버 사진 id를 가져와서 파일 받기
+        String fileId = serverInfo.getPhotoId();
+        return downloadFile(fileId);
+    }
+
+    // 지도 id로 서버 사진 가져오기
+    public LoadFile findMapImage(String id) throws IOException {
+        // 지도 조회
+        Map map = mapRepository.findById(id).orElse(null);
+
+        // null 처리
+        if (map == null)  return null;
+
+        // 지도 사진 id를 가져와서 파일 받기
+        String fileId = map.getPhotoId();
+        return downloadFile(fileId);
     }
 }

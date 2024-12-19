@@ -41,7 +41,7 @@ function Header() {
                         user.profile ?
                         <img 
                         className={styles.profile_img}
-                        src={`${fileApi}${user.profile}`}/>
+                        src={`${fileApi}/user/${user.email}`}/>
                         :
                         <PersonCircle/>
                     }

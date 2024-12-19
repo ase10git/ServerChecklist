@@ -13,7 +13,7 @@ function UserInfo() {
             <div className={styles.profile_box}>
                 {
                     user.profile ?
-                    <img src={`${fileApi}${user.profile}`} alt='profile'/>
+                    <img src={`${fileApi}/user/${user.email}`} alt='profile'/>
                     : <div className={styles.default_img_box}><Person/></div>
                 }
             </div>

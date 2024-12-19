@@ -1,5 +1,6 @@
 package com.ase.serverckecklist.user.vo;
 
+import com.ase.serverckecklist.user.entity.Role;
 import lombok.*;
 
 @Getter
@@ -15,5 +16,6 @@ public class UserVO {
     private boolean verification;
     private String registerDate;
     private String modifiedDate;
-    private String joinedServerList;
+    private String[] joinedServerList;
+    private Role role;
 }

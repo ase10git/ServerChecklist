@@ -5,9 +5,11 @@ import { useEffect, useState } from 'react';
 import { CheckLg, PencilFill, PlusCircle, Trash, X, XLg } from 'react-bootstrap-icons';
 import { create, list, patch, remove } from 'api/serverItems';
 import { saveChecked } from 'api/checklist';
+import { useAuth } from 'contexts/AuthContext';
 
 function Checklists() {
 
+    const {user} = useAuth();
     const [checklists, setChecklists] = useState([]);
     const {id} = useParams(); // serverId
     const [isAdd, setIsAdd] = useState(false); // 추가 상태 플래그
@@ -19,16 +21,15 @@ function Checklists() {
     // 새 체크리스트 form
     const [formData, setFormData] = useState({
         title: '',
-        ownerId: '1111', // for test
+        ownerId: user?.email,
         serverId: id,
         checked: false
     });
 
-    // 새 체크리스트 form
+    // 체크리스트 수정 form
     const [editFormData, setEditFormData] = useState({
         id: '',
         title: '',
-        ownerId: '', // for test
         serverId: id
     });
 
@@ -65,7 +66,6 @@ function Checklists() {
         setEditFormData((prev)=>({
             ...prev,
             id : checklist.id,
-            ownerId : checklist.ownerId,
         }));
     }
 
@@ -113,6 +113,10 @@ function Checklists() {
     async function handleEdit(event) {
         event.preventDefault();
 
+        if (user.email !== checklists.ownerId) {
+            return;
+        }
+        
         const updatedFormData = {...editFormData};
 
         // 빈 값 처리
@@ -138,7 +142,7 @@ function Checklists() {
         setFormData((prev) => ({
             ...prev,
             title: '',
-            ownerId: ''
+            ownerId: user?.email
         }));
         handleAddState();
     }
@@ -156,6 +160,10 @@ function Checklists() {
 
     // 체크리스트 삭제
     async function handleDelete(id) {
+        if (user.email !== checklists.ownerId) {
+            return;
+        }
+        
         if (!window.confirm('정말 삭제할까요?')) {
             return;
         }
@@ -181,6 +189,16 @@ function Checklists() {
     }
 
     useEffect(()=>{
+        document.title = "체크리스트";
+
+        if (!user) {
+            navigate("/login");
+        }
+
+        if (!user.joinedServerList.find(id)) {
+            navigate("/");
+        }
+
         // 서버 체크리스트 가져오기
         async function getChecklists() {
             const res = await list(1, id);
@@ -188,7 +206,7 @@ function Checklists() {
         }
 
         getChecklists();
-    }, [id]);
+    }, [user, id]);
 
     // 페이지를 떠날 때 체크박스 변경 사항 저장하기
     useEffect(()=>{
@@ -270,6 +288,7 @@ function CheckBox({
     makeUnderline,
     handleCheckboxChange,
 }) {
+    const {user} = useAuth();
     return (
         <div className={styles.info_box}>
             <div className={styles.check_info_box}>
@@ -281,14 +300,18 @@ function CheckBox({
                     {checklist.title}
                 </span>
             </div>
-            <div className={styles.option_btn_wrap}>
-                <button 
-                className={`edit_btn ${styles.edit_btn}`}
-                onClick={()=>(handleEditState(checklist))}><PencilFill/></button>
-                <button 
-                className={`del_btn ${styles.del_btn}`}
-                onClick={()=>(handleDelete(checklist.id))}><Trash/></button>
-            </div>
+            {
+                user.email === checklist.ownerId ?
+                <div className={styles.option_btn_wrap}>
+                    <button 
+                    className={`edit_btn ${styles.edit_btn}`}
+                    onClick={()=>(handleEditState(checklist))}><PencilFill/></button>
+                    <button 
+                    className={`del_btn ${styles.del_btn}`}
+                    onClick={()=>(handleDelete(checklist.id))}><Trash/></button>
+                </div>
+                : null
+            }
         </div>
     )
 }

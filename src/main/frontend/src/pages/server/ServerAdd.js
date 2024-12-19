@@ -3,9 +3,12 @@ import { Container, Form, InputGroup, OverlayTrigger, Tooltip } from "react-boot
 import { Camera, XCircle } from "react-bootstrap-icons";
 import { useNavigate } from "react-router-dom";
 import { create } from 'api/server';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useAuth } from 'contexts/AuthContext';
 
 function ServerAdd() {
+
+    const {user} = useAuth();
 
     // form 데이터
     const [formData, setFormData] = useState({
@@ -13,7 +16,7 @@ function ServerAdd() {
         photo: null,
         usage: '',
         description: '',
-        managerId: '1111', // for test
+        managerId: user?.email, // for test
     });
     const navigate = useNavigate();
 
@@ -100,6 +103,14 @@ function ServerAdd() {
     function handleBackBtn() {
         navigate(`/`);
     }
+
+    // 렌더링 처리
+    useEffect(()=>{
+        document.title = "서버추가";
+        if (!user) {
+            navigate("/login");
+        }
+    }, [user]);
 
     // 업로드한 사진 미리보기 생성
     function ImageBox() {

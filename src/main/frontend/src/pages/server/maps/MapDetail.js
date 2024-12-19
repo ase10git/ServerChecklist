@@ -5,10 +5,12 @@ import { useEffect, useState } from 'react';
 import MapContext, { useMap } from 'contexts/MapContext';
 import { patch, remove, show } from 'api/serverItems';
 import { Camera, Map, Pencil, Trash, XCircle } from 'react-bootstrap-icons';
-import fileApi, { getImage } from 'api/image';
+import fileApi from 'api/image';
+import { useAuth } from 'contexts/AuthContext';
 
 function MapDetail() {
 
+    const {user} = useAuth();
     const [map, setMap] = useState({}); // 지도 정보
     const {id, mapid} = useParams();
     const [isEdit, setIsEdit] = useState(false);
@@ -20,7 +22,7 @@ function MapDetail() {
         title: '',
         location: '',
         photo: null,
-        ownerId: '',
+        ownerId: user?.email,
         serverId: id,
         description: ''
     });
@@ -79,6 +81,7 @@ function MapDetail() {
 function MapInfo({
     handleBackBtn
 }) {
+    const {user} = useAuth();
     const {id, map, mapid, handleEditChange, navigate} = useMap();
 
     async function handleDelete() {
@@ -104,8 +107,12 @@ function MapInfo({
             <div className={styles.title_box}>
                 <h2 className={styles.title}>{map.title}</h2> 
                 <div className={styles.btn_wrap}>
-                    <button className={`edit_btn ${styles.edit_btn}`}
-                    onClick={handleEditChange}><Pencil/></button>
+                    {
+                        user.email === map.ownerId ?
+                        <button className={`edit_btn ${styles.edit_btn}`}
+                        onClick={handleEditChange}><Pencil/></button>
+                        : null
+                    }
                     <button className={`del_btn ${styles.del_btn}`}
                     onClick={handleDelete}><Trash/></button>
                 </div>
@@ -114,7 +121,7 @@ function MapInfo({
                 <div className={styles.map_img_box}>
                     {
                         map.photoId ? 
-                        <img src={`${fileApi}${map.photoId}`} alt="mapimg"/>
+                        <img src={`${fileApi}/maps/${map.id}`} alt="mapimg"/>
                         : 
                         <div className={styles.icon_default}>
                             <Map/>
@@ -141,6 +148,7 @@ function MapEdit({
     editFormData,
     setEditFormData
 }) {
+    const {user} = useAuth();
     const {id, mapid, map, setMap, setIsEdit, handleEditChange} = useMap();
 
     // 변경할 파일 미리보기 url
@@ -187,6 +195,10 @@ function MapEdit({
     // 지도 수정
     async function handleSubmit(event) {
         event.preventDefault();
+
+        if (user.email !== map.ownerId) {
+            return;
+        }
 
         // 전송할 formData 객체 생성
         const formDataToSend = new FormData();
@@ -252,7 +264,7 @@ function MapEdit({
         } else {
             if (map.photoId) {
                 return (                        
-                    <img src={`${fileApi}${map.photoId}`}
+                    <img src={`${fileApi}/maps/${map.id}`}
                     alt="mapimg"
                     className={styles.map_img}/>)
             } else {

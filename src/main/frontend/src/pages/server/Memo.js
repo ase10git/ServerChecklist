@@ -5,9 +5,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { CheckLg, PencilFill, PlusCircle, Trash, XLg } from 'react-bootstrap-icons';
 import { create, list, patch, remove } from 'api/serverItems';
 import { Container, Form } from "react-bootstrap";
+import { useAuth } from 'contexts/AuthContext';
 
 function Memo() {
 
+    const {user} = useAuth();
     const [memo, setMemo] = useState([]);
     const {id} = useParams(); // serverId
     const [isAdd, setIsAdd] = useState(false);
@@ -18,7 +20,7 @@ function Memo() {
     const [formData, setFormData] = useState({
         name: '',
         content: '',
-        ownerId: '1111', // for test
+        ownerId: user?.email,
         serverId: id
     });
     // 수정 메모 form
@@ -26,7 +28,7 @@ function Memo() {
         id: '',
         name: '',
         content: '',
-        ownerId: '', // for test
+        ownerId: user?.email,
         serverId: id
     });
 
@@ -94,6 +96,10 @@ function Memo() {
     async function handleEdit(event) {
         event.preventDefault();
 
+        if (user.email !== memo.ownerId) {
+            return;
+        }
+
         const updatedFormData = {...editFormData};
 
         // 빈 값 처리
@@ -122,7 +128,7 @@ function Memo() {
             ...prev,
             name: '',
             content: '',
-            ownerId: ''
+            ownerId: user?.email
         }));
         handleAddState();
     }
@@ -134,7 +140,7 @@ function Memo() {
             id: '',
             name: '',
             content: '',
-            ownerId: ''
+            ownerId: user?.email
         }));
         setIsEdit('');
     }
@@ -159,6 +165,16 @@ function Memo() {
     }
 
     useEffect(()=>{
+        document.title = "메모";
+
+        if (!user) {
+            navigate("/login");
+        }
+
+        if (!user.joinedServerList.find(id)) {
+            navigate("/");
+        }
+
         // 서버 메모 가져오기
         async function getMemo() {
             const res = await list(0, id);
@@ -166,7 +182,7 @@ function Memo() {
         }
 
         getMemo();
-    }, [id]);
+    }, [user, id]);
 
     return (
         <Container className={styles.container}>
@@ -218,6 +234,7 @@ function MemoBox({
     handleEditState,
     handleDelete
 }) {
+    const {user} = useAuth();
     return(
         <>
             <div className={styles.info_box}>
@@ -225,14 +242,18 @@ function MemoBox({
                     <span>{memo.name}</span>
                     <span>{memo.ownerId}</span>
                 </div>
-                <div className={styles.btn_wrap}>
-                    <button 
-                    className={`edit_btn ${styles.edit_btn}`}
-                    onClick={()=>(handleEditState(memo))}><PencilFill/></button>
-                    <button 
-                    className={`del_btn ${styles.del_btn}`}
+                {
+                    user.email === memo.ownerId ?
+                    <div className={styles.btn_wrap}>
+                        <button 
+                        className={`edit_btn ${styles.edit_btn}`}
+                        onClick={()=>(handleEditState(memo))}><PencilFill/></button>
+                        <button 
+                        className={`del_btn ${styles.del_btn}`}
                     onClick={()=>(handleDelete(memo.id))}><Trash/></button>
-                </div>
+                    </div>
+                : null
+                }
             </div>
             <div className={styles.content_box}>
                 {memo.content}

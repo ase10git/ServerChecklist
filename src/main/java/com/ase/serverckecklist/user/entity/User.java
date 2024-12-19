@@ -11,7 +11,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
@@ -114,20 +113,16 @@ public class User implements UserDetails {
         this.modifiedDate = LocalDateTime.now();
     }
 
-    // 사용자 권한 확인
-    public Collection<SimpleGrantedAuthority> getUsersRole() {
-        return role.getAuthorities();
-    }
-
     // 이메일 인증 여부 확인
     public boolean isVerified() {
         return this.verification;
     }
 
     // implements
+    // 사용자 권한 확인
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return role.getAuthorities();
     }
 
     // UserDetails에서 사용하는 username을 email로 수정

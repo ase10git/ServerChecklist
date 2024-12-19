@@ -125,7 +125,7 @@ function UserEdit() {
                                 />
                                 :
                                 user.profile ?
-                                <img src={`${fileApi}${user.profile}`}
+                                <img src={`${fileApi}/user/${user.email}`}
                                 alt="profile"
                                 />
                                 : <Person/>

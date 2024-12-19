@@ -4,9 +4,11 @@ import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import { useEffect, useState } from 'react';
 import { patch } from 'api/server';
 import { Camera, XCircle } from 'react-bootstrap-icons';
+import { useAuth } from 'contexts/AuthContext';
 
 function ServerEdit() {
 
+    const {user} = useAuth();
     const {id} = useParams();
     const {serverInfo} = useOutletContext(); // 서버 정보
     // 파일 제거 플래그
@@ -113,6 +115,18 @@ function ServerEdit() {
     function handleBackBtn() {
         navigate(`/servers/${serverInfo.id}`);
     }
+
+    useEffect(()=>{
+        document.title = "서버수정";
+        if (!user) {
+            navigate("/login");
+        }
+
+        if (user.email !== serverInfo.managerId) {
+            alert("접근 권한이 없습니다!");
+            navigate("/");
+        }
+    }, [user, serverInfo]);
 
     // 서버 사진과 업로드한 사진 미리보기 생성
     function ImageBox() {

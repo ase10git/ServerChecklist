@@ -57,7 +57,7 @@ function ServerMain() {
                     <div className={styles.server_img_box}>
                         {
                             serverInfo.photoId ?
-                            <img src={`${fileApi}${serverInfo.photoId}`} alt="serverimg"/>
+                            <img src={`${fileApi}/servers/${serverInfo.id}`} alt="serverimg"/>
                             : null
                         }
                     </div>

@@ -4,10 +4,12 @@ import { useEffect, useState } from 'react';
 import { Map, PlusCircle, PlusLg, Trash } from 'react-bootstrap-icons';
 import { list } from 'api/serverItems';
 import { Container } from "react-bootstrap";
-import fileApi, { getImage } from 'api/image';
+import fileApi from 'api/image';
+import { useAuth } from 'contexts/AuthContext';
 
 function Maps() {
 
+    const {user} = useAuth();
     const [maplist, setMaplist] = useState([]);
     const {id} = useParams();
     const navigate = useNavigate();
@@ -18,6 +20,16 @@ function Maps() {
     }
 
     useEffect(()=>{
+        document.title = "메모";
+
+        if (!user) {
+            navigate("/login");
+        }
+
+        if (!user.joinedServerList.find(id)) {
+            navigate("/");
+        }
+
         // 지도 가져오기
         async function getMaps() {
             const res = await list(2, id);
@@ -28,7 +40,7 @@ function Maps() {
         }
 
         getMaps();
-    }, []);
+    }, [user, id]);
 
     return (
         <Container className={styles.container}>
@@ -49,7 +61,7 @@ function Maps() {
                             <div className={styles.map_img_box}>
                                 {
                                     el.photoId ?
-                                    <img src={`${fileApi}${el.photoId}`} alt="mapimg"
+                                    <img src={`${fileApi}/maps/${el.id}`} alt="mapimg"
                                     className={styles.map_img}/>
                                     :
                                     <div className={styles.icon_default}>
