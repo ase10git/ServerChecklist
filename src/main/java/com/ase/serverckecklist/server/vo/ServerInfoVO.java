@@ -15,6 +15,7 @@ public class ServerInfoVO {
     private String usage;
     private String description;
     private String managerId;
+    private String managerNickname;
     private String createdDate;
     private String modifiedDate;
     private int numOfMemo;

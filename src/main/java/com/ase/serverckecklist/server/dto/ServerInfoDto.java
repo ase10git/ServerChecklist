@@ -24,7 +24,8 @@ public class ServerInfoDto {
                     name,
                     photoId,
                     usage,
-                    description
+                    description,
+                    managerId
             );
         } else {
             // 수정용
@@ -33,7 +34,8 @@ public class ServerInfoDto {
                     name,
                     photoId,
                     usage,
-                    description
+                    description,
+                    managerId
             );
         }
     }

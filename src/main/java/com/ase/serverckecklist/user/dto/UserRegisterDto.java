@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -15,7 +17,7 @@ public class UserRegisterDto {
     private String email;
     private String password;
     private String nickname;
-    private Role role;
+    private List<Role> role;
 
     // DTO -> Entity
     public User toEntity() {

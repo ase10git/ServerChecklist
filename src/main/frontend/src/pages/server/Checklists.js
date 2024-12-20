@@ -1,15 +1,17 @@
 import styles from 'styles/pages/server/checklists.module.css';
 import { Container, Form } from "react-bootstrap";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from 'react';
 import { CheckLg, PencilFill, PlusCircle, Trash, X, XLg } from 'react-bootstrap-icons';
 import { create, list, patch, remove } from 'api/serverItems';
 import { saveChecked } from 'api/checklist';
 import { useAuth } from 'contexts/AuthContext';
+import { useServer } from 'contexts/ServerContext';
 
 function Checklists() {
 
     const {user} = useAuth();
+    const {isServerUser} = useServer();
     const [checklists, setChecklists] = useState([]);
     const {id} = useParams(); // serverId
     const [isAdd, setIsAdd] = useState(false); // 추가 상태 플래그
@@ -17,6 +19,21 @@ function Checklists() {
     const [isChecked, setIsChecked] = useState([]); // 체크박스 상태
     const [isChanged, setIsChanged] = useState(false); // 체크박스 변경 사항 플래그
     const navigate = useNavigate();
+    const location = useLocation();
+
+    useEffect(()=>{
+        document.title = "체크리스트";
+
+        // 서버 체크리스트 가져오기
+        async function getChecklists() {
+            const res = await list(1, id);
+            setChecklists(res);
+        }
+
+        if (user && isServerUser) {
+            getChecklists();
+        }
+    }, [user, id, isServerUser]);
 
     // 새 체크리스트 form
     const [formData, setFormData] = useState({
@@ -188,26 +205,6 @@ function Checklists() {
         }
     }
 
-    useEffect(()=>{
-        document.title = "체크리스트";
-
-        if (!user) {
-            navigate("/login");
-        }
-
-        if (!user.joinedServerList.find(id)) {
-            navigate("/");
-        }
-
-        // 서버 체크리스트 가져오기
-        async function getChecklists() {
-            const res = await list(1, id);
-            setChecklists(res);
-        }
-
-        getChecklists();
-    }, [user, id]);
-
     // 페이지를 떠날 때 체크박스 변경 사항 저장하기
     useEffect(()=>{
         async function handleBeforeUnload(event) {
@@ -225,7 +222,11 @@ function Checklists() {
         return () => {
             window.removeEventListener("beforeunload", handleBeforeUnload);
         }
-    }, [isChecked, isChanged]);
+    }, [isChecked, isChanged, location.pathname]);
+
+    if (!user || !isServerUser) {
+        return null;
+    }
 
     return(
         <Container className={styles.container}>
@@ -310,7 +311,10 @@ function CheckBox({
                     className={`del_btn ${styles.del_btn}`}
                     onClick={()=>(handleDelete(checklist.id))}><Trash/></button>
                 </div>
-                : null
+                : 
+                <div className={styles.option_btn_wrap}>
+                    <span>{checklist.ownerNickname}</span>
+                </div>
             }
         </div>
     )

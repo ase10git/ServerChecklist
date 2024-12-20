@@ -3,14 +3,15 @@ package com.ase.serverckecklist.security.auth.service;
 import com.ase.serverckecklist.security.auth.entity.Blacklist;
 import com.ase.serverckecklist.security.auth.entity.Token;
 import com.ase.serverckecklist.security.auth.repository.BlacklistRepository;
-import com.ase.serverckecklist.user.entity.User;
 import com.ase.serverckecklist.security.auth.repository.TokenRepository;
 import com.ase.serverckecklist.security.config.SecurityProperties;
+import com.ase.serverckecklist.user.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -43,6 +44,21 @@ public class JwtService {
     // Refresh Token 만료기한
     @Value("${app.security.jwt.refresh-token-expiration}")
     private long refreshTokenExpiration;
+
+    // Token resolver
+    // header에서 token 추출
+    public String resolveToken(HttpServletRequest request) {
+        // 요청으로 온 header 내용 추출
+        final String authHeader = request.getHeader("Authorization");
+
+        // jwt가 없으면 null 반환
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return null;
+        }
+
+        // jwt
+        return authHeader.substring(7);
+    }
 
     // DB에 토큰 저장
     public void saveUserToken(String refreshToken, User user) {

@@ -21,10 +21,6 @@ public enum Role {
     ),
     SERVER_USER(
             Set.of(
-                    Permission.USER_READ,
-                    Permission.USER_UPDATE,
-                    Permission.USER_CREATE,
-                    Permission.USER_DELETE,
                     Permission.SERVERUSER_READ,
                     Permission.SERVERUSER_UPDATE,
                     Permission.SERVERUSER_CREATE,
@@ -33,14 +29,6 @@ public enum Role {
     ),
     SERVER_ADMIN(
             Set.of(
-                    Permission.USER_READ,
-                    Permission.USER_UPDATE,
-                    Permission.USER_CREATE,
-                    Permission.USER_DELETE,
-                    Permission.SERVERUSER_READ,
-                    Permission.SERVERUSER_UPDATE,
-                    Permission.SERVERUSER_CREATE,
-                    Permission.SERVERUSER_DELETE,
                     Permission.SERVERADMIN_READ,
                     Permission.SERVERADMIN_UPDATE,
                     Permission.SERVERADMIN_CREATE,
@@ -72,4 +60,4 @@ public enum Role {
         authorities.add(new SimpleGrantedAuthority("ROLE_" + this.name()));
         return authorities;
     }
-    }
+}

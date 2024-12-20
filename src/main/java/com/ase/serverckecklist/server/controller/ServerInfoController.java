@@ -4,6 +4,7 @@ import com.ase.serverckecklist.server.entity.ServerInfo;
 import com.ase.serverckecklist.server.dto.ServerInfoDto;
 import com.ase.serverckecklist.server.service.ServerInfoService;
 import com.ase.serverckecklist.server.vo.ServerInfoVO;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -38,9 +39,10 @@ public class ServerInfoController {
     // 서버 추가하기
     @PostMapping()
     public ResponseEntity<ServerInfo> create(
+            HttpServletRequest request,
             @ModelAttribute ServerInfoDto dto
             ) throws IOException {
-        ServerInfo created = serverInfoService.create(dto);
+        ServerInfo created = serverInfoService.create(request, dto);
 
         return (created != null) ?
                 ResponseEntity.status(HttpStatus.OK).body(created) :
@@ -51,10 +53,11 @@ public class ServerInfoController {
     // 서버 수정하기
     @PatchMapping("{id}")
     public ResponseEntity<ServerInfo> update(
+            HttpServletRequest request,
             @PathVariable("id") String id,
             @ModelAttribute ServerInfoDto dto
     ) throws IOException {
-        ServerInfo updated = serverInfoService.update(id, dto);
+        ServerInfo updated = serverInfoService.update(request, id, dto);
 
         return (updated != null) ?
                 ResponseEntity.status(HttpStatus.OK).body(updated) :
@@ -64,8 +67,11 @@ public class ServerInfoController {
     // DELETE
     // 서버 삭제하기
     @DeleteMapping("{id}")
-    public ResponseEntity<ServerInfo> delete(@PathVariable("id") String id) {
-        ServerInfo deleted = serverInfoService.delete(id);
+    public ResponseEntity<ServerInfo> delete(
+            HttpServletRequest request,
+            @PathVariable("id") String id
+    ) {
+        ServerInfo deleted = serverInfoService.delete(request, id);
 
         // Service에서 제대로 삭제했다면 삭제한 Entity를 반환해줌
         // Entity == null일 경우는 id에 해당하는 데이터가 없음을 의미

@@ -6,10 +6,12 @@ import { list } from 'api/serverItems';
 import { Container } from "react-bootstrap";
 import fileApi from 'api/image';
 import { useAuth } from 'contexts/AuthContext';
+import { useServer } from 'contexts/ServerContext';
 
 function Maps() {
 
     const {user} = useAuth();
+    const {isServerUser} = useServer();
     const [maplist, setMaplist] = useState([]);
     const {id} = useParams();
     const navigate = useNavigate();
@@ -22,14 +24,6 @@ function Maps() {
     useEffect(()=>{
         document.title = "메모";
 
-        if (!user) {
-            navigate("/login");
-        }
-
-        if (!user.joinedServerList.find(id)) {
-            navigate("/");
-        }
-
         // 지도 가져오기
         async function getMaps() {
             const res = await list(2, id);
@@ -39,8 +33,14 @@ function Maps() {
             }
         }
 
-        getMaps();
-    }, [user, id]);
+        if (user && isServerUser) {
+            getMaps();
+        }
+    }, [user, id, isServerUser]);
+
+    if (!user || !isServerUser) {
+        return null;
+    }
 
     return (
         <Container className={styles.container}>
@@ -61,7 +61,9 @@ function Maps() {
                             <div className={styles.map_img_box}>
                                 {
                                     el.photoId ?
-                                    <img src={`${fileApi}/maps/${el.id}`} alt="mapimg"
+                                    <img src={`${fileApi}/maps/${el.id}`} 
+                                    crossOrigin="use-credentials"
+                                    alt="mapimg"
                                     className={styles.map_img}/>
                                     :
                                     <div className={styles.icon_default}>

@@ -12,6 +12,7 @@ public class CheckListVO {
     private String id;
     private String title;
     private String ownerId;
+    private String ownerNickname;
     private String serverId;
     private Boolean checked;
     private String createdDate;

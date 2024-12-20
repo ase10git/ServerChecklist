@@ -27,6 +27,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -100,7 +103,10 @@ public class AuthenticationService {
         // 비밀번호 인코딩
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
         // 권한 설정 - 일반 사용자
-        user.setRole(Role.USER);
+        List<Role> role = new ArrayList<>();
+        role.add(Role.USER);
+
+        user.setRole(role);
 
         // -----테스트용
         // 이메일 인증 완료

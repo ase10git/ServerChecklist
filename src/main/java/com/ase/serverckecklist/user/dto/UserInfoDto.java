@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -16,8 +18,8 @@ public class UserInfoDto {
     private String email;
     private String nickname;
     private MultipartFile profile;
-    private Role role;
-    private String[] joinedServerList;
+    private List<Role> role;
+    private List<String> joinedServerList;
     private boolean fileDeleteFlag = false;
 
     // DTO -> Entity

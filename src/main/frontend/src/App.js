@@ -19,13 +19,14 @@ import ServerAdd from 'pages/server/ServerAdd';
 import ServerEdit from 'pages/server/ServerEdit';
 import Favorites from 'pages/user/Favorites';
 import Error from 'pages/Error';
-import ServerInfoBox from 'components/servermain/ServerInfoBox';
+import ServerRecentItems from 'components/servermain/ServerRecentItems';
 import { useAuth } from 'contexts/AuthContext';
 import { useEffect } from 'react';
 import NewPassword from 'pages/user/NewPassword';
 import UserEdit from 'components/user/UserEdit';
 import UserInfo from 'components/user/UserInfo';
 import ProtectedRoute from 'contexts/ProtectedRoute';
+import ServerProtectedRoute from 'contexts/ServerProtectedRoute';
 
 function App() {
 
@@ -58,17 +59,20 @@ function App() {
                 <Route path="favorites" Component={Favorites}/>
               </Route>
               <Route path="/servers/add" Component={ServerAdd}/>
-              <Route path="/servers/:id" Component={ServerMain}>
-                <Route index Component={ServerInfoBox}/>
-                <Route path="edit" Component={ServerEdit}/>
-                <Route path="checklists" Component={Checklists}/>
-                <Route path="memo" Component={Memo}/>
-                <Route path="maps">
-                  <Route index Component={Maps}/>
-                  <Route path=":mapid" Component={MapDetail}/>
-                  <Route path="new" Component={MapAdd}/>
+            </Route>
+
+            <Route path="/servers/:id" Component={ServerMain}>
+              <Route index Component={ServerRecentItems}/>
+                <Route element={<ServerProtectedRoute/>}>
+                  <Route path="edit" Component={ServerEdit}/>
+                  <Route path="checklists" Component={Checklists}/>
+                  <Route path="memo" Component={Memo}/>
+                  <Route path="maps">
+                    <Route index Component={Maps}/>
+                    <Route path=":mapid" Component={MapDetail}/>
+                    <Route path="new" Component={MapAdd}/>
+                  </Route>
                 </Route>
-              </Route>
             </Route>
             <Route path="/error" Component={Error}/>
           </Routes>

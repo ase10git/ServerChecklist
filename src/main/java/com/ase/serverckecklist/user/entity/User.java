@@ -5,22 +5,27 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Document(collection = "users")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Slf4j
 public class User implements UserDetails {
 
     @Id
@@ -33,8 +38,8 @@ public class User implements UserDetails {
     private boolean verification = false;
     @Field
     @JsonFormat(shape = JsonFormat.Shape.STRING) // string 형태로 변환
-    private Role role;
-    private String[] joinedServerList = null;
+    private List<Role> role;
+    private List<String> joinedServerList = null;
     private boolean accountNonExpired = true;
     private boolean accountNonLocked = true;
     private boolean enabled = true;
@@ -47,7 +52,7 @@ public class User implements UserDetails {
 
     // constructor
     // 신규용
-    public User(String email, String password, String nickname, Role role) {
+    public User(String email, String password, String nickname, List<Role> role) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
@@ -57,7 +62,7 @@ public class User implements UserDetails {
     }
 
     // 수정용 - 사용자 정보
-    public User(String email, String nickname, String profile, Role role, String[] joinedServerList) {
+    public User(String email, String nickname, String profile, List<Role> role, List<String> joinedServerList) {
         this.email = email;
         this.nickname = nickname;
         this.profile = profile;
@@ -122,7 +127,12 @@ public class User implements UserDetails {
     // 사용자 권한 확인
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return role.getAuthorities();
+        List<SimpleGrantedAuthority> list = new ArrayList<>();
+
+        for(Role r : role) {
+            list.addAll(r.getAuthorities());
+        }
+        return list;
     }
 
     // UserDetails에서 사용하는 username을 email로 수정

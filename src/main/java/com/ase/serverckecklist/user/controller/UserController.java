@@ -68,6 +68,24 @@ public class UserController {
         return userService.update(request, email, dto);
     }
 
+    // 서버 가입
+    @PatchMapping("/join-server/{id}")
+    public ResponseEntity<String> joinServer(
+            HttpServletRequest request,
+            @PathVariable("id") String id
+    ) {
+        return userService.joinServer(request, id);
+    }
+
+    // 서버 탈퇴
+    @PatchMapping("/leave-server/{id}")
+    public ResponseEntity<String> leaveServer(
+            HttpServletRequest request,
+            @PathVariable("id") String id
+    ) {
+        return userService.leaveServer(request, id);
+    }
+
     // DELETE
     @DeleteMapping("{email}")
     public ResponseEntity<User> delete(@PathVariable("email") String email) {

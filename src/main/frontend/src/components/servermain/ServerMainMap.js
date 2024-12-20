@@ -14,7 +14,7 @@ function ServerMainMap({serverMaps, serverId}) {
                             <div className={styles.map_img_box}>
                                 {
                                     el.photoId ?
-                                    <img src={`${fileApi}${el.photoId}`} 
+                                    <img src={`${fileApi}/maps/${el.photoId}`} 
                                     alt="mapimg"
                                     className={styles.map_img}/>
                                     :

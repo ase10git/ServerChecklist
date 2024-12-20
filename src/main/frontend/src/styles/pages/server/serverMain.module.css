@@ -31,6 +31,29 @@
     z-index: 1000;
 }
 
+.btn_wrap{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn_wrap button{
+    margin-left: 10px;
+}
+
+.join_btn{
+    padding: 10px;
+    display: flex; justify-content: center;
+    align-items: center;
+    background-color: var(--green-color-m);
+    color:white;
+    line-height: 1.2;
+}
+
+.join_btn svg{
+    margin-right : 3px;
+}
+
 h1{
     margin: 0;
     padding: 10px;

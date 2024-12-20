@@ -16,7 +16,7 @@ function ServerAdd() {
         photo: null,
         usage: '',
         description: '',
-        managerId: user?.email, // for test
+        managerId: user?.email
     });
     const navigate = useNavigate();
 
@@ -107,10 +107,7 @@ function ServerAdd() {
     // 렌더링 처리
     useEffect(()=>{
         document.title = "서버추가";
-        if (!user) {
-            navigate("/login");
-        }
-    }, [user]);
+    }, []);
 
     // 업로드한 사진 미리보기 생성
     function ImageBox() {

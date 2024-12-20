@@ -3,6 +3,8 @@ package com.ase.serverckecklist.user.vo;
 import com.ase.serverckecklist.user.entity.Role;
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Builder
@@ -16,6 +18,6 @@ public class UserVO {
     private boolean verification;
     private String registerDate;
     private String modifiedDate;
-    private String[] joinedServerList;
-    private Role role;
+    private List<String> joinedServerList;
+    private List<Role> role;
 }

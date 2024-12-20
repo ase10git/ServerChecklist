@@ -4,6 +4,8 @@ import com.ase.serverckecklist.server.dto.MemoDto;
 import com.ase.serverckecklist.server.entity.Memo;
 import com.ase.serverckecklist.server.repository.MemoRepository;
 import com.ase.serverckecklist.server.vo.MemoVO;
+import com.ase.serverckecklist.user.entity.User;
+import com.ase.serverckecklist.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,7 @@ import java.util.ArrayList;
 @Service
 @RequiredArgsConstructor
 public class MemoService {
+    private final UserRepository userRepository;
     private final MemoRepository memoRepository;
 
     // 서버의 모든 메모 조회
@@ -23,11 +26,20 @@ public class MemoService {
 
         // Memo -> MemoVO 변환
         for (Memo memo : list) {
+            // 소유자 닉네임
+            User user = userRepository.findByEmail(memo.getOwnerId()).orElse(null);
+            String ownerNickname = "소유자없음";
+
+            if (user != null) {
+                ownerNickname = user.getNickname();
+            }
+
             MemoVO vo = MemoVO.builder()
                     .id(memo.getId())
                     .name(memo.getName())
                     .content(memo.getContent())
                     .ownerId(memo.getOwnerId())
+                    .ownerNickname(ownerNickname)
                     .serverId(memo.getServerId())
                     .createdDate(memo.getCreatedDate().toString())
                     .modifiedDate(memo.getModifiedDate().toString())
@@ -46,11 +58,20 @@ public class MemoService {
 
         // Memo -> MemoVO 변환
         for (Memo memo : list) {
+            // 소유자 닉네임
+            User user = userRepository.findByEmail(memo.getOwnerId()).orElse(null);
+            String ownerNickname = "소유자없음";
+
+            if (user != null) {
+                ownerNickname = user.getNickname();
+            }
+
             MemoVO vo = MemoVO.builder()
                     .id(memo.getId())
                     .name(memo.getName())
                     .content(memo.getContent())
                     .ownerId(memo.getOwnerId())
+                    .ownerNickname(ownerNickname)
                     .serverId(memo.getServerId())
                     .createdDate(memo.getCreatedDate().toString())
                     .modifiedDate(memo.getModifiedDate().toString())
@@ -69,17 +90,26 @@ public class MemoService {
     public MemoVO show(String id) {
         Memo memo = memoRepository.findById(id).orElse(null);
 
-        return memo != null ?
-                MemoVO.builder()
+        if (memo == null) return null;
+
+        // 소유자 관리자 닉네임
+        User user = userRepository.findByEmail(memo.getOwnerId()).orElse(null);
+        String ownerNickname = "소유자없음";
+
+        if (user != null) {
+            ownerNickname = user.getNickname();
+        }
+
+        return MemoVO.builder()
                     .id(memo.getId())
                     .name(memo.getName())
                     .content(memo.getContent())
                     .ownerId(memo.getOwnerId())
+                    .ownerNickname(ownerNickname)
                     .serverId(memo.getServerId())
                     .createdDate(memo.getCreatedDate().toString())
                     .modifiedDate(memo.getModifiedDate().toString())
-                    .build()
-                : null;
+                    .build();
     }
 
     // 새 메모 추가

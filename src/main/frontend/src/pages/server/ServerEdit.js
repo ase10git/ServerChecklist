@@ -118,11 +118,8 @@ function ServerEdit() {
 
     useEffect(()=>{
         document.title = "서버수정";
-        if (!user) {
-            navigate("/login");
-        }
 
-        if (user.email !== serverInfo.managerId) {
+        if (user?.email !== serverInfo.managerId) {
             alert("접근 권한이 없습니다!");
             navigate("/");
         }

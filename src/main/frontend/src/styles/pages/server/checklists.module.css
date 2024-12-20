@@ -114,3 +114,10 @@
     padding: 10px;
     margin-right: 5%;
 }
+
+.option_btn_wrap span{
+    padding: 5px;
+    background-color: var(--green-color-ml);
+    border-radius: 5px;
+    font-size: 1rem;
+}

@@ -7,15 +7,42 @@ import { patch, remove, show } from 'api/serverItems';
 import { Camera, Map, Pencil, Trash, XCircle } from 'react-bootstrap-icons';
 import fileApi from 'api/image';
 import { useAuth } from 'contexts/AuthContext';
+import { useServer } from 'contexts/ServerContext';
 
 function MapDetail() {
 
     const {user} = useAuth();
+    const {isServerUser} = useServer();
     const [map, setMap] = useState({}); // 지도 정보
     const {id, mapid} = useParams();
     const [isEdit, setIsEdit] = useState(false);
     const navigate = useNavigate();
     
+    useEffect(()=>{
+        // 지도 가져오기
+        async function getMap() {
+            const res = await show(2, mapid);
+
+            if (res) {
+                setMap(res);
+            }
+
+            setEditFormData({
+                id: mapid,
+                title: res.title,
+                location: res.location,
+                photo: null,
+                ownerId: res.ownerId,
+                serverId: id,
+                description: res.description
+            });
+        }
+
+        if (user && isServerUser) {
+            getMap();
+        }
+    }, [id, mapid, isServerUser]);
+
     // 수정 메모 form
     const [editFormData, setEditFormData] = useState({
         id: mapid,
@@ -37,27 +64,9 @@ function MapDetail() {
         setIsEdit(!isEdit);
     }
 
-    useEffect(()=>{
-        // 지도 가져오기
-        async function getMap() {
-            const res = await show(2, mapid);
-
-            if (res) {
-                setMap(res);
-            }
-
-            setEditFormData({
-                id: mapid,
-                title: res.title,
-                location: res.location,
-                photo: null,
-                ownerId: res.ownerId,
-                serverId: id,
-                description: res.description
-            });
-        }
-        getMap();
-    }, [id, mapid]);
+    if (!user || !isServerUser) {
+        return null;
+    }
 
     return (
         <Container className={styles.container}>
@@ -108,7 +117,7 @@ function MapInfo({
                 <h2 className={styles.title}>{map.title}</h2> 
                 <div className={styles.btn_wrap}>
                     {
-                        user.email === map.ownerId ?
+                        user?.email === map.ownerId ?
                         <button className={`edit_btn ${styles.edit_btn}`}
                         onClick={handleEditChange}><Pencil/></button>
                         : null

@@ -1,7 +1,6 @@
 import axios from 'lib/axios';
 import { createContext, useContext, useState } from "react";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
-import { getImage } from 'api/image';
+import { useLocation, useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 

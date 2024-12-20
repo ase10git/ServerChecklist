@@ -5,6 +5,8 @@ import com.ase.serverckecklist.server.entity.Map;
 import com.ase.serverckecklist.server.repository.MapRepository;
 import com.ase.serverckecklist.file.service.FileService;
 import com.ase.serverckecklist.server.vo.MapVO;
+import com.ase.serverckecklist.user.entity.User;
+import com.ase.serverckecklist.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,7 +17,7 @@ import java.util.ArrayList;
 @Service
 @RequiredArgsConstructor
 public class MapService {
-
+    private final UserRepository userRepository;
     private final MapRepository mapRepository;
     private final FileService fileService;
 
@@ -28,12 +30,21 @@ public class MapService {
 
         // Map -> MapVO 변환
         for(Map map : list) {
+            // 소유자 닉네임
+            User user = userRepository.findByEmail(map.getOwnerId()).orElse(null);
+            String ownerNickname = "소유자없음";
+
+            if (user != null) {
+                ownerNickname = user.getNickname();
+            }
+
             MapVO vo = MapVO.builder()
                     .id(map.getId())
                     .title(map.getTitle())
                     .location(map.getLocation())
                     .photoId(map.getPhotoId())
                     .ownerId(map.getOwnerId())
+                    .ownerNickname(ownerNickname)
                     .serverId(map.getServerId())
                     .description(map.getDescription())
                     .createdDate(map.getCreatedDate().toString())
@@ -53,12 +64,21 @@ public class MapService {
 
         // Map -> MapVO 변환
         for(Map map : list) {
+            // 소유자 닉네임
+            User user = userRepository.findByEmail(map.getOwnerId()).orElse(null);
+            String ownerNickname = "소유자없음";
+
+            if (user != null) {
+                ownerNickname = user.getNickname();
+            }
+
             MapVO vo = MapVO.builder()
                         .id(map.getId())
                         .title(map.getTitle())
                         .location(map.getLocation())
                         .photoId(map.getPhotoId())
                         .ownerId(map.getOwnerId())
+                        .ownerNickname(ownerNickname)
                         .serverId(map.getServerId())
                         .description(map.getDescription())
                         .createdDate(map.getCreatedDate().toString())
@@ -73,19 +93,28 @@ public class MapService {
     public MapVO show(String id) {
         Map map = mapRepository.findById(id).orElse(null);
 
-        return map != null ?
-                    MapVO.builder()
+        if (map == null) return null;
+
+        // 소유자 닉네임
+        User user = userRepository.findByEmail(map.getOwnerId()).orElse(null);
+        String ownerNickname = "소유자없음";
+
+        if (user != null) {
+            ownerNickname = user.getNickname();
+        }
+
+        return MapVO.builder()
                     .id(map.getId())
                     .title(map.getTitle())
                     .location(map.getLocation())
                     .photoId(map.getPhotoId())
                     .ownerId(map.getOwnerId())
+                    .ownerNickname(ownerNickname)
                     .serverId(map.getServerId())
                     .description(map.getDescription())
                     .createdDate(map.getCreatedDate().toString())
                     .modifiedDate(map.getModifiedDate().toString())
-                    .build()
-                : null;
+                    .build();
     }
 
     // 새 맵 추가

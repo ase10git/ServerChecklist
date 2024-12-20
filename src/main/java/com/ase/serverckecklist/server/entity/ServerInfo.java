@@ -32,23 +32,24 @@ public class ServerInfo {
     // constructor
 
     // 신규 등록용
-    public ServerInfo(String name, String photoId, String usage, String description) {
+    public ServerInfo(String name, String photoId, String usage, String description, String managerId) {
         this.name = name;
         this.photoId = photoId;
         this.usage = usage;
         this.description = description;
+        this.managerId = managerId;
         this.createdDate = LocalDateTime.now();
         this.modifiedDate = LocalDateTime.now();
-        this.managerId = "";
     }
 
     // 수정용
-    public ServerInfo(String id, String name, String photoId, String usage, String description) {
+    public ServerInfo(String id, String name, String photoId, String usage, String description, String managerId) {
         this.id = id;
         this.name = name;
         this.photoId = photoId;
         this.usage = usage;
         this.description = description;
+        this.managerId = managerId;
     }
 
     // 데이터 수정

@@ -14,6 +14,7 @@ public class MapVO {
     private String location;
     private String photoId;
     private String ownerId;
+    private String ownerNickname;
     private String serverId;
     private String description;
     private String createdDate;

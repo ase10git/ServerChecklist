@@ -40,11 +40,11 @@ public class SecurityConfig {
     // logout success handler
     private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
 
-    // 가시성을 위한 static 처리
-    private static final Role USER = Role.USER;
-    private static final Role ADMIN = Role.ADMIN;
-    private static final Role SERVER_USER = Role.SERVER_USER;
-    private static final Role SERVER_ADMIN = Role.SERVER_ADMIN;
+    // Role and Authorities
+    private static final String[] PUBLIC_ROLES = {Role.USER.name(), Role.ADMIN.name()};
+    private static final String[] USER_ROLES = {Role.USER.name(), Role.SERVER_USER.name(), Role.SERVER_ADMIN.name()};
+    private static final String[] SERVER_ROLES = {Role.SERVER_USER.name(), Role.SERVER_ADMIN.name(), Role.ADMIN.name()};
+    private static final String[] ADMIN_ROLES = {Role.ADMIN.name(), Role.SERVER_ADMIN.name()};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
@@ -64,58 +64,48 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/register", "/api/auth/login", "/api/user/current-user").permitAll()
 
                         // user
-                        .requestMatchers(HttpMethod.GET, "/api/user/{email}").hasRole(ADMIN.name())
-                        .requestMatchers(HttpMethod.PATCH, "/api/user/**", "/api/user/new-password/**").hasAnyRole(USER.name(), ADMIN.name())
-                        .requestMatchers(HttpMethod.PATCH, "/api/user/**", "/api/user/new-password/**").hasAnyRole(Permission.USER_UPDATE.name(), Permission.ADMIN_UPDATE.name())
-                        .requestMatchers(HttpMethod.DELETE, "/api/user/{email}").hasAnyRole(USER.name(), ADMIN.name())
-                        .requestMatchers(HttpMethod.DELETE, "/api/user/{email}").hasAnyAuthority(Permission.USER_DELETE.name(), Permission.ADMIN_DELETE.name())
+                        .requestMatchers(HttpMethod.GET, "/api/user/{email}").hasRole(Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.PATCH, "/api/user/**", "/api/user/new-password/**").hasAnyRole(PUBLIC_ROLES)
+                        .requestMatchers(HttpMethod.PATCH, "/api/user/**", "/api/user/new-password/**").hasAnyAuthority(Permission.USER_UPDATE.name(), Permission.ADMIN_UPDATE.name())
+                        .requestMatchers(HttpMethod.DELETE, "/api/user/{email}").hasAnyRole(PUBLIC_ROLES)
+                        .requestMatchers(HttpMethod.DELETE, "/api/user/{email}").hasAnyAuthority(Permission.USER_UPDATE.name(), Permission.ADMIN_UPDATE.name())
 
                         // favorites
-                        .requestMatchers("/api/favorites/**").hasAnyRole(USER.name(), SERVER_USER.name(), SERVER_ADMIN.name())
+                        .requestMatchers("/api/favorites/**").hasAnyRole(USER_ROLES)
 
                         // server
-                        .requestMatchers(HttpMethod.POST, "/api/servers").hasAnyRole(
-                                USER.name(), SERVER_USER.name(), SERVER_ADMIN.name()
-                        )
-                        .requestMatchers(HttpMethod.PATCH, "/api/servers/{id}").hasAnyRole(
-                                SERVER_ADMIN.name(), ADMIN.name()
-                        )
-                        .requestMatchers(HttpMethod.DELETE, "/api/servers/{id}").hasAnyRole(
-                                SERVER_ADMIN.name(), ADMIN.name()
-                        )
+                        .requestMatchers(HttpMethod.POST, "/api/servers").hasAnyRole(USER_ROLES)
+                        .requestMatchers(HttpMethod.PATCH, "/api/servers/{id}").hasAnyRole(ADMIN_ROLES)
+                        .requestMatchers(HttpMethod.DELETE, "/api/servers/{id}").hasAnyRole(ADMIN_ROLES)
                         .requestMatchers(HttpMethod.POST, "/api/servers").hasAuthority(Permission.USER_CREATE.name())
                         .requestMatchers(HttpMethod.PATCH, "/api/servers/{id}").hasAnyAuthority(Permission.SERVERADMIN_UPDATE.name(), Permission.ADMIN_UPDATE.name())
                         .requestMatchers(HttpMethod.DELETE, "/api/servers/{id}").hasAnyAuthority(Permission.SERVERADMIN_DELETE.name(), Permission.ADMIN_DELETE.name())
 
                         // memo
-                        .requestMatchers("/api/memo/**").hasAnyRole(
-                                SERVER_USER.name(), SERVER_ADMIN.name(), ADMIN.name()
-                        )
-                        .requestMatchers(HttpMethod.GET, "/api/memo/list/{serverId}", "/api/memo/recentlist/{serverId}", "/api/memo/{id}").hasAnyAuthority(Permission.SERVERUSER_READ.name(), Permission.ADMIN_READ.name())
-                        .requestMatchers(HttpMethod.POST, "/api/memo").hasAuthority(Permission.SERVERUSER_CREATE.name())
-                        .requestMatchers(HttpMethod.PATCH, "/api/memo/{id}").hasAuthority(Permission.SERVERUSER_UPDATE.name())
-                        .requestMatchers(HttpMethod.DELETE, "/api/memo/{id}").hasAuthority(Permission.SERVERUSER_DELETE.name())
+                        .requestMatchers("/api/memo/**").hasAnyRole(SERVER_ROLES)
+                        .requestMatchers(HttpMethod.GET, "/api/memo/list/{serverId}", "/api/memo/recentlist/{serverId}", "/api/memo/{id}").hasAnyAuthority(Permission.SERVERUSER_READ.name(), Permission.SERVERADMIN_READ.name(), Permission.ADMIN_READ.name())
+                        .requestMatchers(HttpMethod.POST, "/api/memo").hasAnyAuthority(Permission.SERVERUSER_CREATE.name(), Permission.SERVERADMIN_CREATE.name())
+                        .requestMatchers(HttpMethod.PATCH, "/api/memo/{id}").hasAnyAuthority(Permission.SERVERUSER_UPDATE.name(), Permission.SERVERADMIN_UPDATE.name())
+                        .requestMatchers(HttpMethod.DELETE, "/api/memo/{id}").hasAnyAuthority(Permission.SERVERUSER_DELETE.name(), Permission.SERVERADMIN_DELETE.name())
 
 
                         // checklists
-                        .requestMatchers("/api/checklists/**").hasAnyRole(
-                                SERVER_USER.name(), SERVER_ADMIN.name(), ADMIN.name()
-                        )
-                        .requestMatchers(HttpMethod.GET, "/api/checklists/list/{serverId}", "/api/checklists/recentlist/{serverId}", "/api/checklists/{id}").hasAnyAuthority(Permission.SERVERUSER_READ.name(), Permission.ADMIN_READ.name())
-                        .requestMatchers(HttpMethod.POST, "/api/checklists").hasAuthority(Permission.SERVERUSER_CREATE.name())
-                        .requestMatchers(HttpMethod.PATCH, "/api/checklists/{id}", "/api/checklists/checkboxs").hasAuthority(Permission.SERVERUSER_UPDATE.name())
-                        .requestMatchers(HttpMethod.DELETE, "/api/checklists/{id}").hasAuthority(Permission.SERVERUSER_DELETE.name())
+                        .requestMatchers("/api/checklists/**").hasAnyRole(SERVER_ROLES)
+                        .requestMatchers(HttpMethod.GET, "/api/checklists/list/{serverId}", "/api/checklists/recentlist/{serverId}", "/api/checklists/{id}").hasAnyAuthority(Permission.SERVERUSER_READ.name(), Permission.SERVERADMIN_READ.name(), Permission.ADMIN_READ.name())
+                        .requestMatchers(HttpMethod.POST, "/api/checklists").hasAnyAuthority(Permission.SERVERUSER_CREATE.name(), Permission.SERVERADMIN_CREATE.name())
+                        .requestMatchers(HttpMethod.PATCH, "/api/checklists/{id}", "/api/checklists/checkboxs").hasAnyAuthority(Permission.SERVERUSER_UPDATE.name(), Permission.SERVERADMIN_UPDATE.name())
+                        .requestMatchers(HttpMethod.DELETE, "/api/checklists/{id}").hasAnyAuthority(Permission.SERVERUSER_DELETE.name(), Permission.SERVERADMIN_DELETE.name())
 
                         // map
-                        .requestMatchers("/api/maps/**").hasAnyRole(SERVER_USER.name(), SERVER_ADMIN.name(), ADMIN.name())
-                        .requestMatchers(HttpMethod.GET, "/api/maps/list/{serverId}", "/api/maps/recentlist/{serverId}", "/api/maps/{id}").hasAnyAuthority(Permission.SERVERUSER_READ.name(), Permission.ADMIN_READ.name())
-                        .requestMatchers(HttpMethod.POST, "/api/maps").hasAuthority(Permission.SERVERUSER_CREATE.name())
-                        .requestMatchers(HttpMethod.PATCH, "/api/maps/{id}").hasAuthority(Permission.SERVERUSER_UPDATE.name())
-                        .requestMatchers(HttpMethod.DELETE, "/api/maps/{id}").hasAuthority(Permission.SERVERUSER_DELETE.name())
+                        .requestMatchers("/api/maps/**").hasAnyRole(SERVER_ROLES)
+                        .requestMatchers(HttpMethod.GET, "/api/maps/list/{serverId}", "/api/maps/recentlist/{serverId}", "/api/maps/{id}").hasAnyAuthority(Permission.SERVERUSER_READ.name(), Permission.SERVERADMIN_READ.name(), Permission.ADMIN_READ.name())
+                        .requestMatchers(HttpMethod.POST, "/api/maps").hasAnyAuthority(Permission.SERVERUSER_CREATE.name(), Permission.SERVERADMIN_CREATE.name())
+                        .requestMatchers(HttpMethod.PATCH, "/api/maps/{id}").hasAnyAuthority(Permission.SERVERUSER_UPDATE.name(), Permission.SERVERADMIN_UPDATE.name())
+                        .requestMatchers(HttpMethod.DELETE, "/api/maps/{id}").hasAnyAuthority(Permission.SERVERUSER_DELETE.name(), Permission.SERVERADMIN_DELETE.name())
 
                         // file
-                        .requestMatchers("/api/file/maps/**").hasAnyRole(SERVER_USER.name(), SERVER_ADMIN.name(), ADMIN.name())
-                        .requestMatchers(HttpMethod.GET, "/api/file/maps/{id}").hasAnyAuthority(Permission.SERVERUSER_READ.name(), Permission.ADMIN_READ.name())
+                        .requestMatchers("/api/file/maps/**").hasAnyRole(SERVER_ROLES)
+                        .requestMatchers(HttpMethod.GET, "/api/file/maps/**").hasAnyAuthority(Permission.SERVERUSER_READ.name(), Permission.SERVERADMIN_READ.name(), Permission.ADMIN_READ.name())
 
                         .anyRequest() // 그 외의 모든 요청은
                         .permitAll() // 허용

@@ -1,21 +1,37 @@
 import styles from 'styles/pages/server/memo.module.css';
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate,  useParams } from 'react-router-dom';
 //import memoSample from 'lib/sampleData/memoSample';
 import { CheckLg, PencilFill, PlusCircle, Trash, XLg } from 'react-bootstrap-icons';
 import { create, list, patch, remove } from 'api/serverItems';
 import { Container, Form } from "react-bootstrap";
 import { useAuth } from 'contexts/AuthContext';
+import { useServer } from 'contexts/ServerContext';
 
 function Memo() {
 
     const {user} = useAuth();
+    const {isServerUser} = useServer();
     const [memo, setMemo] = useState([]);
     const {id} = useParams(); // serverId
     const [isAdd, setIsAdd] = useState(false);
     const [isEdit, setIsEdit] = useState('');
     const navigate = useNavigate();
     
+    useEffect(()=>{
+        document.title = "메모";
+
+        // 서버 메모 가져오기
+        async function getMemo() {
+            const res = await list(0, id);
+            setMemo(res);
+        }
+
+        if (user && isServerUser) {
+            getMemo();
+        }
+    }, [user, id, isServerUser]);
+
     // 새 메모 form
     const [formData, setFormData] = useState({
         name: '',
@@ -164,25 +180,9 @@ function Memo() {
         }
     }
 
-    useEffect(()=>{
-        document.title = "메모";
-
-        if (!user) {
-            navigate("/login");
-        }
-
-        if (!user.joinedServerList.find(id)) {
-            navigate("/");
-        }
-
-        // 서버 메모 가져오기
-        async function getMemo() {
-            const res = await list(0, id);
-            setMemo(res);
-        }
-
-        getMemo();
-    }, [user, id]);
+    if (!user || !isServerUser) {
+        return null;
+    }
 
     return (
         <Container className={styles.container}>
@@ -240,7 +240,7 @@ function MemoBox({
             <div className={styles.info_box}>
                 <div className={styles.memo_title_box}>
                     <span>{memo.name}</span>
-                    <span>{memo.ownerId}</span>
+                    <span>{memo.ownerNickname}</span>
                 </div>
                 {
                     user.email === memo.ownerId ?

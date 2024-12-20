@@ -1,9 +1,11 @@
 package com.ase.serverckecklist.server.service;
 
 import com.ase.serverckecklist.server.dto.CheckListDto;
-import com.ase.serverckecklist.server.repository.CheckListRepository;
 import com.ase.serverckecklist.server.entity.CheckList;
+import com.ase.serverckecklist.server.repository.CheckListRepository;
 import com.ase.serverckecklist.server.vo.CheckListVO;
+import com.ase.serverckecklist.user.entity.User;
+import com.ase.serverckecklist.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,7 +17,7 @@ import java.util.ArrayList;
 @RequiredArgsConstructor
 @Slf4j
 public class CheckListService {
-
+    private final UserRepository userRepository;
     private final CheckListRepository checkListRepository;
 
     // 서버의 모든 체크리스트 전체 조회
@@ -26,10 +28,19 @@ public class CheckListService {
         ArrayList<CheckListVO> voList = new ArrayList<>();
 
         for(CheckList checkList : list) {
+            // 소유자 닉네임
+            User user = userRepository.findByEmail(checkList.getOwnerId()).orElse(null);
+            String ownerNickname = "소유자없음";
+
+            if (user != null) {
+                ownerNickname = user.getNickname();
+            }
+
             CheckListVO vo = CheckListVO.builder()
                     .id(checkList.getId())
                     .title(checkList.getTitle())
                     .ownerId(checkList.getOwnerId())
+                    .ownerNickname(ownerNickname)
                     .serverId(checkList.getServerId())
                     .checked(checkList.getChecked())
                     .createdDate(checkList.getCreatedDate().toString())
@@ -49,10 +60,19 @@ public class CheckListService {
         ArrayList<CheckListVO> voList = new ArrayList<>();
 
         for(CheckList checkList : list) {
+            // 소유자 닉네임
+            User user = userRepository.findByEmail(checkList.getOwnerId()).orElse(null);
+            String ownerNickname = "소유자없음";
+
+            if (user != null) {
+                ownerNickname = user.getNickname();
+            }
+
             CheckListVO vo = CheckListVO.builder()
                     .id(checkList.getId())
                     .title(checkList.getTitle())
                     .ownerId(checkList.getOwnerId())
+                    .ownerNickname(ownerNickname)
                     .serverId(checkList.getServerId())
                     .checked(checkList.getChecked())
                     .createdDate(checkList.getCreatedDate().toString())
@@ -68,17 +88,26 @@ public class CheckListService {
     public CheckListVO show(@PathVariable String id) {
         CheckList checkList = checkListRepository.findById(id).orElse(null);
 
-        return checkList != null ?
-                CheckListVO.builder()
-                        .id(checkList.getId())
-                        .title(checkList.getTitle())
-                        .ownerId(checkList.getOwnerId())
-                        .serverId(checkList.getServerId())
-                        .checked(checkList.getChecked())
-                        .createdDate(checkList.getCreatedDate().toString())
-                        .modifiedDate(checkList.getModifiedDate().toString())
-                        .build()
-                : null;
+        if (checkList == null) return null;
+
+        // 소유자 관리자 닉네임
+        User user = userRepository.findByEmail(checkList.getOwnerId()).orElse(null);
+        String ownerNickname = "소유자없음";
+
+        if (user != null) {
+            ownerNickname = user.getNickname();
+        }
+
+        return CheckListVO.builder()
+                    .id(checkList.getId())
+                    .title(checkList.getTitle())
+                    .ownerId(checkList.getOwnerId())
+                    .ownerNickname(ownerNickname)
+                    .serverId(checkList.getServerId())
+                    .checked(checkList.getChecked())
+                    .createdDate(checkList.getCreatedDate().toString())
+                    .modifiedDate(checkList.getModifiedDate().toString())
+                    .build();
     }
 
     // 새 체크리스트 추가

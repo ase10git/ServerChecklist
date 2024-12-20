@@ -1,19 +1,43 @@
-import { useEffect, useState } from 'react';
 import styles from 'styles/pages/server/serverMain.module.css';
 import { Link, Outlet, useNavigate, useParams } from 'react-router-dom';
-import { remove, show } from 'api/server';
-import { Pencil, Trash } from 'react-bootstrap-icons';
-import fileApi, { getImage } from 'api/image';
+import { remove, show, joinServer, leaveServer } from 'api/server';
+import { Heart, Heartbreak, HeartbreakFill, Pencil, Plug, Trash } from 'react-bootstrap-icons';
+import fileApi from 'api/image';
+import ServerProvider, { useServer } from 'contexts/ServerContext';
 
 function ServerMain() {
+    return(
+        <ServerProvider>
+            <div className={styles.container}>
+                <ServerMainInfo/>
+                <Outlet/>
+            </div>
+        </ServerProvider>
+    )
+}
 
-    const [serverInfo, setServerInfo] = useState({}); // 서버 정보
-    const {id} = useParams(); // 서버 id
+function ServerMainInfo() {
+    const {serverInfo, isServerUser, isServerManager} = useServer();
     const navigate = useNavigate();
+    const {id} = useParams(); // 서버 id
 
     // 서버 편집 페이지로 이동
     function handleServerEdit() {
         navigate(`/servers/${serverInfo.id}/edit`);
+    }
+
+    // 서버 가입
+    async function joinServer() {
+        await joinServer(id);
+    }
+
+    // 서버 탈퇴
+    async function leaveServer() {
+        if (!window.confirm("정말 서버를 탈퇴하시겠습니까?")) {
+            return;
+        }
+
+        await leaveServer(id);
     }
 
     // 서버 제거
@@ -28,46 +52,45 @@ function ServerMain() {
     //     }
     // }
 
-    useEffect(()=>{
-        // 서버 정보 가져오기
-        async function getServer() {
-            const res = await show(id);
-
-            if (res) {
-                setServerInfo(res);
-            }
-        }
-
-        getServer();
-    }, []);
-
     return(
-        <div className={styles.container}>
-            <div className={styles.server_info_box}>
-                <div className={styles.top_box}>
-                    <div className={styles.title_box}>
-                        <h1><Link to={`/servers/${serverInfo.id}`}>{serverInfo.name}</Link></h1>
-                        <div>
-                            <button className='edit_btn'
-                            onClick={handleServerEdit}><Pencil/></button>
-                            <button
-                            className='del_btn'><Trash/></button>
-                        </div>
-                    </div>
-                    <div className={styles.server_img_box}>
+        <div className={styles.server_info_box}>
+            <div className={styles.top_box}>
+                <div className={styles.title_box}>
+                    <h1><Link to={`/servers/${serverInfo.id}`}>{serverInfo.name}</Link></h1>
+                    <div className={styles.btn_wrap}>
                         {
-                            serverInfo.photoId ?
-                            <img src={`${fileApi}/servers/${serverInfo.id}`} alt="serverimg"/>
+                            !isServerUser ?
+                            <button className={styles.join_btn}
+                            onClick={joinServer}><Heart/>서버 가입</button>
+                            :
+                            !isServerManager ?
+                            <button className={styles.join_btn}
+                            onClick={leaveServer}><HeartbreakFill/>서버 탈퇴</button>
                             : null
+                        }
+                        {
+                            isServerManager ?
+                            <>
+                                <button className='edit_btn'
+                                onClick={handleServerEdit}><Pencil/></button>
+                                <button
+                                className='del_btn'><Trash/></button>
+                            </>
+                        : null
                         }
                     </div>
                 </div>
-                <div className={styles.server_desc_box}>
-                    <p>{serverInfo.description}</p>
+                <div className={styles.server_img_box}>
+                    {
+                        serverInfo.photoId ?
+                        <img src={`${fileApi}/servers/${serverInfo.id}`} alt="serverimg"/>
+                        : null
+                    }
                 </div>
             </div>
-            {/* Server 하위 페이지에서 전부 공유 */}
-            <Outlet context={{serverInfo, setServerInfo}}/>
+            <div className={styles.server_desc_box}>
+                <p>{serverInfo.description}</p>
+            </div>
         </div>
     )
 }

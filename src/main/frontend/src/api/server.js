@@ -54,3 +54,30 @@ export async function remove(id) {
         alert("서버 삭제에 실패했습니다");
     }
 }
+
+
+// ------ 서버 가입 --------
+export async function joinServer(id) {
+    try {
+        const res = await axios.patch(`/user/join-server/${id}`);
+
+        const body = res.data;
+        return body;    
+    } catch (error) {
+        alert("서버 가입에 실패했습니다");
+    }
+}
+
+export async function leaveServer(id) {
+    try {
+        const res = await axios.patch(`/user/leave-server/${id}`);
+
+        if (res.status === 200) {
+            alert("성공적으로 탈퇴했습니다");
+        }
+        const body = res.data;
+        return body;    
+    } catch (error) {
+        alert("서버 탈퇴에 실패했습니다");
+    }
+}
