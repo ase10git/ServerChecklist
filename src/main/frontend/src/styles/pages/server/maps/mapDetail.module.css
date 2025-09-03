@@ -1,0 +1,170 @@
+.container{
+    width: 90%;
+    margin: 20px 0;
+    position: relative;
+}
+
+.title_box{
+    width: 100%;
+    margin-bottom: 20px;
+    display: flex; justify-content: space-between;
+    align-items: center;
+}
+
+.title{
+    width: 80%;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* default map info page */
+.edit_btn{
+    margin-right: 5px;
+}
+
+.box{
+    width: 100%;
+    padding: 20px;
+    background-color: var(--green-color-m);
+    border-radius: 10px;
+}
+
+.map_img_box{
+    width: 100%; height: 450px;
+    margin-bottom: 5px;
+    border: 1px solid white;
+    border-radius: 5px;
+    position: relative;
+}
+
+.map_img_box img{
+    width: 100%; height: 100%;
+}
+
+.icon_default{
+    width: 100%; height: 100%;
+    display: flex; justify-content: center;
+    align-items: center;
+    background-color: white;
+    font-size: 50px;
+}
+
+.info_box{
+    margin-top: 10px 0;
+    position: relative;
+}
+
+.info_box p{
+    padding: 10px 0;
+    color:white;
+}
+
+.nickname{
+    padding: 5px 8px;
+    position: absolute; top:0; right:0;
+    background-color: var(--green-color-l);
+    border-radius: 5px;
+}
+
+.desc_box{
+    border-top: 1px solid white;
+}
+
+.location{
+    margin-left: 10px;
+    padding: 5px 8px;
+    background-color: var(--green-color-l);
+    border-radius: 5px;
+    color:#000;
+}
+
+.list_btn_wrap{
+    width: 100%;
+    padding-top: 20px;
+    display: flex; justify-content: flex-end;
+}
+
+.list_btn_wrap button{
+    padding: 8px;
+    background-color: var(--green-color-m);
+    font-size: 1rem;
+    color: white;
+}
+
+/* map edit page */
+.top_box{
+    width: 100%;
+    position:relative;
+}
+
+.remove_img_btn{
+    position: absolute; top: 10px; right: 10px;
+    display: flex; justify-content: center; align-items: center;
+    background-color: white;
+    border-radius: 100%;
+    z-index: 1000;
+    font-size: 30px;
+}
+
+.img_box{
+    width: 100%; height: 450px;
+    margin-bottom: 5px;
+    border: 1px solid white;
+    border-radius: 5px;
+    position: relative;
+}
+
+.map_img{
+    width: 100%; height: 100%;
+}
+
+.map_default_img{
+    display: flex; justify-content: center;
+    align-items: center;
+}
+
+.img_box label{
+    width: 100%; height: 100%;
+    position: absolute;
+    display: flex; justify-content: center;
+    align-items: center;
+    background-color: white;
+    font-size: 8rem;
+}
+
+.img_box input{
+    width: 100%; height: 100%;
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.file_remove_btn{
+    padding: 5px;
+}
+
+.file_remove_btn.del_true{
+    background-color: var(--red-color-l);
+    color:white;
+}
+
+.file_remove_btn.del_false{
+    background-color: var(--green-color-dm);
+    color: white;
+}
+
+.info_box.edit{
+    margin-top: 30px;
+}
+
+.edit_btn_wrap{
+    width: 100%;
+    padding-top: 20px;
+    display: flex; justify-content: flex-end;
+}
+
+.upload_btn{
+    margin-right: 5px;
+}

@@ -1,0 +1,74 @@
+.container{
+    width: 90%;
+    margin: 20px 0;
+    position: relative;
+}
+
+.title_box{
+    width: 100%;
+    margin-bottom: 20px;
+    display: flex; justify-content: space-between;
+    align-items: center;
+}
+
+.title{
+    text-align: left;
+}
+
+.box{
+    width: 100%;
+    display: flex; flex-direction: column;
+    align-items: center;
+}
+
+.memo_box{
+    width: 100%;
+    margin: 10px 0; padding: 15px;
+    background-color: var(--green-color-ml);
+    border-radius: 10px;
+}
+
+.info_box{
+    width: 100%;
+    display: flex; justify-content: space-between;
+}
+
+.memo_title_box{
+    width: 70%;
+    padding: 5px 10px;
+    display: flex; justify-content: space-between;
+    background-color: white;
+    border-radius: 5px;
+}
+
+.edit_btn{
+    margin-right: 5px;
+}
+
+.content_box{
+    width: 100%;
+    margin-top: 10px; padding: 10px;
+    background-color: var(--green-color-l);
+    border-radius: 5px;
+}
+
+.plus_wrap{
+    width: 100%;
+    margin: 10px 0;
+    padding: 10px 0;
+    display: flex; justify-content: center; align-items: center;
+    background-color: var(--green-color-ml);
+    border-radius: 10px;
+}
+
+.plus_wrap button{
+    font-size: 1.5rem;
+    color:#000;
+    background-color: transparent;
+}
+
+/* memo add page */
+.memo_box input{
+    width: 100%;
+    font-size: 1rem;
+}

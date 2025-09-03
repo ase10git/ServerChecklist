@@ -1,0 +1,27 @@
+.memo_box{
+    width: 100%;
+    margin-top: 20px;
+    display: flex; justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.memo{
+    width: 45%; height: 200px;
+    margin: 10px; padding: 8px;
+    border-radius: 5px;
+    background-color: var(--green-color-ml);
+}
+
+.title{
+    margin-bottom: 10px;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.content{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

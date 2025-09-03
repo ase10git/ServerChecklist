@@ -1,0 +1,59 @@
+.container{
+    width: 80%;
+    margin: 20px; padding: 20px;
+    display: flex; justify-content: space-between;
+    background-color: var(--green-color-m);
+    border-radius: 10px;
+    position: relative;
+}
+
+@media screen and (min-width: 1368px) {
+    .container{
+        width: 40%;
+    }
+}
+
+.server_name{
+    padding: 8px;
+    border-radius: 5px;
+    position: absolute; top:-10px; left:-10px;
+    background-color: var(--green-color-ml);
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+.server_photo_box{
+    width: 50%; height: 220px;
+    border-radius: 5px;
+    background-color: #ffffff;
+    display: flex; justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.server_photo{
+    width: 100%;
+}
+
+.server_info_box{
+    width: 47%;
+}
+
+.server_info{
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: var(--green-color-ml);
+    border-radius: 5px;
+}
+
+.server_info:last-child{
+    margin-bottom: 0px;
+}
+
+.server_info p{
+    margin-bottom: 0 !important;
+}
+
+.server_info p > span{
+    margin-right: 5px;
+}

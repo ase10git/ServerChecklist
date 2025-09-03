@@ -1,0 +1,95 @@
+*{margin:0; padding: 0; box-sizing: border-box;}
+ul, ol, li{list-style-type: none;}
+a{text-decoration: none; color:#000;}
+
+/* custom options */
+:root{
+    --green-color-l: #ebfffe;
+    --green-color-ml: #8be6e1;
+    --green-color-m: #007a60;
+    --green-color-dm: #013d39;
+    --green-color-d: #001b19;
+    --red-color-l: #ff6161;
+    --red-color-m: #e20909;
+    --red-color-d: #9c0000;
+    --blue-color-l: #6186ff;
+    --blue-color-d: #001e80;
+}
+
+/* App.js */
+.app-wrapper{
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: var(--green-color-l);
+}
+
+.app-wrapper.dark{
+    background-color: var(--green-color-d);
+}
+
+.content-wrapper{
+    width: 100%;
+    flex: 1;
+    display: flex; flex-direction: column; align-items: center;
+    font-size: 1.1rem;
+}
+
+/* input config */
+input {
+    border-radius: 5px;
+    border: none;
+}
+
+input:focus input:active{
+    border: none;
+}
+
+/* button common config */
+button{
+    padding: 2px;
+    border-radius: 5px;
+    border: none !important;
+    cursor: pointer;
+}
+
+.edit_btn{
+    padding: 7px;
+    color:white;
+    background-color: var(--blue-color-l);
+    font-size: 1rem;
+    transition: 0.2s;
+}
+
+.edit_btn:active{
+    background-color: var(--blue-color-d);
+}
+
+.del_btn{
+    padding: 7px;
+    color:white;
+    background-color: var(--red-color-l);
+    font-size: 1rem;
+    transition: 0.2s;
+}
+
+.del_btn:active{
+    background-color: var(--red-color-d);
+}
+
+.add_btn{
+    padding: 7px;
+    color:white;
+    background-color: var(--green-color-m);
+    font-size: 1rem;
+    transition: 0.2s;
+}
+
+.add_btn:active{
+    background-color: var(--green-color-dm);
+}
+
+/* carousel */
+.carousel-item.active, .carousel-item-next, .carousel-item-prev{
+    display: flex; justify-content: center;
+}

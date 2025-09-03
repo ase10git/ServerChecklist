@@ -1,0 +1,32 @@
+[
+    {
+        "id" : "11111",
+        "name" : "minecraft",
+        "photo" : "",
+        "usage" : "minecraft",
+        "description" : "minecraft server",
+        "numOfMemos" : 3,
+        "numOfLists" : 3,
+        "numOfMaps" : 2
+    },
+    {
+        "id" : "121",
+        "name" : "palworld",
+        "photo" : "",
+        "usage" : "palworld",
+        "description" : "palworld server",
+        "numOfMemos" : 1,
+        "numOfLists" : 2,
+        "numOfMaps" : 0
+    },
+    {
+        "id" : "11321",
+        "name" : "sub channel",
+        "photo" : "",
+        "usage" : "minecraft",
+        "description" : "minecraft server for newbie",
+        "numOfMemos" : 6,
+        "numOfLists" : 8,
+        "numOfMaps" : 3
+    }
+]
